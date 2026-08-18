@@ -1,0 +1,562 @@
+:root {
+  --bg: #080909;
+  --ink: #f4f2ec;
+  --muted: #a3a09a;
+  --line: rgba(255, 255, 255, 0.12);
+  --panel: #101111;
+  --accent: #d8b454;
+  --sidebar: 280px;
+  --gap: 10px;
+  /* Project detail pages: white and neutral greys only. No warm tint, no
+     accent colour, so nothing competes with the work being shown. */
+  --paper: #ffffff;
+  --paper-ink: #151515;
+  --paper-muted: #6b6b6b;
+  --paper-line: #e3e3e3;
+  --paper-well: #f4f4f4;
+  --tile-ratio: 1 / 1;
+  --detail-image-height: min(68vh, 620px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 72% 16%, rgba(255, 255, 255, 0.08), transparent 28%),
+    linear-gradient(135deg, #070808, #101110 44%, #050505);
+  color: var(--ink);
+  font-family: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.32;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px 26px 20px;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, #0e0f0f, #080909);
+  border-right: 1px solid var(--line);
+}
+
+.profile h1 {
+  margin: 0 0 13px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.profile p {
+  margin: 0;
+  max-width: 250px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.16;
+}
+
+.index-nav {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.index-nav section + section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.index-nav h2,
+.side-links a,
+.kicker {
+  margin: 0 0 5px;
+  color: #f6f1e7;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.index-nav a,
+.side-links a {
+  display: block;
+  padding: 1px 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.08;
+}
+
+.index-nav a:hover,
+.side-links a:hover {
+  color: var(--accent);
+}
+
+.side-links {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.side-links a {
+  padding-left: 0;
+  font-weight: 700;
+  font-size: 0.74rem;
+}
+
+.gallery {
+  margin-left: var(--sidebar);
+  min-height: 100vh;
+  padding: var(--gap);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: var(--gap);
+  align-content: start;
+}
+
+.gallery[hidden] {
+  display: none;
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: var(--tile-ratio);
+  min-height: 0;
+  overflow: hidden;
+  background: #171817;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  outline: 0 solid transparent;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+.tile img {
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  transform: scale(1.04);
+  transition: transform 320ms ease, filter 320ms ease, opacity 220ms ease;
+}
+
+/* Crop framing belongs to the image, not to its slot in the grid: nth-child
+   rules re-target a different set of tiles every time the gallery is
+   reordered. Heroes are exported as squares, so object-position has nothing
+   to do anyway; use --hero-crop in tools/export_web_images.py to choose the
+   framing at export time. */
+
+.tile:hover img {
+  transform: scale(1.09);
+  opacity: 0.72;
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.text-panel {
+  aspect-ratio: var(--tile-ratio);
+  min-height: 0;
+  overflow: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.text-panel h2 {
+  margin: 0 0 18px;
+  max-width: 620px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.6rem, 2.6vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.text-panel p {
+  margin: 0;
+  max-width: 650px;
+  color: var(--muted);
+}
+
+.text-panel.compact {
+  justify-content: flex-start;
+}
+
+.text-panel ul {
+  padding-left: 18px;
+  margin: 14px 0 0;
+}
+
+.text-panel li + li {
+  margin-top: 12px;
+}
+
+.text-panel dl {
+  margin: 14px 0 0;
+}
+
+.text-panel dt {
+  font-weight: 700;
+}
+
+.text-panel dd {
+  margin: 3px 0 16px;
+  color: var(--muted);
+}
+
+.project-detail {
+  margin-left: var(--sidebar);
+  min-height: 100vh;
+  padding: 26px clamp(20px, 4vw, 58px) 70px;
+  background: var(--paper);
+  color: var(--paper-ink);
+}
+
+.project-detail[hidden] {
+  display: none;
+}
+
+.detail-nav {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  margin: -26px clamp(-58px, -4vw, -20px) 34px;
+  padding: 18px clamp(20px, 4vw, 58px);
+  background: var(--paper);
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.detail-nav a {
+  color: var(--paper-ink);
+  font-weight: 700;
+}
+
+.detail-nav a:hover {
+  text-decoration: underline;
+}
+
+/* No cap here: the image grid should fill the page. Prose is held to a
+   readable measure by the 720px rule on p/li/h2 further down. */
+.markdown-body {
+  max-width: none;
+}
+
+/* Identity on the left, the written account on the right. The reference this
+   follows keeps no rule between the two, only the gutter. */
+.project-intro {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr);
+  gap: clamp(24px, 3.5vw, 56px);
+  align-items: start;
+}
+
+/* The category label is the only bold dark item in the left column; the
+   summary under the title stays grey, as in the reference. */
+.project-hero .kicker {
+  color: var(--paper-ink);
+}
+
+/* The first heading carries a top margin that would drop the right column
+   below the title it should sit level with. */
+.project-body > *:first-child {
+  margin-top: 0;
+}
+
+/* Body figures are inside a column now, so the fixed 900px cap can overflow. */
+.project-body figure {
+  max-width: 100%;
+}
+
+.project-hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+  font-weight: 700;
+  /* Large bold sans sets loose by default; pull it back optically. */
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+}
+
+/* The title receives focus on navigation so screen readers land on it.
+   Keep the ring for keyboard users only, not for every mouse click. */
+.project-hero h1:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.project-hero p {
+  margin: 0;
+  max-width: 620px;
+  color: var(--paper-muted);
+}
+
+/* Closes the page, on the same three-column spec as the index gallery. Pulled
+   out to the full width, past the padding that keeps prose readable, so the
+   wall is as dense here as it is on the index. Tiles are square crops and wide
+   figures lose most of their content at that size, so a tile opens the full
+   image in the lightbox. */
+.project-grid {
+  margin: 46px clamp(-58px, -4vw, -20px) 0;
+  padding: 0 var(--gap);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: var(--gap);
+}
+
+.grid-tile {
+  position: relative;
+  aspect-ratio: var(--tile-ratio);
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--paper-well);
+  border: 1px solid var(--paper-line);
+  cursor: pointer;
+}
+
+.grid-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.04);
+  transition: transform 320ms ease, opacity 220ms ease;
+}
+
+.grid-tile:hover img {
+  transform: scale(1.09);
+  opacity: 0.72;
+}
+
+.grid-tile:focus-visible {
+  outline: 2px solid var(--paper-ink);
+  outline-offset: 3px;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 56px);
+  background: rgba(12, 12, 12, 0.94);
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: calc(100vh - clamp(96px, 12vw, 160px));
+  width: auto;
+  object-fit: contain;
+}
+
+.lightbox-close,
+.lightbox-step {
+  position: absolute;
+  z-index: 2;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lightbox-close:hover,
+.lightbox-step:hover,
+.lightbox-close:focus-visible,
+.lightbox-step:focus-visible {
+  background: rgba(255, 255, 255, 0.26);
+  outline: 0;
+}
+
+.lightbox-close {
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.8rem;
+}
+
+.lightbox-step {
+  top: 50%;
+  width: 46px;
+  height: 64px;
+  font-size: 2.1rem;
+  transform: translateY(-50%);
+}
+
+.lightbox-step.previous {
+  left: 16px;
+}
+
+.lightbox-step.next {
+  right: 16px;
+}
+
+.lightbox-count {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+/* The page behind the viewer must not scroll while it is open. */
+body.lightbox-open {
+  overflow: hidden;
+}
+
+
+.markdown-body h2 {
+  margin: 32px 0 12px;
+  max-width: 720px;
+  /* Slightly under the old serif size: bold sans carries more weight at the
+     same pixel height, so matching it exactly would overpower the body. */
+  font-size: clamp(1.1rem, 1.55vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.25;
+}
+
+.markdown-body h3 {
+  margin: 24px 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.markdown-body p,
+.markdown-body li,
+.markdown-body dd {
+  max-width: 720px;
+}
+
+.markdown-body p {
+  margin: 0 0 18px;
+}
+
+/* Body links inherit the text colour and have no underline globally, which
+   left them indistinguishable from prose. Underline is the only signal left
+   once the accent colour is gone. */
+.markdown-body p a,
+.markdown-body li a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 26px;
+  padding-left: 22px;
+}
+
+.markdown-body figure {
+  margin: 28px 0;
+  max-width: 900px;
+}
+
+.markdown-body figure img {
+  height: var(--detail-image-height);
+  object-fit: contain;
+  background: white;
+}
+
+.markdown-body figcaption {
+  margin-top: 8px;
+  color: var(--paper-muted);
+  font-size: 0.82rem;
+}
+
+.markdown-body .error {
+  max-width: 640px;
+  padding: 18px;
+  border: 1px solid var(--paper-ink);
+  background: var(--paper-well);
+  color: var(--paper-ink);
+}
+
+@media (max-width: 1080px) {
+  :root {
+    --sidebar: 260px;
+  }
+
+  .gallery,
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    position: static;
+    width: auto;
+    max-height: none;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .gallery {
+    margin-left: 0;
+    padding: var(--gap);
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail {
+    margin-left: 0;
+    padding: 18px 18px 54px;
+  }
+
+  .detail-nav {
+    margin: -18px -18px 26px;
+    padding: 16px 18px;
+  }
+
+  .project-intro {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+    /* Match the detail page's own padding here; the clamp used at wider
+       viewports resolves to -20px and would overhang by 2px. */
+    margin-left: -18px;
+    margin-right: -18px;
+  }
+
+  .tile {
+    aspect-ratio: 1 / 1;
+  }
+}
