@@ -3,7 +3,7 @@ title: LOOPS
 year: 2021
 type: Design / elastic robotic structures
 cover: assets/site_images/design/loops/hero.jpg
-gallery: assets/site_images/design/loops/hero.jpg | assets/site_images/design/loops/06.jpg | assets/site_images/design/loops/05.jpg | assets/site_images/design/loops/07.jpg | assets/site_images/design/loops/01.jpg | assets/site_images/design/loops/08.jpg | assets/site_images/design/loops/09.jpg | assets/site_images/design/loops/02.jpg | assets/site_images/design/loops/03.jpg | assets/site_images/design/loops/04.jpg
+gallery: assets/site_images/design/loops/hero.jpg | assets/site_images/design/loops/06.jpg | assets/site_images/design/loops/05.jpg | assets/site_images/design/loops/07.jpg | assets/site_images/design/loops/01.jpg | assets/site_images/design/loops/08.jpg | assets/site_images/design/loops/09.jpg | assets/site_images/design/loops/02.jpg | assets/site_images/design/loops/04.jpg
 summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 

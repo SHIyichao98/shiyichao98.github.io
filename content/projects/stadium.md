@@ -3,7 +3,7 @@ title: Stadium
 year: TODO
 type: Design project
 cover: assets/site_images/design/stadium/hero.jpg
-gallery: assets/site_images/design/stadium/hero.jpg | assets/site_images/design/stadium/02.jpg | assets/site_images/design/stadium/03.jpg | assets/site_images/design/stadium/07.jpg | assets/site_images/design/stadium/01.jpg | assets/site_images/design/stadium/05.jpg | assets/site_images/design/stadium/06.jpg | assets/site_images/design/stadium/04.jpg
+gallery: assets/site_images/design/stadium/02.jpg | assets/site_images/design/stadium/03.jpg | assets/site_images/design/stadium/07.jpg | assets/site_images/design/stadium/01.jpg | assets/site_images/design/stadium/05.jpg | assets/site_images/design/stadium/06.jpg | assets/site_images/design/stadium/04.jpg
 summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 

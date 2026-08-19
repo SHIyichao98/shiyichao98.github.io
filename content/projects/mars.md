@@ -3,7 +3,7 @@ title: Mars
 year: TODO
 type: Design project
 cover: assets/site_images/design/mars/hero.jpg
-gallery: assets/site_images/design/mars/hero.jpg | assets/site_images/design/mars/06.jpg | assets/site_images/design/mars/02.jpg | assets/site_images/design/mars/04.jpg | assets/site_images/design/mars/05.jpg | assets/site_images/design/mars/03.jpg | assets/site_images/design/mars/01.jpg
+gallery: assets/site_images/design/mars/hero.jpg | assets/site_images/design/mars/06.jpg | assets/site_images/design/mars/04.jpg | assets/site_images/design/mars/05.jpg | assets/site_images/design/mars/03.jpg | assets/site_images/design/mars/01.jpg
 summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 
