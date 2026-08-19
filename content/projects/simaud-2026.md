@@ -6,6 +6,7 @@ cover: assets/site_images/research/simaud-2026/full/hero.jpg
 gallery_full: assets/site_images/research/simaud-2026/full/01.jpg | assets/site_images/research/simaud-2026/full/02.jpg | assets/site_images/research/simaud-2026/full/03.jpg | assets/site_images/research/simaud-2026/full/04.jpg | assets/site_images/research/simaud-2026/full/05.jpg | assets/site_images/research/simaud-2026/full/06.jpg | assets/site_images/research/simaud-2026/full/07.jpg | assets/site_images/research/simaud-2026/full/08.jpg | assets/site_images/research/simaud-2026/full/09.jpg | assets/site_images/research/simaud-2026/full/10.jpg
 summary: Integrating shape grammars, daylight simulation, surrogate modeling, and explainable AI to support performance-aware rule selection in architectural design.
 authors: Yichao Shi, Athanassios Economou, Patrick Kastner
+links: [Paper](https://www.researchgate.net/profile/Yichao_Shi4/publication/404041046_RULE-LEVEL_REASONING_FOR_PERFORMANCE-AWARE_FLOORPLAN_GENERATION_INTEGRATING_SHAPE_GRAMMARS_WITH_DAYLIGHT_SIMULATION/links/69e7a2fda07af005d34671aa/RULE-LEVEL-REASONING-FOR-PERFORMANCE-AWARE-FLOORPLAN-GENERATION-INTEGRATING-SHAPE-GRAMMARS-WITH-DAYLIGHT-SIMULATION.pdf)
 ---
 
 ## Overview
