@@ -65,17 +65,17 @@ img {
 .profile h1 {
   margin: 0 0 13px;
   color: #ffffff;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 
 .profile p {
   margin: 0;
   max-width: 250px;
   color: var(--muted);
-  font-size: 0.68rem;
-  line-height: 1.16;
+  font-size: 0.78rem;
+  line-height: 1.22;
 }
 
 .index-nav {
@@ -95,18 +95,27 @@ img {
 .kicker {
   margin: 0 0 5px;
   color: #f6f1e7;
-  font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0;
+}
+
+.index-nav h2,
+.side-links a {
+  font-size: 0.86rem;
+}
+
+/* Sits on a project page, not in the sidebar, so it keeps its own size. */
+.kicker {
+  font-size: 0.76rem;
 }
 
 .index-nav a,
 .side-links a {
   display: block;
-  padding: 1px 0;
+  padding: 2px 0;
   color: var(--muted);
-  font-size: 0.74rem;
-  line-height: 1.08;
+  font-size: 0.84rem;
+  line-height: 1.2;
 }
 
 .index-nav a:hover,
@@ -123,7 +132,7 @@ img {
 .side-links a {
   padding-left: 0;
   font-weight: 700;
-  font-size: 0.74rem;
+  font-size: 0.84rem;
 }
 
 .gallery {
