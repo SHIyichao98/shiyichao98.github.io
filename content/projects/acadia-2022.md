@@ -4,7 +4,7 @@ year: ACADIA 2022
 type: Research / Elastic Robotic Structures
 cover: assets/site_images/research/acadia-2022/grid/hero.jpg
 gallery: assets/site_images/research/acadia-2022/grid/01.jpg | assets/site_images/research/acadia-2022/grid/02.jpg | assets/site_images/research/acadia-2022/grid/03.jpg | assets/site_images/research/acadia-2022/grid/04.jpg | assets/site_images/research/acadia-2022/grid/05.jpg | assets/site_images/research/acadia-2022/grid/06.jpg
-gallery_full: assets/site_images/research/acadia-2022/full/01.jpg | assets/site_images/research/acadia-2022/full/02.jpg | assets/site_images/research/acadia-2022/full/03.jpg
+gallery_full: assets/site_images/research/acadia-2022/full/01.jpg | assets/site_images/research/acadia-2022/full/02.jpg | assets/site_images/research/acadia-2022/full/03.jpg | assets/site_images/research/acadia-2022/full/04.jpg | assets/site_images/research/acadia-2022/full/05.jpg | assets/site_images/research/acadia-2022/full/06.jpg | assets/site_images/research/acadia-2022/full/07.jpg | assets/site_images/research/acadia-2022/full/08.jpg | assets/site_images/research/acadia-2022/full/09.jpg | assets/site_images/research/acadia-2022/full/10.jpg | assets/site_images/research/acadia-2022/full/11.jpg | assets/site_images/research/acadia-2022/full/12.jpg | assets/site_images/research/acadia-2022/full/13.jpg | assets/site_images/research/acadia-2022/full/14.jpg | assets/site_images/research/acadia-2022/full/15.jpg
 summary: A mobile, shape-changing architectural system integrating elastic structures, robotic actuation, parametric simulation, and cyber-physical control.
 authors: Valentina Soana, Yichao Shi, Tongyao Lin, Yiting Ma, Ling Dai
 links: [Paper](https://discovery.ucl.ac.uk/id/eprint/10206982/)
