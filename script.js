@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "14";
+const ASSET_VERSION = "15";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -201,7 +201,10 @@ const renderBlocks = (markdown) => {
 const renderProject = (markdown) => {
   const { meta, body } = parseFrontMatter(markdown);
   const title = meta.title || "Untitled project";
-  const year = meta.year ? `<p class="kicker">${inlineMarkdown(meta.year)} / ${inlineMarkdown(meta.type || "Project")}</p>` : "";
+  // Either half may be absent, and dropping the line when only the year is
+  // missing would take the type down with it.
+  const kickerParts = [meta.year, meta.type].filter(Boolean).map(inlineMarkdown);
+  const kicker = kickerParts.length ? `<p class="kicker">${kickerParts.join(" / ")}</p>` : "";
   // A project can carry two lines under its title: a subtitle naming the work
   // itself, and a summary describing it. Either may be absent.
   const subtitle = meta.subtitle ? `<p class="subtitle">${inlineMarkdown(meta.subtitle)}</p>` : "";
@@ -213,7 +216,7 @@ const renderProject = (markdown) => {
   return `
     <div class="project-intro">
       <header class="project-hero">
-        ${year}
+        ${kicker}
         <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
         ${subtitle}
         ${summary}
