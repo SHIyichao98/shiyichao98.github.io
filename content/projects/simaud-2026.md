@@ -1,25 +1,28 @@
 ---
 title: Rule-Level Reasoning for Performance-Aware Floorplan Generation
-year: SimAUD 2026
-type: Research / simulation and explainable AI
-cover: assets/site_images/research/simaud-2026/hero.jpg
-gallery: assets/site_images/research/simaud-2026/01.jpg | assets/site_images/research/simaud-2026/02.jpg | assets/site_images/research/simaud-2026/03.jpg | assets/site_images/research/simaud-2026/04.jpg | assets/site_images/research/simaud-2026/05.jpg | assets/site_images/research/simaud-2026/06.jpg | assets/site_images/research/simaud-2026/07.jpg
-summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+year: ANNSIM 2026
+type: Research / Shape Grammar + Building Performance
+cover: assets/site_images/research/simaud-2026/full/hero.jpg
+gallery_full: assets/site_images/research/simaud-2026/full/01.jpg | assets/site_images/research/simaud-2026/full/02.jpg | assets/site_images/research/simaud-2026/full/03.jpg | assets/site_images/research/simaud-2026/full/04.jpg | assets/site_images/research/simaud-2026/full/05.jpg | assets/site_images/research/simaud-2026/full/06.jpg | assets/site_images/research/simaud-2026/full/07.jpg | assets/site_images/research/simaud-2026/full/08.jpg | assets/site_images/research/simaud-2026/full/09.jpg | assets/site_images/research/simaud-2026/full/10.jpg
+summary: Integrating shape grammars, daylight simulation, surrogate modeling, and explainable AI to support performance-aware rule selection in architectural design.
+authors: Yichao Shi, Athanassios Economou, Patrick Kastner
 ---
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+This research develops a rule-level reasoning workflow that connects shape grammar-based floorplan generation with daylight performance simulation. A one-bedroom apartment grammar generates alternative layouts, which are evaluated in ClimateStudio using daylight metrics including spatial daylight autonomy (sDA), annual sunlight exposure (ASE), illuminance, and related performance indicators. Each design is represented by a compact rule-sequence feature vector, linking explicit grammar decisions directly to quantitative simulation outcomes.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+A surrogate model based on XGBoost is trained to approximate the aggregated daylight score, while SHAP and Partial Dependence Plots are used to identify which rule choices are most strongly associated with predicted performance. These signals support a rule-level reasoning engine that performs both global ranking of rule combinations and local searches for candidate single-rule edits, allowing full simulation to be reserved for a smaller set of promising alternatives.
 
 ## Focus
 
-- Lorem ipsum dolor sit amet consectetur adipiscing
-- Sed do eiusmod tempor incididunt ut labore
-- Magna aliqua ut enim ad minim veniam quis
-- Nostrud exercitation ullamco laboris nisi aliquip
+- Shape Grammar & Performance-Aware Design
+- Building Performance Simulation
+- Daylight Analysis with ClimateStudio
+- Surrogate Modeling with XGBoost
+- Explainable AI with SHAP & PDP
+- Neural-Symbolic Rule-Level Reasoning
 
 ## Role
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+First author and lead researcher, responsible for the research framework, shape grammar development, daylight simulation workflow, dataset construction, surrogate modeling, explainable AI analysis, rule-level reasoning system, and preparation of the research publication.
