@@ -1,25 +1,29 @@
 ---
 title: From Concept to Consistent Multi-View Renders
 year: CAADRIA 2025
-type: Research / shape grammar and generative AI
+type: Research / Shape Grammar + Generative AI
 cover: assets/site_images/research/caadria-2025-1/hero.jpg
 gallery: assets/site_images/research/caadria-2025-1/hero.jpg | assets/site_images/research/caadria-2025-1/01.jpg | assets/site_images/research/caadria-2025-1/02.jpg | assets/site_images/research/caadria-2025-1/03.jpg | assets/site_images/research/caadria-2025-1/04.jpg
-summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+summary: Integrating shape grammars with Stable Diffusion to connect architectural concept generation, 3D modeling, and consistent multi-view visualization.
+authors: Yichao Shi, Jiaxiang Luo, Chunlan Wang, Tzu-Chieh Kurt Hong, Tian Tian Lo
+links: [Paper](https://research.polyu.edu.hk/en/publications/from-concept-to-consistent-multi-view-renders-integrating-shape-g/)
 ---
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+This research proposes an integrated architectural workflow that combines shape grammars with Stable Diffusion to connect early-stage design generation with consistent multi-view rendering. Starting from a simple design parti, shape grammars implemented in Shape Machine generate feasible floor plans, which are then translated into three-dimensional models and rendered through Stable Diffusion using ControlNet and LoRA.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The workflow links symbolic and generative AI across three stages: rule-based floor plan generation, automated 2D-to-3D model construction, and AI-assisted rendering. By preserving geometric and material information through Rhino layers and color encoding, the method improves control over materials, spatial configuration, and visual consistency across different viewpoints.
 
 ## Focus
 
-- Lorem ipsum dolor sit amet consectetur adipiscing
-- Sed do eiusmod tempor incididunt ut labore
-- Magna aliqua ut enim ad minim veniam quis
-- Nostrud exercitation ullamco laboris nisi aliquip
+- Shape Grammar & Generative Design
+- Symbolic AI + Generative AI
+- Automated Floor Plan Generation
+- Parametric 2D-to-3D Modeling
+- Stable Diffusion, ControlNet & LoRA
+- Multi-View Rendering Consistency
 
 ## Role
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+First author and lead researcher, responsible for the core research framework, shape grammar workflow, computational implementation, experimental development, and preparation of the research publication.
