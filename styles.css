@@ -112,10 +112,10 @@ img {
 .index-nav a,
 .side-links a {
   display: block;
-  padding: 2px 0;
+  padding: 0;
   color: var(--muted);
   font-size: 0.84rem;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .index-nav a:hover,
@@ -131,6 +131,9 @@ img {
 
 .side-links a {
   padding-left: 0;
+  /* Shares a rule with the section headers, where the 5px is the gap under a
+     heading. On a link it just loosens the list. */
+  margin-bottom: 0;
   font-weight: 700;
   font-size: 0.84rem;
 }
@@ -560,6 +563,11 @@ body.lightbox-open {
     overflow: visible;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+  }
+
+  .index-nav a,
+  .side-links a {
+    padding: 4px 0;
   }
 
   .gallery {
