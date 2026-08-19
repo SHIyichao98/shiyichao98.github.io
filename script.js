@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "24";
+const ASSET_VERSION = "25";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -83,7 +83,11 @@ const parseFrontMatter = (source) => {
 };
 
 const splitGallery = (meta) => {
-  const images = meta.gallery || meta.images || meta.cover || "";
+  // cover is a fallback for projects that predate the gallery field. A project
+  // that declares a full-width wall and no grid has made its choice, so the
+  // cover must not reappear as a lone grid tile.
+  const fallback = meta.gallery_full ? "" : meta.cover;
+  const images = meta.gallery || meta.images || fallback || "";
   return images
     .split("|")
     .map((image) => image.trim())

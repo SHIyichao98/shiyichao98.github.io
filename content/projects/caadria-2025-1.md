@@ -2,8 +2,7 @@
 title: From Concept to Consistent Multi-View Renders
 year: CAADRIA 2025
 type: Research / Shape Grammar + Generative AI
-cover: assets/site_images/research/caadria-2025-1/grid/hero.jpg
-gallery: assets/site_images/research/caadria-2025-1/grid/01.jpg | assets/site_images/research/caadria-2025-1/grid/02.jpg | assets/site_images/research/caadria-2025-1/grid/03.jpg | assets/site_images/research/caadria-2025-1/grid/04.jpg
+cover: assets/site_images/research/caadria-2025-1/full/hero.jpg
 gallery_full: assets/site_images/research/caadria-2025-1/full/01.jpg | assets/site_images/research/caadria-2025-1/full/02.jpg | assets/site_images/research/caadria-2025-1/full/03.jpg | assets/site_images/research/caadria-2025-1/full/04.jpg | assets/site_images/research/caadria-2025-1/full/05.jpg | assets/site_images/research/caadria-2025-1/full/06.jpg | assets/site_images/research/caadria-2025-1/full/07.jpg | assets/site_images/research/caadria-2025-1/full/08.jpg
 summary: Integrating shape grammars with Stable Diffusion to connect architectural concept generation, 3D modeling, and consistent multi-view visualization.
 authors: Yichao Shi, Jiaxiang Luo, Chunlan Wang, Tzu-Chieh Kurt Hong, Tian Tian Lo

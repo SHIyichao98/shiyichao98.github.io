@@ -65,6 +65,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--quality", type=int, default=88, help="JPEG quality. 88 is a good default.")
     parser.add_argument("--no-thumbs", action="store_true", help="Skip the thumbs/ folder.")
     parser.add_argument(
+        "--aspect",
+        help="Force output to this ratio, as W:H. Use when a source was exported at the "
+             "wrong shape: slide decks sometimes arrive vertically squashed, and the "
+             "geometry cannot be recovered by cropping.",
+    )
+    parser.add_argument(
         "--assume-cmyk",
         type=Path,
         help="ICC profile to assume for untagged CMYK sources. Defaults to US Web Coated (SWOP).",
@@ -168,6 +174,21 @@ def load(path: Path) -> Image.Image:
     return to_srgb(image, path).convert("RGB")
 
 
+def correct_aspect(image: Image.Image, ratio: float | None) -> Image.Image:
+    """Restretch to the intended ratio. Only called when a source is known to be
+    distorted, since it changes geometry rather than just size."""
+    if not ratio:
+        return image
+    current = image.width / image.height
+    if abs(current - ratio) < 0.01:
+        return image
+    # Keep the wider dimension and move the other, so the correction is a
+    # resample rather than a crop.
+    if current > ratio:
+        return image.resize((image.width, round(image.width / ratio)), Image.Resampling.LANCZOS)
+    return image.resize((round(image.height * ratio), image.height), Image.Resampling.LANCZOS)
+
+
 def fit_within(image: Image.Image, box: tuple[int, int]) -> tuple[Image.Image, bool]:
     """Scale down to fit inside box. Never scales up."""
     scale = min(box[0] / image.width, box[1] / image.height)
@@ -259,8 +280,13 @@ def main() -> None:
     print(f"  hero source: {hero_source.name}")
     shortfalls: list[str] = []
 
+    target_ratio = None
+    if args.aspect:
+        w, h = (float(v) for v in args.aspect.split(":"))
+        target_ratio = w / h
+
     for index, path in enumerate(unique, start=1):
-        image = load(path)
+        image = correct_aspect(load(path), target_ratio)
         main_image, resampled = fit_within(image, MAIN_BOX)
         target = args.out / f"{index:02d}"
 
@@ -279,7 +305,7 @@ def main() -> None:
                 thumb, thumb_resampled = square_crop(image, THUMB_SIZE)
                 save(thumb, args.out / "thumbs" / f"{index:02d}", args.format, args.quality, thumb_resampled)
 
-    hero_image = load(hero_source)
+    hero_image = correct_aspect(load(hero_source), target_ratio)
     hero, hero_resampled = square_crop(hero_image, HERO_SIZE, args.hero_crop)
     print(f"  hero.{ext}  {hero.width}x{hero.height} ({args.hero_crop} crop)")
     if hero.width < HERO_SIZE:
