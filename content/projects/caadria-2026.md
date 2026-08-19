@@ -6,6 +6,7 @@ cover: assets/site_images/research/caadria-2026/full/hero.jpg
 gallery_full: assets/site_images/research/caadria-2026/full/01.jpg | assets/site_images/research/caadria-2026/full/02.jpg | assets/site_images/research/caadria-2026/full/03.jpg | assets/site_images/research/caadria-2026/full/04.jpg | assets/site_images/research/caadria-2026/full/05.jpg | assets/site_images/research/caadria-2026/full/06.jpg | assets/site_images/research/caadria-2026/full/07.jpg | assets/site_images/research/caadria-2026/full/08.jpg | assets/site_images/research/caadria-2026/full/09.jpg | assets/site_images/research/caadria-2026/full/10.jpg | assets/site_images/research/caadria-2026/full/11.jpg | assets/site_images/research/caadria-2026/full/12.jpg
 summary: Using shape grammar as a deterministic benchmark to test the performance limits, functional validity, and data saturation of AI-based floor-plan generation.
 authors: Yichao Shi, Tzu-Chieh Kurt Hong
+links: [Paper](https://papers.cumincad.org/cgi-bin/works/paper/caadria2026_544)
 ---
 
 ## Overview
