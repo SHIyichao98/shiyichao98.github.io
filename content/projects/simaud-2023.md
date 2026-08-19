@@ -1,26 +1,28 @@
 ---
-title: Integrating Conditional Shape Embedding with Generative Adversarial Networks
-year: SimAUD 2023
-type: Research / shape embedding and generative models
-layout: full
-cover: assets/site_images/research/simaud-2023/hero.jpg
-gallery: assets/site_images/research/simaud-2023/hero.jpg | assets/site_images/research/simaud-2023/01.jpg | assets/site_images/research/simaud-2023/02.jpg | assets/site_images/research/simaud-2023/03.jpg | assets/site_images/research/simaud-2023/04.jpg | assets/site_images/research/simaud-2023/05.jpg | assets/site_images/research/simaud-2023/06.jpg | assets/site_images/research/simaud-2023/07.jpg | assets/site_images/research/simaud-2023/08.jpg
-summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+title: Integrating Conditional Shape Embedding with Generative Adversarial Network
+year: ANNSIM 2023
+type: Research / Shape Grammar + Machine Learning
+cover: assets/site_images/research/simaud-2023/full/hero.jpg
+gallery_full: assets/site_images/research/simaud-2023/full/01.jpg | assets/site_images/research/simaud-2023/full/02.jpg | assets/site_images/research/simaud-2023/full/03.jpg | assets/site_images/research/simaud-2023/full/04.jpg | assets/site_images/research/simaud-2023/full/05.jpg | assets/site_images/research/simaud-2023/full/06.jpg | assets/site_images/research/simaud-2023/full/07.jpg | assets/site_images/research/simaud-2023/full/08.jpg | assets/site_images/research/simaud-2023/full/09.jpg | assets/site_images/research/simaud-2023/full/10.jpg | assets/site_images/research/simaud-2023/full/11.jpg | assets/site_images/research/simaud-2023/full/12.jpg | assets/site_images/research/simaud-2023/full/13.jpg | assets/site_images/research/simaud-2023/full/14.jpg | assets/site_images/research/simaud-2023/full/15.jpg | assets/site_images/research/simaud-2023/full/16.jpg | assets/site_images/research/simaud-2023/full/17.jpg | assets/site_images/research/simaud-2023/full/18.jpg | assets/site_images/research/simaud-2023/full/19.jpg
+summary: Combining rule-based shape recognition with pix2pix GANs to enable automated fire-code assessment of early-stage architectural sketches in raster format.
+authors: Han Tu, Yichao Shi, Meng Xu
 ---
 
 ## Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+This research develops an automated assessment workflow for early-stage architectural sketches by integrating Shape Machine with a pix2pix Generative Adversarial Network (GAN). Shape Machine translates selected fire-code requirements into conditional shape-embedding checks for vector drawings, while the resulting checked plans are converted into color-coded raster images for machine-learning training. This allows schematic sketches in common raster formats to be evaluated without first converting them into detailed CAD or BIM models.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Using school floor plans as a case study, the workflow translates fire-code criteria into checking functions covering evacuation distances, door counts, and circulation widths. Shape Machine generates labeled training data, and a pix2pix GAN learns to transform unreviewed sketches into color-marked assessment images. The study used 300 paired images and tested the trained model on unseen sketch styles, showing that the combined workflow can support faster early-stage plan review.
 
 ## Focus
 
-- Lorem ipsum dolor sit amet consectetur adipiscing
-- Sed do eiusmod tempor incididunt ut labore
-- Magna aliqua ut enim ad minim veniam quis
-- Nostrud exercitation ullamco laboris nisi aliquip
+- Shape Grammar & Conditional Shape Embedding
+- Machine Learning for Design Assessment
+- pix2pix Generative Adversarial Networks
+- Automated Fire-Code Checking
+- Raster + Vector Drawing Integration
+- Early-Stage Architectural Sketch Evaluation
 
 ## Role
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Second author and researcher, contributing to the integration of Shape Machine with the machine-learning workflow, fire-code translation and checking logic, dataset development, experimental evaluation, and preparation of the research publication.
