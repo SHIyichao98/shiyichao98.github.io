@@ -5,7 +5,8 @@
   --line: rgba(255, 255, 255, 0.12);
   --panel: #101111;
   --accent: #d8b454;
-  --sidebar: 280px;
+  /* 480px at 1920, narrowing on smaller screens so the wall keeps room. */
+  --sidebar: clamp(280px, 25vw, 480px);
   --gap: 10px;
   /* Project detail pages: white and neutral greys only. No warm tint, no
      accent colour, so nothing competes with the work being shown. */
@@ -130,7 +131,7 @@ img {
   min-height: 100vh;
   padding: var(--gap);
   display: grid;
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap);
   align-content: start;
 }
@@ -321,7 +322,7 @@ img {
   margin: 46px clamp(-58px, -4vw, -20px) 0;
   padding: 0 var(--gap);
   display: grid;
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap);
 }
 
@@ -538,7 +539,7 @@ body.lightbox-open {
 
   .gallery,
   .project-grid {
-    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
