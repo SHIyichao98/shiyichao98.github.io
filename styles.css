@@ -330,6 +330,18 @@ img {
   color: var(--paper-muted);
 }
 
+/* Credits, set apart from the grey summary above them. */
+.project-hero .authors {
+  margin: 16px 0 0;
+  color: var(--paper-ink);
+  font-size: 0.9rem;
+}
+
+.project-hero .hero-links {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
 /* Names the work; the summary under it describes the work. Dark and slightly
    larger, so the two lines do not read as one grey block. */
 .project-hero .subtitle {

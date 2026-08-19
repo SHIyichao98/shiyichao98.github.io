@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "18";
+const ASSET_VERSION = "19";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -209,6 +209,10 @@ const renderProject = (markdown) => {
   // itself, and a summary describing it. Either may be absent.
   const subtitle = meta.subtitle ? `<p class="subtitle">${inlineMarkdown(meta.subtitle)}</p>` : "";
   const summary = meta.summary ? `<p>${inlineMarkdown(meta.summary)}</p>` : "";
+  // Credits and an outbound link sit under the summary, in the left column,
+  // the way the reference keeps institution and year there.
+  const authors = meta.authors ? `<p class="authors">${inlineMarkdown(meta.authors)}</p>` : "";
+  const links = meta.links ? `<p class="hero-links">${inlineMarkdown(meta.links)}</p>` : "";
   const images = splitGallery(meta);
   // A project can carry both walls: the grid first, then full-width images
   // beneath it. Each hydrates its own lightbox set.
@@ -219,7 +223,7 @@ const renderProject = (markdown) => {
 
   // With no kicker, subtitle or summary there is nothing to fill a left column,
   // and the title ends up stranded beside the text. Lead with it instead.
-  if (!kicker && !subtitle && !summary) {
+  if (!kicker && !subtitle && !summary && !authors && !links) {
     return `
       <header class="project-hero project-hero-lead">
         <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
@@ -239,6 +243,8 @@ const renderProject = (markdown) => {
         <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
         ${subtitle}
         ${summary}
+        ${authors}
+        ${links}
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
     </div>
