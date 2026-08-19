@@ -1,6 +1,8 @@
 const projectSources = {
   "arch-6020": "content/projects/arch-6020.md",
   "arch-2017": "content/projects/arch-2017.md",
+  "arch-2020": "content/projects/arch-2020.md",
+  "arch-8833": "content/projects/arch-8833.md",
   "acadia-2022": "content/projects/acadia-2022.md",
   loops: "content/projects/loops.md",
   "caadria-2025-1": "content/projects/caadria-2025-1.md",
@@ -26,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "4";
+const ASSET_VERSION = "5";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");

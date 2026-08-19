@@ -1,170 +1,115 @@
-# Academic Portfolio
+# Yichao Shi — Academic Portfolio
 
-This is a static academic portfolio and research archive. It is intentionally
-text-first: closer to a personal faculty / researcher homepage than a commercial
-portfolio landing page.
+**Live site: https://shiyichao98.github.io/**
 
-## Files
+Static site, no build step. `index.html` is the image index; every project page
+is a Markdown file rendered in the browser by `script.js`.
 
-- `index.html`: page content, research interests, projects, writing, CV, contact.
-- `styles.css`: typography, layout, spacing, and responsive behavior.
-- `script.js`: loads Markdown project pages and controls image galleries.
-- `assets/site_images/`: compressed web images used by the public site.
-- `assets/research_projects/`: local source archive, ignored by Git.
+## Where things live
 
-## Local Preview
+| | |
+|---|---|
+| `index.html` | Image index (the curated wall) and the sidebar that lists every project |
+| `script.js` | Markdown loader, routing, image grid, lightbox |
+| `styles.css` | All styling |
+| `content/projects/*.md` | One file per project: front matter plus body copy |
+| `assets/site_images/` | **Published** web images. This is the only image folder that ships |
+| `tools/` | Export and maintenance scripts |
 
-Run a local server from this directory:
+Source material stays local and is gitignored: `assets/research_projects/`,
+`assets/my_design_works/`, `assets/index_of_images/`,
+`assets/teaching_work_samples/`. Only exports under `assets/site_images/` are
+published.
+
+## History, and how to trace it back
+
+The site used to live at `https://shiyichao98.github.io/portfolio/`, from the
+repository `SHIyichao98/portfolio`. That repository is now **private** and its
+Pages site is switched off, so the old URL returns 404 and any link to it needs
+updating.
+
+It was retired for two reasons: the URL carried an extra `/portfolio/` path
+segment, and the repository tracked 33 files of student coursework whose
+filenames contained real student names, publicly downloadable and never
+referenced by the site.
+
+This repository starts from a fresh commit rather than carrying that history
+over, so the student files are gone from the published record entirely, along
+with 43 MB of large blobs left behind by images deleted during earlier work.
+
+**The old repository still exists and is still yours.** It is private, but the
+full commit history is intact, and those commit messages record why most of the
+decisions here were made — the colour management work, the layout changes, the
+LOOPS restructuring. To read it:
+
+```
+https://github.com/SHIyichao98/portfolio
+```
+
+## Local preview
 
 ```powershell
 python -m http.server 5500
 ```
 
-Then open:
+Then open `http://127.0.0.1:5500/`.
 
-```text
-http://127.0.0.1:5500/
-```
+## Adding or updating images
 
-Keep the PowerShell window open while previewing. Closing it stops the preview
-server.
-
-## What To Replace
-
-1. Replace `Shiyi` with your preferred academic name.
-2. Replace `your.email@example.com`, GitHub, and LinkedIn links.
-3. Update the affiliation line under the name.
-4. Replace the three research questions with your real interests.
-5. Replace project descriptions with your actual research, design, or coding work.
-6. Add real publications, working papers, studio projects, or course notes.
-7. Update the CV section with your education, lab, advisor, tools, and service.
-
-## Project Pages With Markdown
-
-Project detail pages are managed with Markdown files in:
-
-```text
-content/projects/
-```
-
-The image wall in `index.html` uses `data-project` values to decide which
-Markdown file to open. For example:
-
-```html
-<a href="#project/arch-6020" data-project="arch-6020">
-```
-
-loads:
-
-```text
-content/projects/arch-6020.md
-```
-
-Each Markdown file can include front matter:
-
-```markdown
----
-title: Project Title
-year: 2026
-type: Teaching / research
-cover: assets/path/to/cover.jpg
-gallery: assets/path/01.jpg | assets/path/02.jpg | assets/path/03.jpg
-summary: One sentence summary.
----
-```
-
-Supported Markdown patterns:
-
-- `## Heading`
-- `### Subheading`
-- Paragraphs
-- Bullet lists
-- `![Caption](assets/path/to/image.jpg)`
-- `[Link text](https://example.com)`
-- `**bold text**`
-
-To add a new project:
-
-1. Put source material in `assets/research_projects/` if it should stay local.
-2. Export or copy lightweight web images into `assets/site_images/`.
-3. Create a new Markdown file in `content/projects/`.
-4. Add the new slug to `projectSources` in `script.js`.
-5. Add a tile in `index.html` with `data-project="your-slug"`.
-6. Add the carousel images to the Markdown frontmatter with `gallery:`.
-
-Keep the public image set small. GitHub Pages is happiest when project images
-are compressed JPG/PNG files, not full paper folders, PSD files, Illustrator
-files, or animation frame exports.
-
-## Publishing With GitHub Pages
-
-This site has no build step. It can be published for free with GitHub Pages as a
-public repository. The current structure is ready for Pages:
-
-- `index.html` is at the repository root.
-- `styles.css`, `script.js`, and `assets/` use relative paths.
-- `.nojekyll` is included so GitHub serves the files as plain static files.
-
-### Option A: Project Site
-
-This is like `https://karadagi.github.io/researcher_profile/`.
-
-1. Create a public GitHub repository, for example `portfolio`.
-2. Push this folder to that repository.
-3. Open the repository on GitHub.
-4. Go to `Settings` -> `Pages`.
-5. Under `Build and deployment`, choose `Deploy from a branch`.
-6. Select branch `main` and folder `/root`.
-7. Save.
-
-Your URL will usually be:
-
-```text
-https://YOUR-GITHUB-USERNAME.github.io/portfolio/
-```
-
-### Option B: Personal Homepage
-
-Use this if you want the shorter URL:
-
-```text
-https://YOUR-GITHUB-USERNAME.github.io/
-```
-
-Create the repository with this exact name:
-
-```text
-YOUR-GITHUB-USERNAME.github.io
-```
-
-Then push these files to that repository and enable Pages from `main` + `/root`.
-
-For Netlify or Vercel, import the GitHub repository and leave the build command
-empty. The publish directory is `.`.
-
-## Maintenance
-
-- Keep the newest or most relevant work near the top.
-- Use project entries like citations: year, title, short description, links.
-- Add dates to notes and publications so the archive has a clear timeline.
-- Check external links every few months.
-- Keep raw research folders local and ignored by Git. Only publish selected web
-  images from `assets/site_images/`.
-- After replacing site images, run:
+Put full-resolution sources in the matching local folder, then export:
 
 ```powershell
-python tools\enhance_site_images.py
+python tools\export_web_images.py "assets\my_design_works\PROJECT" --out assets\site_images\design\PROJECT
 ```
 
-This does a conservative web cleanup pass: resize very small images, normalize
-contrast on diagram-like figures, and lightly sharpen photos/renders.
+The exporter reads through each file's ICC profile. That matters: several
+sources are CMYK press files or tagged Apple RGB and Display P3, and converting
+them without their profile shifts colour visibly. It never scales an image up;
+if a source is too small it says so rather than inventing pixels.
 
-For paper screenshots that still look blurry, re-render the original PDF at a
-higher resolution and choose a cleaner crop:
+Targets come from `styles.css`: 2240x1400 for the full image, 1200x1200 square
+for a cover, 720x720 square for a grid tile.
+
+A `hero_image/` subfolder inside a source folder designates the cover; otherwise
+pass `--hero FILENAME` or let it pick the largest file.
+
+### The homepage wall
+
+The wall is curated by hand, not one tile per project. Put the images you want
+on it in `assets/index_of_images/` under any filename, then:
 
 ```powershell
-python tools\render_pdf_pages.py "assets\research_projects\PROJECT\paper.pdf" ".codex-preview\pdf-pages" --dpi 360
+python tools\build_index_tiles.py assets\index_of_images
 ```
 
-Then crop the best page/figure into `assets/site_images/`, update the matching
-Markdown gallery if needed, and run `python tools\enhance_site_images.py` again.
+Each pick is matched back to its project by image content rather than filename,
+cropped square, and interleaved so no two tiles from the same project sit next
+to each other. Update the tiles and alt text in `index.html` afterwards.
+
+### After changing any published file
+
+```powershell
+python tools\bump_version.py
+```
+
+Published filenames are stable and GitHub Pages sends `max-age=600`, so without
+a version stamp a returning visitor keeps their cached copy and can end up
+running new markup against old CSS. This raises the stamp in `index.html` and
+`script.js`, which covers everything the page fetches at runtime.
+
+## Adding a project
+
+1. Export images to `assets/site_images/<section>/<slug>/`.
+2. Create `content/projects/<slug>.md` with `title`, `year`, `type`, `cover`,
+   `gallery`, `summary`.
+3. Add the slug to `projectSources` in `script.js`.
+4. Add a sidebar link in `index.html`.
+5. Optionally add a tile to the wall.
+
+Markdown supports `## Heading`, `### Subheading`, paragraphs, bullet lists,
+`![Caption](path)`, `[Link](url)` and `**bold**`.
+
+## Publishing
+
+GitHub Pages serves `main` at the repository root. `.nojekyll` keeps Jekyll out
+of the way. Pushing to `main` deploys; a build takes about a minute.
