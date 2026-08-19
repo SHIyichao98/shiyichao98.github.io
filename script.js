@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "5";
+const ASSET_VERSION = "6";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -95,8 +95,14 @@ const splitGallery = (meta) => {
 // file on error rather than showing a broken tile.
 const thumbSource = (image) => image.replace(/([^/]+)$/, "thumbs/$1");
 
-const renderGrid = (title, images) => {
+// Two layouts. "grid" is the default three-column wall of square crops, right
+// for a set of discrete photographs. "full" stacks each image at its own
+// proportions across the page, for figures that carry sub-panels and labels and
+// have to be read rather than browsed; a square crop of those loses most of the
+// content. In full mode a tile loads the full image rather than a square thumb.
+const renderGrid = (title, images, layout) => {
   if (!images.length) return "";
+  const full = layout === "full";
 
   const tiles = images
     .map(
@@ -110,7 +116,7 @@ const renderGrid = (title, images) => {
           aria-label="Open image ${index + 1} of ${images.length}"
         >
           <img
-            data-thumb-src="${escapeHtml(versioned(thumbSource(image)))}"
+            data-thumb-src="${escapeHtml(versioned(full ? image : thumbSource(image)))}"
             data-full-src="${escapeHtml(versioned(image))}"
             alt=""
             loading="lazy"
@@ -121,7 +127,7 @@ const renderGrid = (title, images) => {
     .join("");
 
   return `
-    <section class="project-grid" data-grid aria-label="${escapeHtml(title)} images">
+    <section class="project-grid${full ? " is-full" : ""}" data-grid aria-label="${escapeHtml(title)} images">
       ${tiles}
     </section>
   `;
@@ -210,7 +216,7 @@ const renderProject = (markdown) => {
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
     </div>
-    ${renderGrid(title, images)}
+    ${renderGrid(title, images, meta.layout)}
   `;
 };
 

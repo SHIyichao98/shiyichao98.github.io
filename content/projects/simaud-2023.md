@@ -2,6 +2,7 @@
 title: Integrating Conditional Shape Embedding with Generative Adversarial Networks
 year: SimAUD 2023
 type: Research / shape embedding and generative models
+layout: full
 cover: assets/site_images/research/simaud-2023/hero.jpg
 gallery: assets/site_images/research/simaud-2023/hero.jpg | assets/site_images/research/simaud-2023/01.jpg | assets/site_images/research/simaud-2023/02.jpg | assets/site_images/research/simaud-2023/03.jpg | assets/site_images/research/simaud-2023/04.jpg | assets/site_images/research/simaud-2023/05.jpg | assets/site_images/research/simaud-2023/06.jpg | assets/site_images/research/simaud-2023/07.jpg | assets/site_images/research/simaud-2023/08.jpg
 summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

@@ -349,6 +349,31 @@ img {
   opacity: 0.72;
 }
 
+/* Full-width mode: one image per row at its own proportions, nothing cropped.
+   The hover zoom is dropped too — it belongs to a thumbnail, not to a figure
+   already shown whole. */
+.project-grid.is-full {
+  grid-template-columns: 1fr;
+  gap: 26px;
+}
+
+.project-grid.is-full .grid-tile {
+  aspect-ratio: auto;
+  background: transparent;
+  border: 0;
+}
+
+.project-grid.is-full .grid-tile img {
+  height: auto;
+  object-fit: contain;
+  transform: none;
+}
+
+.project-grid.is-full .grid-tile:hover img {
+  transform: none;
+  opacity: 0.86;
+}
+
 .grid-tile:focus-visible {
   outline: 2px solid var(--paper-ink);
   outline-offset: 3px;
