@@ -6,6 +6,8 @@ Shi, Y., Economou, A., & Kastner, P. (2026). Rule-level reasoning for performanc
 
 Shi, Y., & Hong, T.-C. K. (2026). Benchmarking pix2pix on floor plans: Shape grammar as a deterministic standard for model limits. In *Proceedings of the 31st International Conference of the Association for Computer-Aided Architectural Design Research in Asia (CAADRIA 2026)*.
 
+Shi, Y., Varma, S., & Economou, A. (2026). Toward shape grammar inference from CAD drawings via unsupervised clustering. In J. S. Gero & T. Shealy (Eds.), *Design Computing and Cognition '26*. Springer.
+
 Li, D., Shi, Y., Schwartz, M., & Kapadia, M. (2026). Early-stage architecture design assistance by LLMs and knowledge graphs. *Automation in Construction, 182*, Article 106756. [https://doi.org/10.1016/j.autcon.2025.106756](https://doi.org/10.1016/j.autcon.2025.106756)
 
 Mamoli, M., Shi, Y., & Cerbone, V. (2025). Automating the archaeological reconstruction of classical Greek and Roman architecture in Shape Machine. In S. Kotsopoulos (Ed.), *Shape Computation* (pp. 433-454). Birkhauser. [https://doi.org/10.1007/978-3-031-81623-9_20](https://doi.org/10.1007/978-3-031-81623-9_20)
