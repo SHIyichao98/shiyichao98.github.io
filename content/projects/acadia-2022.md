@@ -2,8 +2,9 @@
 title: LOOPS
 year: ACADIA 2022
 type: Research / elastic robotic structures
-cover: assets/site_images/research/acadia-2022/hero.jpg
-gallery: assets/site_images/research/acadia-2022/hero.jpg | assets/site_images/research/acadia-2022/01.jpg | assets/site_images/research/acadia-2022/02.jpg | assets/site_images/research/acadia-2022/03.jpg | assets/site_images/research/acadia-2022/04.jpg | assets/site_images/research/acadia-2022/05.jpg | assets/site_images/research/acadia-2022/06.jpg | assets/site_images/research/acadia-2022/07.jpg | assets/site_images/research/acadia-2022/08.jpg | assets/site_images/research/acadia-2022/09.jpg | assets/site_images/research/acadia-2022/10.jpg | assets/site_images/research/acadia-2022/11.jpg
+cover: assets/site_images/research/acadia-2022/grid/hero.jpg
+gallery: assets/site_images/research/acadia-2022/grid/01.jpg | assets/site_images/research/acadia-2022/grid/02.jpg | assets/site_images/research/acadia-2022/grid/03.jpg | assets/site_images/research/acadia-2022/grid/04.jpg | assets/site_images/research/acadia-2022/grid/05.jpg | assets/site_images/research/acadia-2022/grid/06.jpg
+gallery_full: assets/site_images/research/acadia-2022/full/01.jpg | assets/site_images/research/acadia-2022/full/02.jpg | assets/site_images/research/acadia-2022/full/03.jpg
 summary: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 ---
 

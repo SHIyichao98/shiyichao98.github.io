@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "17";
+const ASSET_VERSION = "18";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -127,7 +127,7 @@ const renderGrid = (title, images, layout) => {
     .join("");
 
   return `
-    <section class="project-grid${full ? " is-full" : ""}" data-grid aria-label="${escapeHtml(title)} images">
+    <section class="project-grid${full ? " is-full" : ""}" data-grid aria-label="${escapeHtml(title)}${full ? " full-width images" : " images"}">
       ${tiles}
     </section>
   `;
@@ -210,6 +210,12 @@ const renderProject = (markdown) => {
   const subtitle = meta.subtitle ? `<p class="subtitle">${inlineMarkdown(meta.subtitle)}</p>` : "";
   const summary = meta.summary ? `<p>${inlineMarkdown(meta.summary)}</p>` : "";
   const images = splitGallery(meta);
+  // A project can carry both walls: the grid first, then full-width images
+  // beneath it. Each hydrates its own lightbox set.
+  const fullImages = (meta.gallery_full || "")
+    .split("|")
+    .map((image) => image.trim())
+    .filter(Boolean);
 
   // With no kicker, subtitle or summary there is nothing to fill a left column,
   // and the title ends up stranded beside the text. Lead with it instead.
@@ -220,6 +226,7 @@ const renderProject = (markdown) => {
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
       ${renderGrid(title, images, meta.layout)}
+      ${renderGrid(title, fullImages, "full")}
     `;
   }
 
@@ -236,6 +243,7 @@ const renderProject = (markdown) => {
       <div class="project-body">${renderBlocks(body)}</div>
     </div>
     ${renderGrid(title, images, meta.layout)}
+    ${renderGrid(title, fullImages, "full")}
   `;
 };
 
@@ -299,7 +307,7 @@ const hydrateGrids = (root) => {
   root.querySelectorAll("[data-grid]").forEach((grid) => {
     const tiles = Array.from(grid.querySelectorAll("[data-grid-tile]"));
     const sources = tiles.map((tile) => tile.dataset.src);
-    const label = grid.getAttribute("aria-label").replace(" images", "");
+    const label = grid.getAttribute("aria-label").replace(/ (?:full-width )?images$/, "");
 
     // Attach the fallback before assigning src, so a missing thumbs/ file is
     // always caught. Setting src in the markup would race the listener.
