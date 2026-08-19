@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "10";
+const ASSET_VERSION = "11";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -202,6 +202,9 @@ const renderProject = (markdown) => {
   const { meta, body } = parseFrontMatter(markdown);
   const title = meta.title || "Untitled project";
   const year = meta.year ? `<p class="kicker">${inlineMarkdown(meta.year)} / ${inlineMarkdown(meta.type || "Project")}</p>` : "";
+  // A project can carry two lines under its title: a subtitle naming the work
+  // itself, and a summary describing it. Either may be absent.
+  const subtitle = meta.subtitle ? `<p class="subtitle">${inlineMarkdown(meta.subtitle)}</p>` : "";
   const summary = meta.summary ? `<p>${inlineMarkdown(meta.summary)}</p>` : "";
   const images = splitGallery(meta);
 
@@ -212,6 +215,7 @@ const renderProject = (markdown) => {
       <header class="project-hero">
         ${year}
         <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
+        ${subtitle}
         ${summary}
       </header>
       <div class="project-body">${renderBlocks(body)}</div>

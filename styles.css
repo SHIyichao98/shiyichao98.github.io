@@ -325,6 +325,14 @@ img {
   color: var(--paper-muted);
 }
 
+/* Names the work; the summary under it describes the work. Dark and slightly
+   larger, so the two lines do not read as one grey block. */
+.project-hero .subtitle {
+  margin: 0 0 10px;
+  color: var(--paper-ink);
+  font-size: 1rem;
+}
+
 /* Closes the page, on the same three-column spec as the index gallery. Pulled
    out to the full width, past the padding that keeps prose readable, so the
    wall is as dense here as it is on the index. Tiles are square crops and wide
