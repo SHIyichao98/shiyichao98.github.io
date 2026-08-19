@@ -2,10 +2,6 @@
 title: Selected Publications
 ---
 
-[Google Scholar](https://scholar.google.com/citations?hl=en&user=BEV56aQAAAAJ&view_op=list_works)
-
-[ResearchGate](https://www.researchgate.net/profile/Yichao_Shi4/research)
-
 Shi, Y., Economou, A., & Kastner, P. (2026). Rule-level reasoning for performance-aware floorplan generation: Integrating shape grammars with daylight simulation. In *Proceedings of the 2026 Annual Modeling and Simulation Conference (ANNSIM 2026)*. Society for Modeling & Simulation International.
 
 Shi, Y., & Hong, T.-C. K. (2026). Benchmarking pix2pix on floor plans: Shape grammar as a deterministic standard for model limits. In *Proceedings of the 31st International Conference of the Association for Computer-Aided Architectural Design Research in Asia (CAADRIA 2026)*.

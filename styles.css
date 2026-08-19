@@ -287,6 +287,11 @@ img {
   align-items: start;
 }
 
+/* Used when the title leads the page rather than sitting in a left column. */
+.project-hero-lead {
+  margin-bottom: 26px;
+}
+
 /* The category label is the only bold dark item in the left column; the
    summary under the title stays grey, as in the reference. */
 .project-hero .kicker {

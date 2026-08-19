@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "15";
+const ASSET_VERSION = "16";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -211,8 +211,20 @@ const renderProject = (markdown) => {
   const summary = meta.summary ? `<p>${inlineMarkdown(meta.summary)}</p>` : "";
   const images = splitGallery(meta);
 
-  // Two columns above the wall: identity on the left, the written account on
-  // the right, then the images run full width to the bottom.
+  // With no kicker, subtitle or summary there is nothing to fill a left column,
+  // and the title ends up stranded beside the text. Lead with it instead.
+  if (!kicker && !subtitle && !summary) {
+    return `
+      <header class="project-hero project-hero-lead">
+        <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
+      </header>
+      <div class="project-body">${renderBlocks(body)}</div>
+      ${renderGrid(title, images, meta.layout)}
+    `;
+  }
+
+  // Otherwise two columns above the wall: identity on the left, the written
+  // account on the right, then the images run full width to the bottom.
   return `
     <div class="project-intro">
       <header class="project-hero">
