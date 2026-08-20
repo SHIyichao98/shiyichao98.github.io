@@ -30,6 +30,7 @@ import json
 import os
 import re
 import sys
+import time
 
 from PIL import Image
 
@@ -48,13 +49,30 @@ COURSES = [
 ]
 
 THUMB = 190
-# Canvas exports a submission as lastnamefirstname_id_id_originalname, and the
-# studio hand-off used Lastname_Firstname-Assignment. Neither tells us how the
-# student writes their own name, which is why every guess is marked as one.
+# A source filename may name its student three ways. Only the first is written
+# by a person who knew the answer; the other two are machine exports that
+# mangle the name, so what they yield is a guess and is flagged as one.
 PATTERNS = (
-    re.compile(r"^([A-Za-z]+)_([A-Za-z]+)-"),          # Nguyen_Andy-ARCH2017-...
+    re.compile(r"^([A-Z][a-z]+(?: [A-Z][a-z]+)+)_\d"),  # Sydney Wetterhan_01.jpg — typed by hand
+    re.compile(r"^([A-Za-z]+)_([A-Za-z]+)-"),           # Nguyen_Andy-ARCH2017-...
     re.compile(r"^([a-z]{4,})_\d+_\d+_", re.ASCII),     # wetterhansydneymarie_1051586_...
 )
+
+
+def open_for_write(path: str, **kwargs):
+    """Open for writing, waiting out a lock.
+
+    The repo lives inside OneDrive, and the sheet is meant to be edited in
+    Excel, so either can be holding the file when this runs.
+    """
+    for attempt in range(20):
+        try:
+            return open(path, "w", **kwargs)
+        except PermissionError:
+            if attempt == 0:
+                print(f"  {os.path.basename(path)} is locked — waiting (close it in Excel if it is open)")
+            time.sleep(1)
+    sys.exit(f"could not write {path}: still locked after 20s")
 
 
 def dhash(path: str, size: int = 8) -> int:
@@ -69,26 +87,35 @@ def dhash(path: str, size: int = 8) -> int:
     return bits
 
 
-def guess_name(filename: str) -> str:
-    """Initials for the student a source filename names, or "" when it names none.
+def guess_name(filename: str) -> tuple[str, bool]:
+    """What to credit for a source file, and whether it had to be guessed.
 
-    The site shows initials rather than full names: coursework is an education
-    record, and a name beside it identifies its author to anyone who visits.
-    The full name stays visible in this sheet's source-filename column, which
-    never leaves the machine, so a person can still tell who each row is.
+    A name typed into the filename by hand is taken at its word and used in
+    full: whoever wrote it knew the student and decided to name them. A name
+    recovered from a machine export is reduced to initials instead, because
+    the export mangles it and because coursework is an education record — a
+    full name beside it identifies its author to every visitor. Either way the
+    filename stays in this sheet's source column, which never leaves the
+    machine, so a person can always see who a row belongs to.
     """
     stem = os.path.basename(filename)
+
     match = PATTERNS[0].match(stem)
     if match:
-        # Lastname_Firstname- : initials read first name, then last.
-        return f"{match.group(2)[0]}{match.group(1)[0]}".upper()
+        return match.group(1), False
+
     match = PATTERNS[1].match(stem)
     if match:
-        # A run-together lastnamefirstname cannot be split reliably, so the
-        # initials it yields are a guess and are flagged as one.
-        run = match.group(1)
-        return run[0].upper()
-    return ""
+        # Lastname_Firstname- : initials read first name, then last.
+        return f"{match.group(2)[0]}{match.group(1)[0]}".upper(), True
+
+    match = PATTERNS[2].match(stem)
+    if match:
+        # A run-together lastnamefirstname cannot be split reliably, so this
+        # yields one letter and needs a person to finish it.
+        return match.group(1)[0].upper(), True
+
+    return "", False
 
 
 def gallery_of(slug: str) -> list[str]:
@@ -128,8 +155,13 @@ def collect() -> list[dict]:
             continue
 
         # Recover a filename per image by content, since export renumbers and
-        # the counts do not always line up.
-        sources = sorted(glob.glob(os.path.join(ROOT, source_dir, "*.*")))
+        # the counts do not always line up. Recursive: a course whose files
+        # have been renamed by hand keeps them in a subfolder of its own.
+        sources = sorted(
+            path
+            for path in glob.glob(os.path.join(ROOT, source_dir, "**", "*.*"), recursive=True)
+            if os.path.isfile(path)
+        )
         hashes = {}
         for path in sources:
             try:
@@ -140,7 +172,7 @@ def collect() -> list[dict]:
         found = existing_credits(slug)
         for index, image in enumerate(gallery):
             full = os.path.join(ROOT, image)
-            source, guess, distance = "", "", None
+            source, guess, distance, uncertain = "", "", None, False
             if os.path.exists(full) and hashes:
                 here = dhash(full)
                 source, distance = min(
@@ -148,10 +180,10 @@ def collect() -> list[dict]:
                     key=lambda pair: pair[1],
                 )
                 if distance <= 10:
-                    guess = guess_name(source)
+                    guess, uncertain = guess_name(source)
                     source = os.path.basename(source)
                 else:
-                    source, guess = "", ""
+                    source, guess, uncertain = "", "", False
             rows.append(
                 {
                     "slug": slug,
@@ -160,7 +192,7 @@ def collect() -> list[dict]:
                     "image": image,
                     "source": source,
                     "student": (found[index] if index < len(found) else "") or guess,
-                    "guessed": bool(guess) and not (index < len(found) and found[index]),
+                    "guessed": uncertain and not (index < len(found) and found[index]),
                     "thumb": thumb_uri(full) if os.path.exists(full) else "",
                 }
             )
@@ -306,11 +338,11 @@ def main() -> None:
         json.dumps([{k: r[k] for k in ("slug", "index")} for r in rows]),
     )
     out_html = os.path.join(ROOT, "tools", "credits.html")
-    with open(out_html, "w", encoding="utf-8") as handle:
+    with open_for_write(out_html, encoding="utf-8") as handle:
         handle.write(page)
 
     out_csv = os.path.join(ROOT, "tools", "credits.csv")
-    with open(out_csv, "w", encoding="utf-8-sig", newline="") as handle:
+    with open_for_write(out_csv, encoding="utf-8-sig", newline="") as handle:
         writer = csv.writer(handle)
         writer.writerow(["course", "index", "image", "source_file", "student"])
         for row in rows:
