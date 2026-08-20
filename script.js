@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "49";
+const ASSET_VERSION = "50";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -104,9 +104,14 @@ const thumbSource = (image) => image.replace(/([^/]+)$/, "thumbs/$1");
 // proportions across the page, for figures that carry sub-panels and labels and
 // have to be read rather than browsed; a square crop of those loses most of the
 // content. In full mode a tile loads the full image rather than a square thumb.
-const renderGrid = (title, images, layout) => {
+const renderGrid = (title, images, layout, credit) => {
   if (!images.length) return "";
   const full = layout === "full";
+  // The button already carries an aria-label, which wins over its contents, so
+  // the strip is shown but not announced twice.
+  const caption = credit
+    ? `<span class="tile-caption">${escapeHtml(credit)}</span>`
+    : "";
 
   const tiles = images
     .map(
@@ -124,7 +129,7 @@ const renderGrid = (title, images, layout) => {
             data-full-src="${escapeHtml(versioned(image))}"
             alt=""
             loading="lazy"
-          />
+          />${caption}
         </button>
       `,
     )
@@ -234,6 +239,9 @@ const renderProject = (markdown) => {
         .join("<br />")}</p>`
     : "";
   const links = meta.links ? `<p class="hero-links">${inlineMarkdown(meta.links)}</p>` : "";
+  // Shown over the foot of every tile on hover. Absent on pages that have no
+  // one to credit.
+  const credit = meta.credit || "";
   const images = splitGallery(meta);
   // A project can carry both walls: the grid first, then full-width images
   // beneath it. Each hydrates its own lightbox set.
@@ -250,8 +258,8 @@ const renderProject = (markdown) => {
         <h1${titleClass} tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
-      ${renderGrid(title, images, meta.layout)}
-      ${renderGrid(title, fullImages, "full")}
+      ${renderGrid(title, images, meta.layout, credit)}
+      ${renderGrid(title, fullImages, "full", credit)}
     `;
   }
 
@@ -270,8 +278,8 @@ const renderProject = (markdown) => {
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
     </div>
-    ${renderGrid(title, images, meta.layout)}
-    ${renderGrid(title, fullImages, "full")}
+    ${renderGrid(title, images, meta.layout, credit)}
+    ${renderGrid(title, fullImages, "full", credit)}
   `;
 };
 
@@ -429,6 +437,20 @@ document.querySelectorAll("[data-project]").forEach((link) => {
 closeProject.addEventListener("click", (event) => {
   event.preventDefault();
   showIndex();
+});
+
+// The index wall labels each tile with the project it opens. Reading the name
+// off the sidebar link keeps the two in step: renaming a project in index.html
+// renames its captions too.
+document.querySelectorAll(".gallery .tile[data-project]").forEach((tile) => {
+  const name = document
+    .querySelector(`.index-nav a[data-project="${tile.dataset.project}"]`)
+    ?.textContent.trim();
+  if (!name) return;
+  const caption = document.createElement("span");
+  caption.className = "tile-caption";
+  caption.textContent = name;
+  tile.append(caption);
 });
 
 const syncRoute = () => {
