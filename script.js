@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "53";
+const ASSET_VERSION = "54";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -427,12 +427,34 @@ const openProject = async (slug, updateHash = true) => {
     if (token !== requestToken) return;
     detailContent.innerHTML = renderProject(markdown);
     hydrateGrids(detailContent);
+    openExternalLinksInNewTab(detailContent);
     detailContent.querySelector("[data-project-title]")?.focus({ preventScroll: true });
   } catch (error) {
     if (token !== requestToken) return;
     detailContent.innerHTML = `<p class="error">${escapeHtml(error.message)}</p>`;
   }
 };
+
+// A link that leaves the site opens in its own tab, so a visitor part-way
+// through a project does not lose the page they were reading. Applied after
+// every render rather than written into each link, because most of them come
+// out of markdown. rel is set explicitly: the implied noopener that comes with
+// target="_blank" is recent, and noreferrer costs nothing here.
+const openExternalLinksInNewTab = (root) => {
+  root.querySelectorAll("a[href]").forEach((link) => {
+    const href = link.getAttribute("href");
+    // Routes are hashes and mail is handed to a mail client, neither of which
+    // navigates away from the page.
+    if (!href || href.startsWith("#") || href.startsWith("mailto:")) return;
+    // Reading .origin off the element resolves relative hrefs first, so a
+    // path inside the site is compared as the site, not as a bare string.
+    if (link.origin === window.location.origin) return;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
+};
+
+openExternalLinksInNewTab(document);
 
 document.querySelectorAll("[data-project]").forEach((link) => {
   link.addEventListener("click", (event) => {
