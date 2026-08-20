@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "34";
+const ASSET_VERSION = "35";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -212,6 +212,11 @@ const renderProject = (markdown) => {
   // A project can carry two lines under its title: a subtitle naming the work
   // itself, and a summary describing it. Either may be absent.
   const subtitle = meta.subtitle ? `<p class="subtitle">${inlineMarkdown(meta.subtitle)}</p>` : "";
+  // A profile page can carry a portrait in the left column, under the title and
+  // above the summary. Absent on every other page.
+  const portrait = meta.portrait
+    ? `<img class="portrait" src="${escapeHtml(versioned(meta.portrait))}" alt="${escapeHtml(title)}" />`
+    : "";
   const summary = meta.summary ? `<p>${inlineMarkdown(meta.summary)}</p>` : "";
   // Credits and an outbound link sit under the summary, in the left column,
   // the way the reference keeps institution and year there.
@@ -227,7 +232,7 @@ const renderProject = (markdown) => {
 
   // With no kicker, subtitle or summary there is nothing to fill a left column,
   // and the title ends up stranded beside the text. Lead with it instead.
-  if (!kicker && !subtitle && !summary && !authors && !links) {
+  if (!kicker && !subtitle && !summary && !authors && !links && !portrait) {
     return `
       <header class="project-hero project-hero-lead">
         <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
@@ -246,6 +251,7 @@ const renderProject = (markdown) => {
         ${kicker}
         <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
         ${subtitle}
+        ${portrait}
         ${summary}
         ${authors}
         ${links}

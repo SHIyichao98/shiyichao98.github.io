@@ -330,6 +330,17 @@ img {
   color: var(--paper-muted);
 }
 
+/* Sits between the title and the summary, so the column reads name, face,
+   then description. Capped so it stays a portrait rather than a banner. */
+.project-hero .portrait {
+  width: 100%;
+  max-width: 260px;
+  margin: 4px 0 18px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--paper-well);
+}
+
 /* Credits, set apart from the grey summary above them. */
 .project-hero .authors {
   margin: 16px 0 0;

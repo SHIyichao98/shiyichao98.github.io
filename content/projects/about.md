@@ -24,6 +24,5 @@ My research asks how formal design knowledge can be encoded, generated, evaluate
 
 - [Georgia Tech profile](https://arch.gatech.edu/people/yichao-shi)
 - [Georgia Tech PhD profile](https://arch.gatech.edu/phd-yichao-shi)
-- [ResearchGate](https://www.researchgate.net/profile/Yichao_Shi4/research)
 - [GitHub](https://github.com/SHIyichao98)
 - [LinkedIn](https://www.linkedin.com/in/yichao-shi-747843154/)
