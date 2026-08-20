@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "36";
+const ASSET_VERSION = "37";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -209,6 +209,10 @@ const renderProject = (markdown) => {
   // missing would take the type down with it.
   const kickerParts = [meta.year, meta.type].filter(Boolean).map(inlineMarkdown);
   const kicker = kickerParts.length ? `<p class="kicker">${kickerParts.join(" / ")}</p>` : "";
+  // A body that opens with its own heading would print the title twice. Keep
+  // the element — it is the focus target on every route change, and it labels
+  // the page — but take it out of view.
+  const titleClass = meta.hide_title === "true" ? ' class="is-quiet"' : "";
   // A project can carry two lines under its title: a subtitle naming the work
   // itself, and a summary describing it. Either may be absent.
   const subtitle = meta.subtitle ? `<p class="subtitle">${inlineMarkdown(meta.subtitle)}</p>` : "";
@@ -235,7 +239,7 @@ const renderProject = (markdown) => {
   if (!kicker && !subtitle && !summary && !authors && !links && !portrait) {
     return `
       <header class="project-hero project-hero-lead">
-        <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
+        <h1${titleClass} tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
       ${renderGrid(title, images, meta.layout)}
@@ -249,7 +253,7 @@ const renderProject = (markdown) => {
     <div class="project-intro">
       <header class="project-hero">
         ${kicker}
-        <h1 tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
+        <h1${titleClass} tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
         ${subtitle}
         ${portrait}
         ${summary}

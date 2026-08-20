@@ -330,12 +330,26 @@ img {
   color: var(--paper-muted);
 }
 
+/* Hidden from view but still in the document, so the router can focus it and
+   assistive technology can still announce the page. */
+.project-hero h1.is-quiet {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Sits between the title and the summary, so the column reads name, face,
    then description. Capped so it stays a portrait rather than a banner. */
 .project-hero .portrait {
+  display: block;
   width: 100%;
   max-width: 260px;
-  margin: 4px 0 18px;
+  margin: 4px auto 18px;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   background: var(--paper-well);
