@@ -5,6 +5,7 @@ type: Design Project / Craft and Culture
 cover: assets/site_images/design/craftman/full/hero.jpg
 gallery_full: assets/site_images/design/craftman/full/01.jpg | assets/site_images/design/craftman/full/02.jpg | assets/site_images/design/craftman/full/03.jpg | assets/site_images/design/craftman/full/04.jpg | assets/site_images/design/craftman/full/05.jpg
 summary: A small-scale workshop and cultural space designed around the making, teaching, and preservation of Longquan celadon craftsmanship in Lishui, China.
+authors: Advisor: Zhangzheng Yang
 ---
 
 ## Overview

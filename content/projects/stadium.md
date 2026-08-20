@@ -6,6 +6,7 @@ cover: assets/site_images/design/stadium/grid/hero.jpg
 gallery: assets/site_images/design/stadium/grid/01.jpg | assets/site_images/design/stadium/grid/02.jpg | assets/site_images/design/stadium/grid/03.jpg
 gallery_full: assets/site_images/design/stadium/full/01.jpg | assets/site_images/design/stadium/full/02.jpg | assets/site_images/design/stadium/full/03.jpg | assets/site_images/design/stadium/full/04.jpg | assets/site_images/design/stadium/full/05.jpg
 summary: A university stadium designed as both a sports facility and a shared campus space, using circulation, landscape, and public activity to reconnect a fragmented site.
+authors: Advisor: Xiao Sun
 ---
 
 ## Overview

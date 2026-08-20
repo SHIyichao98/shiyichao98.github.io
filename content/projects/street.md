@@ -5,6 +5,7 @@ type: Design Project / Urban & Educational Architecture
 cover: assets/site_images/design/street/full/hero.jpg
 gallery_full: assets/site_images/design/street/full/01.jpg | assets/site_images/design/street/full/02.jpg | assets/site_images/design/street/full/03.jpg | assets/site_images/design/street/full/04.jpg | assets/site_images/design/street/full/05.jpg
 summary: A street and public-space reconstruction project responding to the daily rhythms of students, accompanying parents, and food vendors around Maotanchang Middle School in Lu’an, China.
+authors: Advisor: Nan Zhang
 ---
 
 ## Overview
