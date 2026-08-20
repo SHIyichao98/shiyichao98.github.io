@@ -2,6 +2,7 @@
 title: About
 year: Profile
 type: Biography
+portrait: assets/site_images/profile/portrait.jpg
 summary: Yichao Shi is an instructor and PhD student in Architecture at Georgia Tech, working across shape grammar, computational design, and AI-assisted architectural workflows.
 ---
 
