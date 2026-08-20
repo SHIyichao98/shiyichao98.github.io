@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "50";
+const ASSET_VERSION = "52";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -104,14 +104,18 @@ const thumbSource = (image) => image.replace(/([^/]+)$/, "thumbs/$1");
 // proportions across the page, for figures that carry sub-panels and labels and
 // have to be read rather than browsed; a square crop of those loses most of the
 // content. In full mode a tile loads the full image rather than a square thumb.
-const renderGrid = (title, images, layout, credit) => {
+// credits is read per image and falls back to the page-wide value, so a wall
+// can name whoever made each picture — teaching pages credit a different
+// student per tile — without every page having to list one per image.
+const renderGrid = (title, images, layout, credit, perImage = []) => {
   if (!images.length) return "";
   const full = layout === "full";
   // The button already carries an aria-label, which wins over its contents, so
   // the strip is shown but not announced twice.
-  const caption = credit
-    ? `<span class="tile-caption">${escapeHtml(credit)}</span>`
-    : "";
+  const captionFor = (index) => {
+    const text = perImage[index] || credit;
+    return text ? `<span class="tile-caption">${escapeHtml(text)}</span>` : "";
+  };
 
   const tiles = images
     .map(
@@ -129,7 +133,7 @@ const renderGrid = (title, images, layout, credit) => {
             data-full-src="${escapeHtml(versioned(image))}"
             alt=""
             loading="lazy"
-          />${caption}
+          />${captionFor(index)}
         </button>
       `,
     )
@@ -239,9 +243,14 @@ const renderProject = (markdown) => {
         .join("<br />")}</p>`
     : "";
   const links = meta.links ? `<p class="hero-links">${inlineMarkdown(meta.links)}</p>` : "";
-  // Shown over the foot of every tile on hover. Absent on pages that have no
-  // one to credit.
+  // Shown over the foot of a tile on hover. A page can name one credit for the
+  // whole wall, or one per image lined up with the gallery it belongs to.
+  // Absent on pages that have no one to credit.
   const credit = meta.credit || "";
+  const splitCredits = (value) =>
+    (value || "").split("|").map((entry) => entry.trim());
+  const gridCredits = splitCredits(meta.gallery_credits);
+  const fullCredits = splitCredits(meta.gallery_full_credits);
   const images = splitGallery(meta);
   // A project can carry both walls: the grid first, then full-width images
   // beneath it. Each hydrates its own lightbox set.
@@ -258,8 +267,8 @@ const renderProject = (markdown) => {
         <h1${titleClass} tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
-      ${renderGrid(title, images, meta.layout, credit)}
-      ${renderGrid(title, fullImages, "full", credit)}
+      ${renderGrid(title, images, meta.layout, credit, gridCredits)}
+      ${renderGrid(title, fullImages, "full", credit, fullCredits)}
     `;
   }
 
@@ -278,8 +287,8 @@ const renderProject = (markdown) => {
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
     </div>
-    ${renderGrid(title, images, meta.layout, credit)}
-    ${renderGrid(title, fullImages, "full", credit)}
+    ${renderGrid(title, images, meta.layout, credit, gridCredits)}
+    ${renderGrid(title, fullImages, "full", credit, fullCredits)}
   `;
 };
 
