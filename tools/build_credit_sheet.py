@@ -70,16 +70,24 @@ def dhash(path: str, size: int = 8) -> int:
 
 
 def guess_name(filename: str) -> str:
-    """Recover a name from a source filename, or return "" when it holds none."""
+    """Initials for the student a source filename names, or "" when it names none.
+
+    The site shows initials rather than full names: coursework is an education
+    record, and a name beside it identifies its author to anyone who visits.
+    The full name stays visible in this sheet's source-filename column, which
+    never leaves the machine, so a person can still tell who each row is.
+    """
     stem = os.path.basename(filename)
     match = PATTERNS[0].match(stem)
     if match:
-        return f"{match.group(2)} {match.group(1)}"
+        # Lastname_Firstname- : initials read first name, then last.
+        return f"{match.group(2)[0]}{match.group(1)[0]}".upper()
     match = PATTERNS[1].match(stem)
     if match:
-        # A run-together lastnamefirstname cannot be split reliably, so hand
-        # back the raw run and let a person put the space in the right place.
-        return match.group(1)
+        # A run-together lastnamefirstname cannot be split reliably, so the
+        # initials it yields are a guess and are flagged as one.
+        run = match.group(1)
+        return run[0].upper()
     return ""
 
 
