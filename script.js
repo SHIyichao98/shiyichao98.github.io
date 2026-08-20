@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "39";
+const ASSET_VERSION = "41";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -224,7 +224,15 @@ const renderProject = (markdown) => {
   const summary = meta.summary ? `<p>${inlineMarkdown(meta.summary)}</p>` : "";
   // Credits and an outbound link sit under the summary, in the left column,
   // the way the reference keeps institution and year there.
-  const authors = meta.authors ? `<p class="authors">${inlineMarkdown(meta.authors)}</p>` : "";
+  // Credits can run to several lines — a studio or cluster, then advisors,
+  // then the team. Split on the same pipe the galleries use.
+  const authors = meta.authors
+    ? `<p class="authors">${meta.authors
+        .split("|")
+        .map((line) => inlineMarkdown(line.trim()))
+        .filter(Boolean)
+        .join("<br />")}</p>`
+    : "";
   const links = meta.links ? `<p class="hero-links">${inlineMarkdown(meta.links)}</p>` : "";
   const images = splitGallery(meta);
   // A project can carry both walls: the grid first, then full-width images
