@@ -33,6 +33,7 @@ summary: Academic profile, education, experience, awards, service, and selected 
 ## Academic Service
 
 - Session chair: HCII 2025
+- Workshop tutor: Digital Futures 2023, 2024, 2026; eCAADe 2026
 - Conference reviewer: ACADIA 2026, CAADRIA 2027, HCII 2025
 - Journal reviewer: Architectural Intelligence; Journal of Integrated Design and Process Science
 
