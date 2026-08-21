@@ -23,7 +23,6 @@ summary: Academic profile, education, experience, awards, service, and selected 
 - Graduate Student Instructor, Georgia Institute of Technology, August 2023 – present
 - Graduate Research Assistant, Georgia Institute of Technology, August 2022 – present
 - Research Fellow, Concordia University, Montreal, June – August 2025
-- Workshop Tutor, Tongji University, Shanghai, June 2023 – present
 
 ## Awards
 
