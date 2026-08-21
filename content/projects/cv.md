@@ -2,7 +2,7 @@
 title: CV
 year: Current
 type: Academic profile
-summary: Academic profile, education, experience, awards, and selected links.
+summary: Academic profile, education, experience, awards, service, and selected links.
 ---
 
 ## Current Appointment
@@ -30,13 +30,10 @@ summary: Academic profile, education, experience, awards, and selected links.
 - Mitacs Globalink Research Award
 - CMAA-SAC Scholarship
 
-## Certifications
+## Academic Service
 
-- Introduction to Generative AI for Software Development
-- Google UX Design
-- Machine Learning
-- eCAADe 2024
-- Jifeng Program: The Challenge of Completing Courses in a Computer Science Major in One Year
+- Conference reviewer: ACADIA 2026, CAADRIA 2027, HCII 2025
+- Journal reviewer: Architectural Intelligence; Journal of Integrated Design and Process Science
 
 ## Methods and Tools
 
