@@ -210,6 +210,11 @@ img {
   pointer-events: none;
 }
 
+/* The prefix recedes so the name reads first. */
+.tile-caption-label {
+  color: rgba(255, 255, 255, 0.68);
+}
+
 .tile:hover .tile-caption,
 .tile:focus-visible .tile-caption,
 .grid-tile:hover .tile-caption,
