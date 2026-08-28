@@ -78,6 +78,19 @@ img {
   line-height: 1.22;
 }
 
+/* The one line that says what the work is about, under the appointment that
+   says where it happens. Brighter than the affiliation because it matters
+   more: after the name, it is what a visitor should read first. */
+.profile .statement {
+  margin: 9px 0 0;
+  padding-top: 9px;
+  max-width: 250px;
+  border-top: 1px solid var(--line);
+  color: #d6d6d6;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
 .index-nav {
   margin-top: 16px;
   padding-top: 14px;

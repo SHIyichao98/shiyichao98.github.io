@@ -4,12 +4,12 @@ year: Profile
 type: Biography
 hide_title: true
 portrait: assets/site_images/profile/portrait.jpg
-summary: Yichao Shi is an instructor and PhD student in Architecture at Georgia Tech, working across shape grammar, computational design, and AI-assisted architectural workflows.
+summary: Yichao Shi studies how computational systems represent, learn, and evaluate architectural design knowledge, with shape grammar as the theoretical foundation.
 ---
 
 ## About
 
-I am Yichao Shi, an instructor and PhD student in the School of Architecture at the Georgia Institute of Technology. My work sits at the intersection of shape grammar, computational design, design cognition, artificial intelligence, human-computer interaction, and architectural representation.
+I am Yichao Shi, an instructor and PhD student in the School of Architecture at the Georgia Institute of Technology. I study how computational systems represent, learn, and evaluate architectural design knowledge. Shape grammar is the theoretical foundation of that work, and I connect it to artificial intelligence, CAD data, and building performance simulation.
 
 My research asks how formal design knowledge can be encoded, generated, evaluated, and interpreted through computational systems. Recent projects examine shape-grammar workflows, AI-assisted architectural generation, floor-plan benchmarking, rule inference from CAD drawings, performance-aware design reasoning, and cultural design systems such as Dougong and Chinese garden composition.
 
