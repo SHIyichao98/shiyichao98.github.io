@@ -76,7 +76,12 @@ AS_DESIGN = {"acadia-2022": "loops", "ucl-loops": "loops"}
 # Content matching cannot place a pick that exists nowhere else in the library,
 # and at nineteen differing bits it guesses: 27-2-2 is the porcelain workshop,
 # which it read as LOOPS. Anything it places past a dozen bits is worth an eye.
-BY_HAND = {"01-01.jpg": "street", "27-2-2.jpg": "craftman"}
+BY_HAND = {"01-01.jpg": "street", "27-2-2.jpg": "craftman", "dome.jpg": "mars"}
+# Past this many differing bits the nearest neighbour is a coincidence, not the
+# same picture. Cropping a pick square by hand pushes it up the scale, so a
+# match that used to be exact can drift out of range; better to stop and be
+# told than to ship a tile that links to the wrong project.
+TRUST_BITS = 20
 
 TITLES = {
     "arch-2017": "Architectural Design Studio",
@@ -133,6 +138,8 @@ def resolve(section: str, path: Path, library):
         if slug:
             return slug, "filename"
     slug, bits = project_by_content(path, library)
+    if bits > TRUST_BITS:
+        return None, f"no confident match, nearest {slug} at {bits} bits"
     return slug, f"content, {bits} bits"
 
 
@@ -160,6 +167,14 @@ def ink_window(image: Image.Image) -> Image.Image:
     side = min(width, height)
     if width == height:
         return image
+
+    # A pick cropped square by hand has already been framed by someone who knew
+    # what mattered in it. Hunting for the ink would re-frame it; take the few
+    # per cent off both edges instead and leave the composition alone.
+    if max(width / height, height / width) < 1.15:
+        left = (width - side) // 2
+        top = (height - side) // 2
+        return image.crop((left, top, left + side, top + side))
 
     small = image.convert("L").resize((240, max(1, round(240 * height / width))))
     pixels = small.load()
@@ -230,7 +245,7 @@ def gather(report: bool):
         for path in sorted(p for p in source.iterdir() if p.is_file()):
             slug, how = resolve(key, path, library)
             if slug is None or slug not in TITLES:
-                print(f"  [!] {path.name}: could not place ({how})", file=sys.stderr)
+                print(f"  [!] {path.name}: {how} — add it to BY_HAND", file=sys.stderr)
                 continue
             items.append({"slug": slug, "path": path, "how": how})
         if report:
