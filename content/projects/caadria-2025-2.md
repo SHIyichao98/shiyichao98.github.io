@@ -3,7 +3,7 @@ title: Reimagining Chinese Garden Design
 year: CAADRIA 2025
 type: Research / Generative AI + Interactive Design
 cover: assets/site_images/research/caadria-2025-2/full/hero.jpg
-gallery_full: assets/site_images/research/caadria-2025-2/full/01.jpg | assets/site_images/research/caadria-2025-2/full/02.jpg | assets/site_images/research/caadria-2025-2/full/03.jpg | assets/site_images/research/caadria-2025-2/full/04.jpg | assets/site_images/research/caadria-2025-2/full/05.jpg | assets/site_images/research/caadria-2025-2/full/06.jpg | assets/site_images/research/caadria-2025-2/full/07.jpg | assets/site_images/research/caadria-2025-2/full/08.jpg | assets/site_images/research/caadria-2025-2/full/09.jpg
+gallery_full: assets/site_images/research/caadria-2025-2/full/01.jpg | assets/site_images/research/caadria-2025-2/full/02.jpg | assets/site_images/research/caadria-2025-2/full/03.jpg | assets/site_images/research/caadria-2025-2/full/04.jpg | assets/site_images/research/caadria-2025-2/full/05.jpg | assets/site_images/research/caadria-2025-2/full/06.jpg | assets/site_images/research/caadria-2025-2/full/07.jpg | assets/site_images/research/caadria-2025-2/full/08.jpg
 summary: An interactive generative AI workflow for creating Traditional Chinese Garden masterplans through user-controlled spatial layouts and style generation.
 authors: Chunlan Wang, Yichao Shi, Changda Ma, Hang Xu, Patrick Kastner
 links: [Paper](https://doi.org/10.52842/conf.caadria.2025.1.009)

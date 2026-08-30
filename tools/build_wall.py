@@ -43,7 +43,9 @@ ROOT = Path(__file__).resolve().parent.parent
 PICKS = ROOT / "assets" / "index_of_images"
 OUT = ROOT / "assets" / "site_images" / "index"
 TILE = 1000
-PER_SECTION = 9
+# Rows of three, so a section keeps whatever it is given rounded down to a
+# multiple of three. A part-filled last row reads as a gap rather than an end.
+ROW = 3
 SECTIONS = (
     ("teaching", "My Teaching Works", "teaching"),
     ("research", "My Research Works", "research"),
@@ -254,11 +256,7 @@ def _section_of(slug: str) -> str:
 
 
 def trim(items, limit):
-    """Keep `limit`, dropping from whichever project has the most to spare.
-
-    Nine tiles beside nine keeps the three sections reading as equals; a section
-    that runs a row longer looks like an accident rather than a choice.
-    """
+    """Keep `limit`, dropping from whichever project has the most to spare."""
     dropped = []
     while len(items) > limit:
         counts = collections.Counter(i["slug"] for i in items)
@@ -288,7 +286,7 @@ def main() -> None:
 
     ordered = {}
     for key, _title, _folder in SECTIONS:
-        kept, dropped = trim(sections[key], PER_SECTION)
+        kept, dropped = trim(sections[key], len(sections[key]) // ROW * ROW)
         if dropped:
             print(f"  {key}: kept {len(kept)}, left out {', '.join(d['path'].name for d in dropped)}")
         mixed, clashes = mix(kept)
