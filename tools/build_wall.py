@@ -1,28 +1,31 @@
-"""Cut the homepage wall's three sections from the project libraries.
+"""Cut the homepage wall from the hand-picked images in assets/index_of_images.
 
-The wall is three sections — teaching, research, design — of six square tiles.
-A tile is cut from an image that already lives on a project page, so nothing new
-has to be exported by hand and a tile always links to work that is actually there.
+The wall is three sections — teaching, research, design — of nine square tiles.
+Each tile links to a project and names it on hover, so every pick has to be tied
+to one. Two ways of doing that, because the two halves of the folder differ:
 
-Two things this does that a plain centre crop does not:
+  Teaching and design picks are lifted from work already on the site, so they are
+  matched by image content. A filename there is whatever the file was called when
+  it was saved and proves nothing.
 
-  Colour is read through export_web_images.load(), so CMYK and Display P3 sources
-  keep their colour. A plain convert("RGB") drops the red channel on those and the
-  wall goes green.
+  Research picks are new crops from the papers and exist nowhere else, so content
+  matching has nothing to match against — it once resolved a research figure to a
+  headshot. Those are read from the filename, which names its project on purpose.
 
-  The square window is placed where the ink is, not in the middle. Research folders
-  hold conference slides, which are mostly white margin; a centred crop of one is a
-  blank tile.
+Colour goes through export_web_images.load(): a plain convert("RGB") drops the
+red channel on CMYK and Display P3 files, which reads on screen as a green cast.
 
-    python tools/build_wall.py            # write the tiles
+    python tools/build_wall.py            # write the tiles and the markup
     python tools/build_wall.py --preview  # contact sheet only, write nothing
+    python tools/build_wall.py --match    # report how each pick was tied to a project
 """
 
 from __future__ import annotations
 
 import argparse
-import glob
-import os
+import collections
+import random
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -32,42 +35,103 @@ from PIL import Image, ImageDraw, ImageFilter
 sys.path.insert(0, str(Path(__file__).parent))
 
 from export_web_images import load  # colour-managed read
+from match_homepage_picks import build_library, dhash
 
 Image.MAX_IMAGE_PIXELS = None
 
 ROOT = Path(__file__).resolve().parent.parent
+PICKS = ROOT / "assets" / "index_of_images"
 OUT = ROOT / "assets" / "site_images" / "index"
 TILE = 1000
+PER_SECTION = 9
+SECTIONS = (
+    ("teaching", "My Teaching Works", "teaching"),
+    ("research", "My Research Works", "research"),
+    ("design", "My Design Works", "my_design"),
+)
 
-# (section, project slug, source image, alt text). Six per section: two rows of
-# three. The design row reuses the picks already cut for the old single wall,
-# one per project, so those tiles are unchanged.
-PICKS = {
-    "teaching": [
-        ("arch-2017", "teaching/arch-2017/10.jpg", "ARCH 2017 studio work"),
-        ("arch-6020", "teaching/arch-6020/10.jpg", "ARCH 6020 student work"),
-        ("arch-8833", "teaching/arch-8833/10.jpg", "ARCH 8833 student work"),
-        ("arch-2020", "teaching/arch-2020/06.jpg", "ARCH 2020 student work"),
-        ("arch-2017", "teaching/arch-2017/03.jpg", "ARCH 2017 studio drawing"),
-        ("arch-6020", "teaching/arch-6020/03.jpg", "ARCH 6020 student model"),
-    ],
-    "research": [
-        ("acadia-2022", "research/acadia-2022/grid/02.jpg", "Elastic robotic structure prototype"),
-        ("caadria-2026", "research/caadria-2026/full/06.jpg", "Floor-plan benchmarking"),
-        ("caadria-2025-2", "research/caadria-2025-2/full/02.jpg", "Chinese garden design study"),
-        ("dcc-2026", "research/dcc-2026/full/07.jpg", "Shape grammar inference from CAD"),
-        ("caadria-2025-1", "research/caadria-2025-1/full/07.jpg", "Shape grammar to rendered views"),
-        ("simaud-2026", "research/simaud-2026/full/07.jpg", "Performance-aware floor-plan generation"),
-    ],
-    "design": [
-        ("loops", "index/01.jpg", "LOOPS six-unit aggregation study"),
-        ("stadium", "index/02.jpg", "Stadium Design for a University axonometric"),
-        ("craftman", "index/03.jpg", "Porcelain Handicraft Workshop exterior view"),
-        ("mars", "index/04.jpg", "Conquer the Mars megastructure interior"),
-        ("street", "index/05.jpg", "School Gate Street Reconstruction street view"),
-        ("robotics", "index/06.jpg", "Overnight House robotic arm inside an inflatable dome"),
-    ],
+# A research filename names its project; nothing else can. Longest first so
+# caadria2025_02 is not read as caadria2025.
+BY_NAME = (
+    ("caadria2025_02", "caadria-2025-2"),
+    ("caadria2025_01", "caadria-2025-1"),
+    ("caadria2026", "caadria-2026"),
+    ("simaud_2026", "simaud-2026"),
+    ("simaud_2023", "simaud-2023"),
+    ("dcc_2026", "dcc-2026"),
+    ("dcc_2024", "dcc-2024"),
+    ("acadia", "acadia-2022"),
+)
+# A library slug may be a page slug (acadia-2022) or a source folder name
+# (ACADIA_2022, ucl_loops). Normalise before looking anything up.
+def normalise(slug: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", slug.lower()).strip("-")
+
+
+# The ACADIA paper and the LOOPS design project are the same work, so a design
+# pick that matches the paper library belongs to the design page.
+AS_DESIGN = {"acadia-2022": "loops", "ucl-loops": "loops"}
+# Content matching cannot place a pick that exists nowhere else in the library,
+# and at nineteen differing bits it guesses: 27-2-2 is the porcelain workshop,
+# which it read as LOOPS. Anything it places past a dozen bits is worth an eye.
+BY_HAND = {"01-01.jpg": "street", "27-2-2.jpg": "craftman"}
+
+TITLES = {
+    "arch-2017": "Architectural Design Studio",
+    "arch-2020": "Computational Design Foundations",
+    "arch-6020": "Advanced Computational Design",
+    "arch-8833": "AI & Computational Design",
+    "acadia-2022": "Elastic Robotic Structures",
+    "caadria-2025-1": "Shape Grammar + Generative AI",
+    "caadria-2025-2": "Generative AI + Interactive Design",
+    "caadria-2026": "Shape Grammar + AI Benchmarking",
+    "dcc-2024": "Shape Grammar + Parametric Design",
+    "dcc-2026": "Shape Grammar + Inference",
+    "simaud-2023": "Shape Grammar + Machine Learning",
+    "simaud-2026": "Shape Grammar + Building Performance",
+    "craftman": "Porcelain Handicraft Workshop",
+    "loops": "LOOPS",
+    "mars": "Conquer the Mars",
+    "robotics": "Overnight House",
+    "stadium": "Stadium Design for a University",
+    "street": "School Gate Street Reconstruction",
 }
+
+
+def project_by_name(path: Path) -> str | None:
+    stem = re.sub(r"[^a-z0-9]+", "_", path.stem.lower())
+    for needle, slug in BY_NAME:
+        if needle in stem:
+            return slug
+    return None
+
+
+def project_by_content(path: Path, library) -> tuple[str | None, int]:
+    fingerprint = dhash(path)
+    if fingerprint is None:
+        return None, 99
+    bits, _ratio = fingerprint
+    best, best_bits = None, 99
+    for other_bits, _ratio, _p, slug in library:
+        differ = bin(bits ^ other_bits).count("1")
+        if differ < best_bits:
+            best, best_bits = slug, differ
+    if best is None:
+        return None, 99
+    slug = normalise(best.split(":")[-1])
+    return AS_DESIGN.get(slug, slug), best_bits
+
+
+def resolve(section: str, path: Path, library):
+    """Return (slug, how). Research reads its name; everything else its pixels."""
+    if path.name in BY_HAND:
+        return BY_HAND[path.name], "by hand"
+    if section == "research":
+        slug = project_by_name(path)
+        if slug:
+            return slug, "filename"
+    slug, bits = project_by_content(path, library)
+    return slug, f"content, {bits} bits"
 
 
 def looks_like_a_slide(image: Image.Image) -> bool:
@@ -80,20 +144,15 @@ def looks_like_a_slide(image: Image.Image) -> bool:
 
 
 def ink_window(image: Image.Image) -> Image.Image:
-    """Crop square where the image carries its content.
+    """Crop square where the image carries its content, not at its centre.
 
-    A slide is mostly margin, so the centre of the frame is often empty. Scoring
-    columns (or rows) by how many pixels are not near-white and taking the densest
-    run of them lands the window on the diagram instead.
-
-    A full-height window on a slide always swallows the title band above the
-    figure and the footer below it, and the tile then reads as a screenshot of
-    half a sentence. Dropping those bands first leaves the figure alone.
+    A slide is mostly margin, so a centred window lands on white. Scoring columns
+    (or rows) by how many pixels are not near-white and taking the densest run
+    lands it on the figure. On a slide the title band above and the footer below
+    go first, or the tile reads as half a heading.
     """
     if looks_like_a_slide(image):
-        top = round(image.height * 0.19)
-        bottom = round(image.height * 0.89)
-        image = image.crop((0, top, image.width, bottom))
+        image = image.crop((0, round(image.height * 0.19), image.width, round(image.height * 0.89)))
 
     width, height = image.size
     side = min(width, height)
@@ -103,15 +162,12 @@ def ink_window(image: Image.Image) -> Image.Image:
     small = image.convert("L").resize((240, max(1, round(240 * height / width))))
     pixels = small.load()
     horizontal = width > height
-
     if horizontal:
         counts = [sum(1 for y in range(small.height) if pixels[x, y] < 235) for x in range(small.width)]
-        span = min(small.width, max(1, round(small.width * side / width)))
-        total = small.width
+        span, total = min(small.width, max(1, round(small.width * side / width))), small.width
     else:
         counts = [sum(1 for x in range(small.width) if pixels[x, y] < 235) for y in range(small.height)]
-        span = min(small.height, max(1, round(small.height * side / height)))
-        total = small.height
+        span, total = min(small.height, max(1, round(small.height * side / height))), small.height
 
     running = [0]
     for value in counts:
@@ -129,6 +185,148 @@ def ink_window(image: Image.Image) -> Image.Image:
     return image.crop((0, top, side, top + side))
 
 
+def mix(items, cols=3, seed=5):
+    """Order so no project sits beside its own work, or directly above it.
+
+    The grid is three wide, so tile i touches i-1 and i-3. Guarding only against
+    the first still stacks a project down a column.
+    """
+    best = None
+    for attempt in range(seed, seed + 400):
+        rng = random.Random(attempt)
+        pool = collections.defaultdict(list)
+        for item in items:
+            pool[item["slug"]].append(item)
+        for group in pool.values():
+            rng.shuffle(group)
+        out = []
+        while any(pool.values()):
+            banned = {out[-1]["slug"]} if out else set()
+            if len(out) >= cols:
+                banned.add(out[-cols]["slug"])
+            options = [k for k, v in pool.items() if v and k not in banned] or [k for k, v in pool.items() if v]
+            most = max(len(pool[k]) for k in options)
+            out.append(pool[rng.choice([k for k in options if len(pool[k]) == most])].pop())
+        slugs = [i["slug"] for i in out]
+        clashes = sum(1 for i in range(1, len(slugs)) if slugs[i] == slugs[i - 1])
+        clashes += sum(1 for i in range(cols, len(slugs)) if slugs[i] == slugs[i - cols])
+        if best is None or clashes < best[0]:
+            best = (clashes, out)
+        if clashes == 0:
+            break
+    return best[1], best[0]
+
+
+def gather(report: bool):
+    library = build_library()
+    sections = {}
+    for key, _title, folder in SECTIONS:
+        source = PICKS / folder
+        if not source.is_dir():
+            sys.exit(f"missing pick folder: {source}")
+        items = []
+        for path in sorted(p for p in source.iterdir() if p.is_file()):
+            slug, how = resolve(key, path, library)
+            if slug is None or slug not in TITLES:
+                print(f"  [!] {path.name}: could not place ({how})", file=sys.stderr)
+                continue
+            items.append({"slug": slug, "path": path, "how": how})
+        if report:
+            print(f"  {key}: {len(items)} picks")
+            for item in items:
+                print(f"    {item['path'].name:<46} -> {item['slug']:<16} ({item['how']})")
+            counts = collections.Counter(i["slug"] for i in items)
+            missing = [s for s in TITLES if s not in counts and _section_of(s) == key]
+            print(f"    projects: {dict(counts)}")
+            if missing:
+                print(f"    not represented: {', '.join(missing)}")
+            print()
+        sections[key] = items
+    return sections
+
+
+def _section_of(slug: str) -> str:
+    if slug.startswith("arch-"):
+        return "teaching"
+    if slug in {"craftman", "loops", "mars", "robotics", "stadium", "street"}:
+        return "design"
+    return "research"
+
+
+def trim(items, limit):
+    """Keep `limit`, dropping from whichever project has the most to spare.
+
+    Nine tiles beside nine keeps the three sections reading as equals; a section
+    that runs a row longer looks like an accident rather than a choice.
+    """
+    dropped = []
+    while len(items) > limit:
+        counts = collections.Counter(i["slug"] for i in items)
+        fattest = counts.most_common(1)[0][0]
+        # Drop the one that would crop worst: furthest from square.
+        worst, index = None, None
+        for i, item in enumerate(items):
+            if item["slug"] != fattest:
+                continue
+            width, height = Image.open(item["path"]).size
+            skew = max(width / height, height / width)
+            if worst is None or skew > worst:
+                worst, index = skew, i
+        dropped.append(items.pop(index))
+    return items, dropped
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--preview", action="store_true", help="Contact sheet only, write nothing.")
+    parser.add_argument("--match", action="store_true", help="Report how each pick was placed, write nothing.")
+    args = parser.parse_args()
+
+    sections = gather(report=args.match or args.preview)
+    if args.match:
+        return
+
+    ordered = {}
+    for key, _title, _folder in SECTIONS:
+        kept, dropped = trim(sections[key], PER_SECTION)
+        if dropped:
+            print(f"  {key}: kept {len(kept)}, left out {', '.join(d['path'].name for d in dropped)}")
+        mixed, clashes = mix(kept)
+        if clashes:
+            print(f"  {key}: {clashes} tile(s) still adjacent to their own project")
+        ordered[key] = mixed
+
+    cuts = {key: [(item["slug"], cut(item["path"])) for item in items] for key, items in ordered.items()}
+
+    if args.preview:
+        cell = 200
+        rows = max(len(v) for v in cuts.values())
+        sheet = Image.new("RGB", (cell * rows, (cell + 26) * len(SECTIONS)), "white")
+        draw = ImageDraw.Draw(sheet)
+        for row, (key, _title, _folder) in enumerate(SECTIONS):
+            draw.text((4, row * (cell + 26) + 6), key, fill="red")
+            for column, (slug, image) in enumerate(cuts[key]):
+                thumb = image.copy()
+                thumb.thumbnail((cell - 6, cell - 6))
+                sheet.paste(thumb, (column * cell + 3, row * (cell + 26) + 24))
+                draw.text((column * cell + 5, row * (cell + 26) + 26), f"{column+1}.{slug}", fill="blue")
+        out = ROOT.parent / "wall_preview.jpg"
+        sheet.save(out, "JPEG", quality=88)
+        print(f"  {out}")
+        return
+
+    for key, _title, _folder in SECTIONS:
+        folder = OUT / key
+        shutil.rmtree(folder, ignore_errors=True)
+        folder.mkdir(parents=True, exist_ok=True)
+        for index, (_slug, image) in enumerate(cuts[key], 1):
+            target = folder / f"{index:02d}.jpg"
+            image.save(target, "JPEG", quality=88, optimize=True, progressive=True)
+        print(f"  {key}: {len(cuts[key])} tiles")
+
+    write_markup(cuts)
+
+
 def cut(source: Path) -> Image.Image:
     image = load(source)
     square = ink_window(image)
@@ -138,47 +336,34 @@ def cut(source: Path) -> Image.Image:
     return square
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--preview", action="store_true", help="Write a contact sheet and nothing else.")
-    args = parser.parse_args()
+def write_markup(cuts) -> None:
+    index = ROOT / "index.html"
+    text = index.read_text(encoding="utf-8")
+    version = re.search(r"styles\.css\?v=(\d+)", text).group(1)
 
-    cuts: list[tuple[str, int, str, Image.Image]] = []
-    for section, picks in PICKS.items():
-        for index, (slug, relative, _alt) in enumerate(picks, 1):
-            source = ROOT / "assets" / "site_images" / relative
-            if not source.exists():
-                sys.exit(f"missing source: {relative}")
-            cuts.append((section, index, slug, cut(source)))
+    lines = ['    <main class="gallery" aria-label="Selected work">']
+    opening = re.search(r'<header class="masthead">\s*\n\s*<p>(.*?)</p>', text, re.S)
+    statement = opening.group(1).strip() if opening else ""
+    lines += ['      <header class="masthead">', f"        <p>{statement}</p>", "      </header>", ""]
 
-    if args.preview:
-        cell = 240
-        sheet = Image.new("RGB", (cell * 6, (cell + 26) * 3), "white")
-        draw = ImageDraw.Draw(sheet)
-        for row, section in enumerate(PICKS):
-            draw.text((4, row * (cell + 26) + 6), f"{section} — {len(PICKS[section])} tiles", fill="red")
-            column = 0
-            for sec, index, slug, image in cuts:
-                if sec != section:
-                    continue
-                thumb = image.copy()
-                thumb.thumbnail((cell - 6, cell - 6))
-                sheet.paste(thumb, (column * cell + 3, row * (cell + 26) + 24))
-                draw.text((column * cell + 5, row * (cell + 26) + 26), f"{index}. {slug}", fill="blue")
-                column += 1
-        out = ROOT.parent / "wall_preview.jpg"
-        sheet.save(out, "JPEG", quality=88)
-        print(f"  {out}")
-        return
+    for key, title, _folder in SECTIONS:
+        lines.append(f'      <section class="wall" aria-labelledby="wall-{key}">')
+        lines.append(f'        <h2 id="wall-{key}">{title}</h2>')
+        lines.append('        <div class="wall-grid">')
+        for i, (slug, _image) in enumerate(cuts[key], 1):
+            eager = key == "teaching" and i <= 3
+            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}">')
+            lines.append("            <img")
+            lines.append(f'              src="assets/site_images/index/{key}/{i:02d}.jpg?v={version}"')
+            lines.append(f'              alt="{TITLES[slug]}"' + ("" if eager else '\n              loading="lazy"'))
+            lines.append("            />")
+            lines.append("          </a>")
+        lines += ["        </div>", "      </section>", ""]
+    lines.append("    </main>")
 
-    for section in PICKS:
-        folder = OUT / section
-        shutil.rmtree(folder, ignore_errors=True)
-        folder.mkdir(parents=True, exist_ok=True)
-    for section, index, _slug, image in cuts:
-        target = OUT / section / f"{index:02d}.jpg"
-        image.save(target, "JPEG", quality=88, optimize=True, progressive=True)
-        print(f"  {target.relative_to(ROOT)}  {image.size[0]}x{image.size[1]}")
+    updated = re.sub(r'    <main class="gallery"[\s\S]*?\n    </main>', "\n".join(lines), text, count=1)
+    index.write_text(updated, encoding="utf-8")
+    print(f"  index.html: {sum(len(v) for v in cuts.values())} tiles")
 
 
 if __name__ == "__main__":
