@@ -151,10 +151,45 @@ img {
   font-size: 0.84rem;
 }
 
+/* The wall reads as three statements — what I teach, what I research, what I
+   design — rather than one undifferentiated run of pictures. The grid moved
+   down to .wall-grid so the sections and the opening paragraph can sit between
+   the rows. */
 .gallery {
   margin-left: var(--sidebar);
   min-height: 100vh;
   padding: var(--gap);
+}
+
+/* Says what the work is about before the first picture, so a visitor who reads
+   nothing else still knows. */
+.masthead {
+  max-width: 68ch;
+  padding: clamp(30px, 5vw, 64px) 2px clamp(28px, 4vw, 46px);
+}
+
+.masthead p {
+  margin: 0;
+  color: #e9e9e9;
+  font-size: clamp(1rem, 1.55vw, 1.32rem);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}
+
+.wall + .wall {
+  margin-top: clamp(30px, 4vw, 52px);
+}
+
+.wall h2 {
+  margin: 0 0 12px;
+  padding: 0 2px;
+  color: #f4f4f4;
+  font-size: clamp(0.92rem, 1.3vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.015em;
+}
+
+.wall-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap);
@@ -647,7 +682,7 @@ body.lightbox-open {
     --sidebar: 260px;
   }
 
-  .gallery,
+  .wall-grid,
   .project-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -679,7 +714,14 @@ body.lightbox-open {
   .gallery {
     margin-left: 0;
     padding: var(--gap);
+  }
+
+  .wall-grid {
     grid-template-columns: 1fr;
+  }
+
+  .masthead {
+    padding: 26px 2px 24px;
   }
 
   .project-detail {
