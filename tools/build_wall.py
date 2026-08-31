@@ -46,10 +46,12 @@ TILE = 1000
 # Rows of three, so a section keeps whatever it is given rounded down to a
 # multiple of three. A part-filled last row reads as a gap rather than an end.
 ROW = 3
+# Order on the page. Teaching leads because this is a teaching portfolio;
+# research closes it.
 SECTIONS = (
     ("teaching", "My Teaching Works", "teaching"),
-    ("research", "My Research Works", "research"),
     ("design", "My Design Works", "my_design"),
+    ("research", "My Research Works", "research"),
 )
 
 # A research filename names its project; nothing else can. Longest first so
