@@ -355,9 +355,13 @@ def write_markup(cuts) -> None:
     version = re.search(r"styles\.css\?v=(\d+)", text).group(1)
 
     lines = ['    <main class="gallery" aria-label="Selected work">']
-    opening = re.search(r'<header class="masthead">\s*\n\s*<p>(.*?)</p>', text, re.S)
-    statement = opening.group(1).strip() if opening else ""
-    lines += ['      <header class="masthead">', f"        <p>{statement}</p>", "      </header>", ""]
+    # The opening block is written by hand — the statement and the keywords
+    # beside it — so it is carried across whole. Rebuilding it from a captured
+    # sentence silently dropped the keyword list the first time this ran.
+    opening = re.search(r'      <header class="masthead">[\s\S]*?</header>', text)
+    if not opening:
+        sys.exit("index.html has no masthead to carry over")
+    lines += [opening.group(0), ""]
 
     for key, title, _folder in SECTIONS:
         lines.append(f'      <section class="wall" aria-labelledby="wall-{key}">')

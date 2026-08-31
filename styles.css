@@ -78,19 +78,6 @@ img {
   line-height: 1.22;
 }
 
-/* The one line that says what the work is about, under the appointment that
-   says where it happens. Brighter than the affiliation because it matters
-   more: after the name, it is what a visitor should read first. */
-.profile .statement {
-  margin: 9px 0 0;
-  padding-top: 9px;
-  max-width: 250px;
-  border-top: 1px solid var(--line);
-  color: #d6d6d6;
-  font-size: 0.78rem;
-  line-height: 1.3;
-}
-
 .index-nav {
   margin-top: 16px;
   padding-top: 14px;
@@ -164,16 +151,34 @@ img {
 /* Says what the work is about before the first picture, so a visitor who reads
    nothing else still knows. */
 .masthead {
-  max-width: 68ch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(24px, 4vw, 76px);
+  align-items: start;
   padding: clamp(30px, 5vw, 64px) 2px clamp(28px, 4vw, 46px);
 }
 
 .masthead p {
   margin: 0;
+  max-width: 60ch;
   color: #e9e9e9;
   font-size: clamp(1rem, 1.55vw, 1.32rem);
   line-height: 1.45;
   letter-spacing: -0.005em;
+}
+
+/* The terms the work is filed under, set against the right edge so they read
+   as an index rather than a second sentence. A step quieter than the statement:
+   they qualify it, they do not compete with it. */
+.keywords {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.62;
+  letter-spacing: 0.01em;
 }
 
 .wall + .wall {
@@ -721,7 +726,13 @@ body.lightbox-open {
   }
 
   .masthead {
+    grid-template-columns: 1fr;
+    gap: 20px;
     padding: 26px 2px 24px;
+  }
+
+  .keywords {
+    text-align: left;
   }
 
   .project-detail {
