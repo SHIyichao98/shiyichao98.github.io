@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 850" width="1100" height="850">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<text x="60" y="88" font-size="27" font-weight="700" fill="#151515">Research</text>
+<text x="60" y="124" font-size="15.5" fill="#6b6b6b">How computational systems represent, learn, and evaluate architectural design</text>
+<text x="60" y="147" font-size="15.5" fill="#6b6b6b">knowledge, with shape grammar as the formal ground.</text>
+<text x="350" y="182" font-size="12.5" fill="#6b6b6b" text-anchor="middle">2023</text>
+<line x1="350" y1="208" x2="350" y2="768" stroke="#efefef" stroke-width="1"/>
+<text x="548" y="182" font-size="12.5" fill="#6b6b6b" text-anchor="middle">2024</text>
+<line x1="548" y1="208" x2="548" y2="768" stroke="#efefef" stroke-width="1"/>
+<text x="748" y="182" font-size="12.5" fill="#6b6b6b" text-anchor="middle">2025</text>
+<line x1="748" y1="208" x2="748" y2="768" stroke="#efefef" stroke-width="1"/>
+<text x="946" y="182" font-size="12.5" fill="#6b6b6b" text-anchor="middle">2026</text>
+<line x1="946" y1="208" x2="946" y2="768" stroke="#efefef" stroke-width="1"/>
+<line x1="60" y1="208" x2="1046" y2="208" stroke="#d8d8d8" stroke-width="1"/>
+<text x="60" y="277" font-size="13" font-weight="700" letter-spacing="1.4" fill="#151515">REPRESENT</text>
+<text x="60" y="297" font-size="11.5" fill="#6b6b6b">making design knowledge explicit as rules</text>
+<line x1="60" y1="358" x2="1046" y2="358" stroke="#d8d8d8" stroke-width="1"/>
+<text x="60" y="454" font-size="13" font-weight="700" letter-spacing="1.4" fill="#151515">LEARN</text>
+<text x="60" y="474" font-size="11.5" fill="#6b6b6b">recovering and generating it by machine</text>
+<line x1="60" y1="563" x2="1046" y2="563" stroke="#d8d8d8" stroke-width="1"/>
+<text x="60" y="660" font-size="13" font-weight="700" letter-spacing="1.4" fill="#151515">EVALUATE</text>
+<text x="60" y="680" font-size="11.5" fill="#6b6b6b">testing what a system produces against it</text>
+<line x1="60" y1="768" x2="1046" y2="768" stroke="#d8d8d8" stroke-width="1"/>
+<circle cx="350" cy="460" r="5" fill="#151515"/>
+<text x="350" y="436" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">ANNSIM 2023</text>
+<text x="350" y="486" font-size="12" fill="#151515" text-anchor="middle">Conditional shape embedding</text>
+<text x="350" y="502" font-size="12" fill="#151515" text-anchor="middle">with GAN</text>
+<text x="350" y="518" font-size="10.5" fill="#6b6b6b" text-anchor="middle">fire-code checking</text>
+<circle cx="548" cy="283" r="5" fill="#151515"/>
+<circle cx="548" cy="283" r="12" fill="none" stroke="#151515" stroke-width="1" stroke-dasharray="2 3"/>
+<text x="548" y="259" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">DCC 2024</text>
+<text x="548" y="309" font-size="12" fill="#151515" text-anchor="middle">Dougong revisited</text>
+<text x="548" y="326" font-size="10.5" fill="#6b6b6b" text-anchor="middle">parametric grammar</text>
+<circle cx="748" cy="412" r="5" fill="#151515"/>
+<text x="748" y="388" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">CAADRIA 2025</text>
+<text x="748" y="438" font-size="12" fill="#151515" text-anchor="middle">Concept to consistent</text>
+<text x="748" y="454" font-size="12" fill="#151515" text-anchor="middle">multi-view renders</text>
+<text x="748" y="470" font-size="10.5" fill="#6b6b6b" text-anchor="middle">grammar + diffusion</text>
+<circle cx="748" cy="508" r="5" fill="#151515"/>
+<circle cx="748" cy="508" r="12" fill="none" stroke="#151515" stroke-width="1" stroke-dasharray="2 3"/>
+<text x="748" y="484" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">CAADRIA 2025</text>
+<text x="748" y="534" font-size="12" fill="#151515" text-anchor="middle">Reimagining Chinese</text>
+<text x="748" y="550" font-size="12" fill="#151515" text-anchor="middle">garden design</text>
+<text x="748" y="566" font-size="10.5" fill="#6b6b6b" text-anchor="middle">interactive generation</text>
+<circle cx="946" cy="283" r="5" fill="#151515"/>
+<text x="946" y="259" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">DCC 2026</text>
+<text x="946" y="309" font-size="12" fill="#151515" text-anchor="middle">Grammar inference</text>
+<text x="946" y="324" font-size="12" fill="#151515" text-anchor="middle">from CAD drawings</text>
+<text x="946" y="341" font-size="10.5" fill="#6b6b6b" text-anchor="middle">rules recovered from data</text>
+<circle cx="946" cy="618" r="5" fill="#151515"/>
+<text x="946" y="594" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">CAADRIA 2026</text>
+<text x="946" y="644" font-size="12" fill="#151515" text-anchor="middle">Benchmarking pix2pix</text>
+<text x="946" y="658" font-size="12" fill="#151515" text-anchor="middle">on floor plans</text>
+<text x="946" y="676" font-size="10.5" fill="#6b6b6b" text-anchor="middle">grammar as ground truth</text>
+<circle cx="946" cy="714" r="5" fill="#151515"/>
+<text x="946" y="690" font-size="11.5" font-weight="700" fill="#151515" text-anchor="middle">ANNSIM 2026</text>
+<text x="946" y="740" font-size="12" fill="#151515" text-anchor="middle">Rule-level reasoning for</text>
+<text x="946" y="754" font-size="12" fill="#151515" text-anchor="middle">performance-aware plans</text>
+<text x="946" y="772" font-size="10.5" fill="#6b6b6b" text-anchor="middle">daylight + explainability</text>
+<circle cx="66" cy="808" r="6" fill="none" stroke="#151515" stroke-width="1" stroke-dasharray="2 3"/>
+<text x="82" y="812" font-size="11" fill="#6b6b6b">encodes a traditional Chinese design system</text>
+<text x="60" y="842" font-size="11" fill="#6b6b6b">Before this line of work: ACADIA 2022, LOOPS &#8212; elastic robotic structures, built and tested at full scale (MArch, UCL).</text>
+<text x="1046" y="812" font-size="11" fill="#6b6b6b" text-anchor="end">Yichao Shi &#183; eight peer-reviewed papers, 2022&#8211;2026</text>
+</g></svg>

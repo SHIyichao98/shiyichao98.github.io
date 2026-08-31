@@ -1,0 +1,457 @@
+/* Print sheet for the application portfolio.
+
+   Letter landscape, because that is the shape a portfolio is read in and the
+   posting asks for letter. Paper white rather than the website's black: this
+   is a document, it may be printed, and a committee reads twenty of them.
+
+   Every page is a fixed box that clips. Nothing reflows across a page break —
+   an image half on one page and half on the next is worse than a tight page. */
+
+@page {
+  size: 11in 8.5in;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #151515;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  position: relative;
+  width: 11in;
+  height: 8.5in;
+  padding: 0.62in 0.7in 0.55in;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+  display: flex;
+  flex-direction: column;
+}
+
+.page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+/* --- shared type ------------------------------------------------------- */
+
+.head {
+  flex: none;
+  margin: 0 0 18px;
+}
+
+.head.thin {
+  margin-bottom: 12px;
+}
+
+.kicker {
+  margin: 0 0 6px;
+  color: #6b6b6b;
+  font-size: 9.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  font-size: 20pt;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+}
+
+h2 .sub {
+  color: #6b6b6b;
+  font-size: 13pt;
+  font-weight: 400;
+}
+
+h3 {
+  margin: 0 0 4px;
+  font-size: 13pt;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h4 {
+  margin: 0 0 6px;
+  font-size: 9.5pt;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #151515;
+}
+
+p {
+  margin: 0 0 9px;
+  font-size: 10pt;
+  line-height: 1.44;
+}
+
+.lede {
+  font-size: 11.5pt;
+  line-height: 1.4;
+}
+
+.authors {
+  margin: 8px 0 0;
+  color: #6b6b6b;
+  font-size: 9.5pt;
+}
+
+.role {
+  color: #6b6b6b;
+  font-size: 9.5pt;
+}
+
+.focus {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  columns: 2;
+  column-gap: 18px;
+}
+
+.focus li {
+  margin: 0 0 4px;
+  padding-left: 11px;
+  position: relative;
+  font-size: 9.5pt;
+  line-height: 1.3;
+  color: #444;
+  break-inside: avoid;
+}
+
+.focus li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.52em;
+  width: 4px;
+  height: 1px;
+  background: #999;
+}
+
+/* --- two-column body: prose left, pictures right ----------------------- */
+
+.split {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 3.05in 1fr;
+  gap: 0.36in;
+  align-items: stretch;
+}
+
+.prose {
+  min-width: 0;
+}
+
+/* --- picture grids ------------------------------------------------------ */
+
+/* The grid fills whatever height is left rather than stacking fixed-height
+   rows. Four pictures and six then both land inside the page: a fixed row
+   height overflowed the foot as soon as a project had one more image than the
+   page was drawn for. */
+.figs {
+  display: grid;
+  gap: 0.13in;
+  min-height: 0;
+  height: 100%;
+  grid-auto-rows: minmax(0, 1fr);
+  align-content: stretch;
+}
+
+.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.figs figure {
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.figs img {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  object-fit: cover;
+  background: #f2f2f2;
+}
+
+/* Slides and spreads shown whole, sitting on the paper rather than bled to
+   the edge of their cell. Cropping one cuts a heading in half. */
+.figs.whole img {
+  object-fit: contain;
+  background: #fbfbfb;
+  border: 1px solid #ececec;
+}
+
+figcaption {
+  margin-top: 3px;
+  color: #6b6b6b;
+  font-size: 7.5pt;
+  line-height: 1.25;
+}
+
+/* --- cover -------------------------------------------------------------- */
+
+.cover {
+  justify-content: space-between;
+}
+
+.cover-type {
+  padding-top: 1.1in;
+}
+
+.cover h1 {
+  margin: 0 0 14px;
+  font-size: 42pt;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.cover-role {
+  margin: 0 0 4px;
+  max-width: 5.6in;
+  font-size: 12pt;
+  line-height: 1.35;
+  color: #444;
+}
+
+.cover-kind {
+  margin: 0;
+  color: #6b6b6b;
+  font-size: 10.5pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cover-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.13in;
+  margin-bottom: 0.2in;
+}
+
+.cover-strip img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.cover-foot {
+  margin: 0;
+  color: #6b6b6b;
+  font-size: 9.5pt;
+}
+
+/* --- research map ------------------------------------------------------- */
+
+.map {
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.map img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* --- three papers on one page ------------------------------------------- */
+
+.thirds {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.32in;
+}
+
+.third img {
+  display: block;
+  width: 100%;
+  height: 1.2in;
+  object-fit: cover;
+  background: #f2f2f2;
+  margin-bottom: 9px;
+}
+
+.third .kicker {
+  margin-bottom: 3px;
+}
+
+.third p {
+  font-size: 8.6pt;
+  line-height: 1.34;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.third .authors {
+  margin: 4px 0 6px;
+  font-size: 8.5pt;
+}
+
+.pubs {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  margin-top: 0.18in;
+  padding-top: 0.13in;
+  border-top: 1px solid #d8d8d8;
+}
+
+/* Fourteen references, all of them. Two columns clipped the last four, and a
+   list that stops mid-record reads as a shorter record. */
+.pubs ol {
+  margin: 0;
+  padding-left: 13px;
+  columns: 3;
+  column-gap: 0.26in;
+}
+
+.pubs li {
+  margin: 0 0 4px;
+  font-size: 7pt;
+  line-height: 1.26;
+  break-inside: avoid;
+}
+
+/* --- teaching table ----------------------------------------------------- */
+
+.courses {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+
+.courses th {
+  padding: 0 10px 7px 0;
+  border-bottom: 1px solid #151515;
+  text-align: left;
+  font-size: 8.5pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #6b6b6b;
+  font-weight: 700;
+}
+
+.courses td {
+  padding: 11px 10px 11px 0;
+  border-bottom: 1px solid #e6e6e6;
+  vertical-align: top;
+  line-height: 1.36;
+}
+
+.courses .course {
+  width: 2.1in;
+  font-weight: 700;
+}
+
+.courses .course span {
+  display: block;
+  color: #6b6b6b;
+  font-weight: 400;
+}
+
+.courses .role-cell {
+  width: 2.9in;
+  color: #6b6b6b;
+}
+
+/* --- design pages ------------------------------------------------------- */
+
+.design-page {
+  gap: 0.3in;
+}
+
+.design-block {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.design-block .lede {
+  max-width: 6.4in;
+  font-size: 10pt;
+}
+
+.design-block .figs {
+  flex: 1 1 auto;
+  margin-top: 10px;
+}
+
+
+
+/* --- cv ----------------------------------------------------------------- */
+
+.cv {
+  flex: 1 1 auto;
+  min-height: 0;
+  columns: 2;
+  column-gap: 0.5in;
+}
+
+.cv-block {
+  break-inside: avoid;
+  margin-bottom: 15px;
+}
+
+.cv-block ul {
+  margin: 0;
+  padding-left: 14px;
+}
+
+.cv-block li {
+  margin: 0 0 4px;
+  font-size: 9pt;
+  line-height: 1.35;
+}
+
+/* --- closing ------------------------------------------------------------ */
+
+.closing {
+  justify-content: center;
+}
+
+.closing-type {
+  max-width: 6.2in;
+}
+
+.closing h2 {
+  margin-bottom: 14px;
+  font-size: 26pt;
+}
+
+.closing-contact {
+  margin-top: 22px;
+  color: #6b6b6b;
+  font-size: 10.5pt;
+  line-height: 1.55;
+}
