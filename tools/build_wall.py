@@ -154,29 +154,36 @@ def looks_like_a_slide(image: Image.Image) -> bool:
     return sum(1 for v in grey if v > 235) / len(grey) > 0.5
 
 
-def ink_window(image: Image.Image) -> Image.Image:
-    """Crop square where the image carries its content, not at its centre.
+def centre(image: Image.Image) -> Image.Image:
+    width, height = image.size
+    side = min(width, height)
+    left, top = (width - side) // 2, (height - side) // 2
+    return image.crop((left, top, left + side, top + side))
 
-    A slide is mostly margin, so a centred window lands on white. Scoring columns
-    (or rows) by how many pixels are not near-white and taking the densest run
-    lands it on the figure. On a slide the title band above and the footer below
-    go first, or the tile reads as half a heading.
+
+def square_crop(image: Image.Image) -> Image.Image:
+    """Square. Centred, unless the source is a slide.
+
+    Centred is what a picture wants: a render or a photograph is composed
+    around its middle, and moving the window off it reads as a mistake even
+    when the window is technically fuller. Chasing the ink through a wide
+    render finds whatever corner holds the most contrast — one Mars view has a
+    dark slab down its left edge, and the tile came back leaning on it.
+
+    A slide is the exception: it is mostly white margin, so a centred window
+    lands on nothing, and its title band has to come off first.
     """
-    if looks_like_a_slide(image):
-        image = image.crop((0, round(image.height * 0.19), image.width, round(image.height * 0.89)))
+    if not looks_like_a_slide(image):
+        return centre(image)
+    return ink_window(image.crop((0, round(image.height * 0.19), image.width, round(image.height * 0.89))))
 
+
+def ink_window(image: Image.Image) -> Image.Image:
+    """Place the square where the marks are densest. For slides only."""
     width, height = image.size
     side = min(width, height)
     if width == height:
         return image
-
-    # A pick cropped square by hand has already been framed by someone who knew
-    # what mattered in it. Hunting for the ink would re-frame it; take the few
-    # per cent off both edges instead and leave the composition alone.
-    if max(width / height, height / width) < 1.15:
-        left = (width - side) // 2
-        top = (height - side) // 2
-        return image.crop((left, top, left + side, top + side))
 
     small = image.convert("L").resize((240, max(1, round(240 * height / width))))
     pixels = small.load()
@@ -344,7 +351,7 @@ def main() -> None:
 
 def cut(source: Path) -> Image.Image:
     image = load(source)
-    square = ink_window(image)
+    square = square_crop(image)
     if square.width > TILE:
         square = square.resize((TILE, TILE), Image.Resampling.LANCZOS)
         square = square.filter(ImageFilter.UnsharpMask(radius=0.8, percent=55, threshold=3))
