@@ -242,6 +242,22 @@ def blocks_for(spec: dict) -> tuple[list[tuple[str, str]], list[tuple[str, str]]
         body += [("Reference", r.strip()) for r in raw.splitlines() if r.strip()]
         return ([("Title", "Further research")], body)
 
+    if kind == "design":
+        # One or two projects share the page, so the heading belongs to the
+        # first and the rest runs on below it.
+        first = read(spec["slugs"][0])
+        head = [("Kicker", kicker(first)), ("Title", first.get("title", ""))]
+        body = []
+        for index, slug in enumerate(spec["slugs"]):
+            meta = read(slug)
+            if index:
+                body += [("Kicker", kicker(meta)), ("SectionHead", meta.get("title", ""))]
+            body.append(("Standfirst" if not index else "ListItem", meta.get("summary", "")))
+            role = paragraphs(meta, "Role")
+            if role:
+                body.append(("Caption", role[0]))
+        return (head, body)
+
     meta = read(spec["slug"])
     if spec.get("part") == 2:
         head = [("Kicker", f"{kicker(meta)} / student work"), ("Title", meta.get("title", ""))]
