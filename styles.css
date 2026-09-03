@@ -171,6 +171,48 @@ img {
   letter-spacing: -0.005em;
 }
 
+/* The name is the one place on the page that says who wrote it, so it carries
+   a full underline and goes to the About page. Set in the accent, which the
+   dark side of the site uses for exactly one thing at a time. */
+.masthead .whoami {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 180ms ease;
+}
+
+.masthead .whoami:hover,
+.masthead .whoami:focus-visible {
+  color: #ffffff;
+}
+
+/* Three words in the sentence are also the three walls below it. Marked with a
+   dotted rule rather than a solid one: they are a shortcut through the page,
+   not a departure from it, and a paragraph with three solid links in it reads
+   as a list of links rather than as a sentence. */
+.masthead .jump {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(255, 255, 255, 0.42);
+  text-underline-offset: 4px;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.masthead .jump:hover,
+.masthead .jump:focus-visible {
+  color: #ffffff;
+  text-decoration-color: var(--accent);
+}
+
+/* Landing flush against the top edge reads as an overshoot. */
+.wall {
+  scroll-margin-top: 18px;
+}
+
 /* The terms the work is filed under, set against the right edge so they read
    as an index rather than a second sentence. A step quieter than the statement:
    they qualify it, they do not compete with it. */

@@ -28,7 +28,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "94";
+const ASSET_VERSION = "95";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -491,6 +491,32 @@ document.querySelectorAll(".gallery .tile[data-project]").forEach((tile) => {
   caption.className = "tile-caption";
   caption.textContent = name;
   tile.append(caption);
+});
+
+// The opening sentence doubles as navigation: research, design and teach jump
+// to their wall. Handled here rather than left to the browser's own anchor
+// jump, for two reasons. The move is animated, so the reader sees where the
+// page went rather than being teleported. And the address bar stays on the
+// route the router understands -- #wall-design is not a project, so a reload
+// with it in the URL would land on a hash syncRoute has to discard.
+document.addEventListener("click", (event) => {
+  const link = event.target.closest("[data-wall]");
+  if (!link) return;
+  const heading = document.getElementById(link.dataset.wall);
+  if (!heading) return;
+
+  event.preventDefault();
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (heading.closest(".wall") ?? heading).scrollIntoView({
+    behavior: still ? "auto" : "smooth",
+    block: "start",
+  });
+
+  // Carry the reading position with the scroll. Without this a keyboard user
+  // is moved down the page while their focus stays in the sentence, so the
+  // next Tab returns them to where they just left.
+  heading.tabIndex = -1;
+  heading.focus({ preventScroll: true });
 });
 
 const syncRoute = () => {
