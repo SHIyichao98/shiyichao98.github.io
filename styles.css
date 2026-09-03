@@ -172,10 +172,10 @@ img {
 }
 
 /* The name is the one place on the page that says who wrote it, so it carries
-   a full underline and goes to the About page. Set in the accent, which the
-   dark side of the site uses for exactly one thing at a time. */
+   a full underline and goes to the About page. White, not the accent: a gold
+   name in a white sentence read as a highlight rather than a signature. */
 .masthead .whoami {
-  color: var(--accent);
+  color: #ffffff;
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -185,7 +185,7 @@ img {
 
 .masthead .whoami:hover,
 .masthead .whoami:focus-visible {
-  color: #ffffff;
+  color: var(--accent);
 }
 
 /* Three words in the sentence are also the three walls below it. Marked with a

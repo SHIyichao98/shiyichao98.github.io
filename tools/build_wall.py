@@ -103,6 +103,12 @@ BY_HAND = {
 # match that used to be exact can drift out of range; better to stop and be
 # told than to ship a tile that links to the wrong project.
 TRUST_BITS = 20
+# Picks that open a section, in this order, before the shuffle places the rest.
+# Keyed by section, valued by source filename. The first row is the one a
+# visitor sees without scrolling, so it is chosen rather than drawn.
+LEAD = {
+    "teaching": ("Lucas Nagel_03.jpg", "Hang Xu & Dingkun Hu_01.jpeg", "Andy Nguyen_03.jpg"),
+}
 
 TITLES = {
     "arch-2017": "Architectural Design Studio",
@@ -230,21 +236,25 @@ def ink_window(image: Image.Image) -> Image.Image:
     return image.crop((0, top, side, top + side))
 
 
-def mix(items, cols=3, seed=5):
+def mix(items, cols=3, seed=5, head=()):
     """Order so no project sits beside its own work, or directly above it.
 
     The grid is three wide, so tile i touches i-1 and i-3. Guarding only against
     the first still stacks a project down a column.
+
+    `head` is placed first, as given; the shuffle fills in after it and still
+    avoids putting a project under one of the pinned tiles.
     """
     best = None
     for attempt in range(seed, seed + 400):
         rng = random.Random(attempt)
         pool = collections.defaultdict(list)
         for item in items:
-            pool[item["slug"]].append(item)
+            if item not in head:
+                pool[item["slug"]].append(item)
         for group in pool.values():
             rng.shuffle(group)
-        out = []
+        out = list(head)
         while any(pool.values()):
             banned = {out[-1]["slug"]} if out else set()
             if len(out) >= cols:
@@ -332,7 +342,12 @@ def main() -> None:
         kept, dropped = trim(sections[key], len(sections[key]) // ROW * ROW)
         if dropped:
             print(f"  {key}: kept {len(kept)}, left out {', '.join(d['path'].name for d in dropped)}")
-        mixed, clashes = mix(kept)
+        names = {item["path"].name: item for item in kept}
+        head = [names[n] for n in LEAD.get(key, ()) if n in names]
+        absent = [n for n in LEAD.get(key, ()) if n not in names]
+        if absent:
+            print(f"  [!] {key}: lead pick(s) not in the section: {', '.join(absent)}", file=sys.stderr)
+        mixed, clashes = mix(kept, head=head)
         if clashes:
             print(f"  {key}: {clashes} tile(s) still adjacent to their own project")
         ordered[key] = mixed
