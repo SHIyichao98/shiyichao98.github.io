@@ -1,0 +1,77 @@
+# Search engines are welcome. A hiring committee finding this site is the point.
+User-agent: *
+Allow: /
+
+# Crawlers that collect pages and images to train generative models are not.
+# This site publishes student coursework: the students consented to being shown
+# on a teaching page, which is not consent to being absorbed into a model.
+#
+# This is a request, not a control. It binds only the crawlers that choose to
+# read it, and nothing here stops a scraper that ignores robots.txt. The
+# resolution cap and the corner credit in tools/guard_images.py are the parts
+# that do not depend on anyone's good behaviour.
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Perplexity-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Timpibot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+# Google-Extended governs Gemini training only. Google Search indexing runs
+# under Googlebot above and is deliberately left alone.
+User-agent: Google-Extended
+Disallow: /

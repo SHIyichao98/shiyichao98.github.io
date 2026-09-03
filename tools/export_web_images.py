@@ -9,7 +9,10 @@ than the target it is copied at its native size and reported as a shortfall.
 Targets follow the layout in styles.css:
 
   carousel main image   .project-carousel is min(100%, 1120px), frame is 16/10
-                        -> 1120x700 CSS px, doubled for high-DPI = 2240x1400
+                        -> 1120x700 CSS px. Capped at 1600 on the long edge
+                        rather than the 2240 a doubled frame would want: 1600
+                        still oversamples every display, and at 300 dpi it
+                        prints 5.3 in against 7.5. See tools/guard_images.py.
   gallery tile (hero)   .tile is aspect-ratio 1/1 with object-fit: cover
                         -> square crop, 1200x1200
   carousel thumbnail    .carousel-thumb is aspect-ratio 1/1, ~105-220 CSS px
@@ -32,11 +35,22 @@ from pathlib import Path
 
 from PIL import Image, ImageCms, ImageFilter, ImageOps
 
+# Students hand in photographs off their phones, and an iPhone writes HEIC.
+# Some arrive already renamed to .jpg, so the extension proves nothing and the
+# decoder has to be registered whatever the file is called.
+try:
+    import pillow_heif
+
+    pillow_heif.register_heif_opener()
+except ImportError:  # pip install pillow-heif
+    pass
+
 # The stadium renders are over 100 megapixels, past Pillow's decompression-bomb
 # guard. These are the user's own files, so raise the ceiling rather than fail.
 Image.MAX_IMAGE_PIXELS = None
 
-MAIN_BOX = (2240, 1400)
+# Square box, so min() in fit_within caps the long edge whatever the shape.
+MAIN_BOX = (1600, 1600)
 HERO_SIZE = 1200
 # Project pages show a square grid on the same three-column spec as the index,
 # so a cell is roughly 340-362 CSS px. 720 covers that on a high-DPI screen.
