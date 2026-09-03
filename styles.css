@@ -241,6 +241,41 @@ img {
   outline-offset: 4px;
 }
 
+/* --- index wall: grey until looked at ----------------------------------
+   Thirty-three tiles in nine palettes fight each other; drained to grey they
+   read as one wall, and the picture under the cursor is the only one in
+   colour. Suggested by Ilker Karadag, who called it cliche and was right on
+   both counts.
+
+   Done as a filter rather than as grey exports: the files stay in colour, so
+   this is a display choice and not a re-export, and it is reversible by
+   editing one character.
+
+   To go back to colour everywhere, set --tile-grey to 0.
+
+   Only where a cursor exists. On a phone there is no hover, so the reveal can
+   never fire and the wall would simply be monochrome forever -- which is not
+   the effect, it is a bug wearing the effect's clothes. Touch devices get the
+   colour straight away. */
+.wall-grid {
+  --tile-grey: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wall-grid .tile img {
+    filter: grayscale(var(--tile-grey));
+  }
+
+  /* Dimmed less than a project tile is. The caption carries its own scrim, so
+     it stays legible, and the colour arriving at 72% opacity was arriving
+     apologetically. */
+  .wall-grid .tile:hover img,
+  .wall-grid .tile:focus-visible img {
+    filter: grayscale(0);
+    opacity: 0.88;
+  }
+}
+
 /* Rides in with the hover dim: the picture says what it is only while being
    looked at, so nothing carries a permanent label. Shared by the index wall
    and the project walls, over light and dark tiles alike, which is why it
