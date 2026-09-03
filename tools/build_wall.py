@@ -86,7 +86,18 @@ AS_DESIGN = {"acadia-2022": "loops", "ucl-loops": "loops"}
 # Content matching cannot place a pick that exists nowhere else in the library,
 # and at nineteen differing bits it guesses: 27-2-2 is the porcelain workshop,
 # which it read as LOOPS. Anything it places past a dozen bits is worth an eye.
-BY_HAND = {"01-01.jpg": "street", "27-2-2.jpg": "craftman", "dome.jpg": "mars"}
+#
+# Samuel Thurman_13 lands at 22 bits against its own published copy, because
+# that copy now carries a corner credit (tools/guard_images.py) and the source
+# here does not. A dHash is 9x8, so a mark in the top-left corner moves real
+# bits. Expect more of these as the guarded set grows; the fix is a line here,
+# not a looser threshold.
+BY_HAND = {
+    "01-01.jpg": "street",
+    "27-2-2.jpg": "craftman",
+    "dome.jpg": "mars",
+    "Samuel Thurman_13.png": "arch-8833",
+}
 # Past this many differing bits the nearest neighbour is a coincidence, not the
 # same picture. Cropping a pick square by hand pushes it up the scale, so a
 # match that used to be exact can drift out of range; better to stop and be
