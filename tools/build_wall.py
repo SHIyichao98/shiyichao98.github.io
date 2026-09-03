@@ -32,6 +32,14 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter
 
+# Student phone photographs arrive as HEIC, sometimes already renamed .jpg.
+try:
+    import pillow_heif
+
+    pillow_heif.register_heif_opener()
+except ImportError:  # pip install pillow-heif
+    pass
+
 sys.path.insert(0, str(Path(__file__).parent))
 
 from export_web_images import load  # colour-managed read
