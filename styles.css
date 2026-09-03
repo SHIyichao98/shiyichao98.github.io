@@ -8,6 +8,10 @@
   /* 480px at 1920, narrowing on smaller screens so the wall keeps room. */
   --sidebar: clamp(280px, 25vw, 480px);
   --gap: 10px;
+  /* Where content begins, in both columns. The sidebar pads down to it and the
+     masthead pads down to it less the gallery's own gap, so the name and the
+     opening sentence start on one line. */
+  --head-top: 22px;
   /* Project detail pages: white and neutral greys only. No warm tint, no
      accent colour, so nothing competes with the work being shown. */
   --paper: #ffffff;
@@ -55,7 +59,7 @@ img {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 22px 26px 20px;
+  padding: var(--head-top) 26px 20px;
   background:
     radial-gradient(circle at 18% 4%, rgba(255, 255, 255, 0.08), transparent 24%),
     linear-gradient(180deg, #0e0f0f, #080909);
@@ -155,7 +159,7 @@ img {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(24px, 4vw, 76px);
   align-items: start;
-  padding: clamp(30px, 5vw, 64px) 2px clamp(28px, 4vw, 46px);
+  padding: calc(var(--head-top) - var(--gap)) 2px clamp(28px, 4vw, 46px);
 }
 
 .masthead p {
