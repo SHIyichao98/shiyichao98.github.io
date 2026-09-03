@@ -40,7 +40,7 @@ SERVED = "http://127.0.0.1:5500/portfolio.html"
 NAME = "Yichao Shi"
 ROLE = "Instructor and PhD candidate, School of Architecture, Georgia Institute of Technology"
 EMAIL = "yichao.shi@gatech.edu"
-SITE = "shiyichao98.github.io"
+SITE = "yichaoshi.com"
 
 # Twenty pages. Research leads and takes six; teaching takes six, with two on
 # the design studio because that is the teaching a studio-based school hires
