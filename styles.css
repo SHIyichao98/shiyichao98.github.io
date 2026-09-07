@@ -119,6 +119,23 @@ img {
   font-size: 0.76rem;
 }
 
+/* A section heading is the way to that wall alone. Same weight and colour as
+   before; the underline arrives on hover, and stays while its wall is the
+   one showing. */
+.index-nav h2 a {
+  color: inherit;
+}
+
+.index-nav h2 a:hover,
+.index-nav h2 a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gallery .wall[hidden] {
+  display: none;
+}
+
 .index-nav a,
 .side-links a {
   display: block;
@@ -327,24 +344,6 @@ img {
   display: none;
 }
 
-.detail-nav {
-  position: sticky;
-  top: 0;
-  z-index: 4;
-  margin: -26px clamp(-58px, -4vw, -20px) 34px;
-  padding: 18px clamp(20px, 4vw, 58px);
-  background: var(--paper);
-  border-bottom: 1px solid var(--paper-line);
-}
-
-.detail-nav a {
-  color: var(--paper-ink);
-  font-weight: 700;
-}
-
-.detail-nav a:hover {
-  text-decoration: underline;
-}
 
 /* No cap here: the image grid should fill the page. Prose is held to a
    readable measure by the 720px rule on p/li/h2 further down. */
@@ -779,10 +778,6 @@ body.lightbox-open {
     padding: 18px 18px 54px;
   }
 
-  .detail-nav {
-    margin: -18px -18px 26px;
-    padding: 16px 18px;
-  }
 
   .project-intro {
     grid-template-columns: 1fr;

@@ -29,13 +29,12 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "105";
+const ASSET_VERSION = "106";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
 const detail = document.querySelector("#project-detail");
 const detailContent = document.querySelector("[data-project-content]");
-const closeProject = document.querySelector("[data-close-project]");
 
 // Route currently rendered. A hash navigation fires both popstate and
 // hashchange, so syncRoute compares against this to avoid rendering twice.
@@ -389,18 +388,32 @@ const hydrateGrids = (root) => {
 // hash hanging off the address, and the page is the index by default anyway.
 const indexUrl = () => window.location.pathname + window.location.search;
 
-const showIndex = (updateHash = true) => {
+// The three walls answer to three hashes. A sidebar heading opens the index
+// with only its own wall showing; the name, or no hash at all, shows all three.
+const WALL_HASHES = { designs: "design", teaching: "teaching", research: "research" };
+
+const showIndex = (updateHash = true, wall = null) => {
   if (!lightbox.hidden) closeLightbox();
-  currentRoute = "index";
+  const wasIndex = currentRoute === "index";
+  currentRoute = wall ? `wall/${wall}` : "index";
   requestToken += 1;
   document.body.classList.remove("viewing-project");
   detail.hidden = true;
   gallery.hidden = false;
   detailContent.innerHTML = "";
+  document.querySelectorAll(".gallery .wall").forEach((section) => {
+    section.hidden = Boolean(wall) && section.getAttribute("aria-labelledby") !== `wall-${wall}`;
+  });
+  document.querySelectorAll("[data-wall]").forEach((link) => {
+    link.setAttribute("aria-current", link.dataset.wall === wall ? "page" : "false");
+  });
   if (updateHash) {
-    history.pushState(null, "", indexUrl());
+    const hash = wall ? `#${Object.keys(WALL_HASHES).find((k) => WALL_HASHES[k] === wall)}` : "";
+    history.pushState(null, "", indexUrl() + hash);
   }
-  window.scrollTo({ top: indexScrollY, behavior: "instant" });
+  // Coming back from a project restores the place on the wall; choosing a
+  // wall from the sidebar starts it from the top.
+  window.scrollTo({ top: wall || wasIndex ? 0 : indexScrollY, behavior: "instant" });
 };
 
 const openProject = async (slug, updateHash = true) => {
@@ -475,9 +488,16 @@ document.querySelectorAll("[data-project]").forEach((link) => {
   });
 });
 
-closeProject.addEventListener("click", (event) => {
+document.querySelector("[data-home]").addEventListener("click", (event) => {
   event.preventDefault();
   showIndex();
+});
+
+document.querySelectorAll("[data-wall]").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    showIndex(true, link.dataset.wall);
+  });
 });
 
 // On a phone the index lives behind a button. The button only renders under
@@ -522,12 +542,13 @@ document.querySelectorAll(".gallery .tile[data-project]").forEach((tile) => {
 
 const syncRoute = () => {
   const match = window.location.hash.match(/^#project\/(.+)$/);
-  const route = match ? `project/${match[1]}` : "index";
+  const wall = WALL_HASHES[window.location.hash.slice(1)] ?? null;
+  const route = match ? `project/${match[1]}` : wall ? `wall/${wall}` : "index";
   if (route === currentRoute) return;
   if (match) {
     openProject(match[1], false);
   } else {
-    showIndex(false);
+    showIndex(false, wall);
   }
 };
 
