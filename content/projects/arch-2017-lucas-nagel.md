@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2017/lucas-nagel/grid/01.jpg | assets/
 authors: Student: **Lucas Nagel**
 links: [About the course](#project/arch-2017)
 student: Lucas Nagel
+project: 
 course: arch-2017
 ---
 

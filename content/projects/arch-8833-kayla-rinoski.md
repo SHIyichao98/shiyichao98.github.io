@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-8833/kayla-rinoski/grid/01.jpg | asset
 authors: Student: **Kayla Rinoski**
 links: [About the course](#project/arch-8833)
 student: Kayla Rinoski
+project: 
 course: arch-8833
 ---
 

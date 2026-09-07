@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/sam-charles-jonathon-caruso/grid/
 authors: Student: **Sam Charles & Jonathon Caruso**
 links: [About the course](#project/arch-6020)
 student: Sam Charles & Jonathon Caruso
+project: 
 course: arch-6020
 ---
 

@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/chase-scholze/grid/01.jpg | asset
 authors: Student: **Chase Scholze**
 links: [About the course](#project/arch-6020)
 student: Chase Scholze
+project: 
 course: arch-6020
 ---
 

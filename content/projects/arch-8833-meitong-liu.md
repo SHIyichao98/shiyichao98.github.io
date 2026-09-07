@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-8833/meitong-liu/grid/01.jpg | assets/
 authors: Student: **Meitong Liu**
 links: [About the course](#project/arch-8833)
 student: Meitong Liu
+project: 
 course: arch-8833
 ---
 

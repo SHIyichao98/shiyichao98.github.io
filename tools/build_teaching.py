@@ -16,6 +16,16 @@ is one folder ("Hang Xu & Dingkun Hu"). Files are ordered by the number in
 their name, whatever else the name says. Anything at the course level that is
 not a student folder is ignored.
 
+A student with more than one project keeps each in its own subfolder, named
+for the project, each with its own grids/, full/ and project.md:
+
+    <Student Name>/Plaster Models/grids/01.jpg
+    <Student Name>/Plaster Models/project.md
+
+Each project is its own page and its own tile on the course page. Pictures
+directly under the student's folder are one more project, unnamed, and keep
+the short page address.
+
 project.md is the student's own account, written by hand:
 
     ---
@@ -178,29 +188,49 @@ def read_note(student_dir: Path, dry: bool) -> tuple[str, str, str]:
     return meta.get("assignment", "").strip(), meta.get("summary", "").strip(), body.strip()
 
 
-def collect(folder: Path) -> dict[str, dict[str, list[Path]]]:
-    """Student display name -> {"grid": [...], "full": [...]}, each in number order."""
-    students: dict[str, dict[str, list[Path]]] = {}
+def pictures_in(project_dir: Path) -> dict[str, list[Path]]:
+    """{"grid": [...], "full": [...]} from a folder's grids/ and full/, in number order."""
+    shots: dict[str, list[Path]] = {"grid": [], "full": []}
+    for kind, sub in (("grid", "grids"), ("full", "full")):
+        source = project_dir / sub
+        if not source.is_dir():
+            continue
+        files = [p for p in source.iterdir() if p.is_file() and p.suffix.lower() in SOURCE_SUFFIXES]
+        keyed = []
+        for path in files:
+            match = NUMBER.search(path.stem)
+            keyed.append((int(match.group(1)) if match else 10**6, path.name, path))
+        shots[kind] = [p for _n, _name, p in sorted(keyed)]
+    return shots
+
+
+def collect(folder: Path) -> list[tuple[str, str, Path, dict[str, list[Path]]]]:
+    """(student, project, project folder, pictures) for every project in a course.
+
+    A student folder is one project unless it holds project subfolders, in
+    which case each of those is one, and any pictures at the student level
+    are one more with no project name.
+    """
+    out = []
     for student_dir in sorted(folder.iterdir()):
-        if not student_dir.is_dir() or student_dir.name in NOT_STUDENTS:
+        if not student_dir.is_dir() or student_dir.name in NOT_STUDENTS or student_dir.name.startswith("_"):
             continue
         name = display_name(student_dir.name)
-        shots = {"grid": [], "full": []}
-        for kind, sub in (("grid", "grids"), ("full", "full")):
-            source = student_dir / sub
-            if not source.is_dir():
+        found = False
+        own = pictures_in(student_dir)
+        if own["grid"] or own["full"]:
+            out.append((name, "", student_dir, own)); found = True
+        for project_dir in sorted(student_dir.iterdir()):
+            if not project_dir.is_dir() or project_dir.name in NOT_STUDENTS:
                 continue
-            files = [p for p in source.iterdir() if p.is_file() and p.suffix.lower() in SOURCE_SUFFIXES]
-            keyed = []
-            for path in files:
-                match = NUMBER.search(path.stem)
-                keyed.append((int(match.group(1)) if match else 10**6, path.name, path))
-            shots[kind] = [p for _n, _name, p in sorted(keyed)]
-        if shots["grid"] or shots["full"]:
-            students[name] = shots
-        else:
-            print(f"  [!] {student_dir.relative_to(SOURCES)}: no grids/ or full/ pictures", file=sys.stderr)
-    return students
+            shots = pictures_in(project_dir)
+            if shots["grid"] or shots["full"]:
+                out.append((name, display_name(project_dir.name), project_dir, shots)); found = True
+            else:
+                print(f"  [!] {project_dir.relative_to(SOURCES)}: no grids/ or full/ pictures", file=sys.stderr)
+        if not found:
+            print(f"  [!] {student_dir.relative_to(SOURCES)}: no pictures", file=sys.stderr)
+    return out
 
 
 def export(student_dir: Path, shots: dict[str, list[Path]], dry: bool) -> dict[str, list[str]]:
@@ -227,10 +257,12 @@ def export(student_dir: Path, shots: dict[str, list[Path]], dry: bool) -> dict[s
     return published
 
 
-def page(course: dict[str, str], student: str, note: tuple[str, str, str], course_slug: str,
+def page(course: dict[str, str], student: str, project: str, note: tuple[str, str, str], course_slug: str,
          cover: str, shots: dict[str, list[str]]) -> str:
     """A student page: the course as header, the student's own note as body."""
     assignment, summary, body = note
+    # A named project folder names the assignment unless the note says otherwise.
+    assignment = assignment or project
     lines = [
         "---",
         f"title: {course['title']}",
@@ -252,6 +284,7 @@ def page(course: dict[str, str], student: str, note: tuple[str, str, str], cours
         f"authors: {credit}",
         f"links: [About the course](#project/{course_slug})",
         f"student: {student}",
+        f"project: {project}",
         f"course: {course_slug}",
         "---",
         "",
@@ -356,27 +389,30 @@ def main() -> None:
             # The kicker on a student page names the category, as the sidebar does.
             course_meta = {**course_meta, "type": f"Teaching / {cat_title}"}
             hub: list[str] = []
-            students = collect(folder)
-            print(f"  {course_slug}: {len(students)} students")
-            for student, shots in sorted(students.items()):
-                slug = f"{course_slug}-{slugify(student)}"
-                note = read_note(folder / student, args.dry_run)
+            projects = collect(folder)
+            print(f"  {course_slug}: {len(projects)} projects")
+            for student, project, project_dir, shots in projects:
+                slug = f"{course_slug}-{slugify(student)}" + (f"-{slugify(project)}" if project else "")
+                note = read_note(project_dir, args.dry_run)
                 notes_blank += not any(note)
-                student_dir = OUT / course_slug / slugify(student)
+                # Output folder is the slug less the course, so the wall's pick
+                # matcher reads the project straight off the path.
+                student_dir = OUT / course_slug / slug[len(course_slug) + 1:]
                 if args.dry_run or (args.pages_only and student_dir.is_dir()):
                     published = export(student_dir, shots, dry=True)
                 else:
                     published = export(student_dir, shots, dry=False)
                     pictures += sum(len(v) for v in published.values())
                 cover = f"{student_dir.relative_to(ROOT).as_posix()}/hero.jpg"
-                text = page(course_meta, student, note, course_slug, cover, published)
+                text = page(course_meta, student, project, note, course_slug, cover, published)
                 if not args.dry_run:
                     (PROJECTS / f"{slug}.md").write_text(text, encoding="utf-8")
                 pages_written += 1
                 state = f"  assignment: {note[0]}" if note[0] else ("  (note filled, no assignment)" if any(note) else "  (project.md blank)")
-                print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{state}")
+                label = f"{student} \u00b7 {project}" if project else student
+                print(f"    {label:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{state}")
                 sources.append(f'  "{slug}": "content/projects/{slug}.md",')
-                hub.append(f"{slug}::{student}::{cover}")
+                hub.append(f"{slug}::{label}::{cover}")
             if not args.dry_run:
                 write_course_hub(course_slug, hub)
         # The hub pages this once wrote are retired; clear a leftover.

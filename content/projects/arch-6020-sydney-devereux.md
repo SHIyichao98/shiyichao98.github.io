@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/sydney-devereux/grid/01.jpg
 authors: Student: **Sydney Devereux**
 links: [About the course](#project/arch-6020)
 student: Sydney Devereux
+project: 
 course: arch-6020
 ---
 

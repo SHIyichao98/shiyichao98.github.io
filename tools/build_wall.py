@@ -100,6 +100,11 @@ BY_HAND = {
     # 2026 studio; the source folder says so and the published copy is
     # watermarked, which is what pushed the true match out of range.
     "Lucas Nagel_01.jpg": "arch-2017-lucas-nagel",
+    # Each has its own page now; the published copies carry a corner credit,
+    # which is what keeps content matching from placing them on its own.
+    "models01.jpg": "arch-2017-lucas-nagel-plaster-models",
+    "Rishi Patel_01.jpg": "arch-2017-rishi-patel",
+    "Samuel Thurman_01.png": "arch-8833-samuel-thurman",
     # Page 22 of the Kokura portfolio, before that project was published.
     "housing.jpg": "kokura",
 }
@@ -126,12 +131,15 @@ ORDER = {
         "27-2-2.jpg",
     ),
     "teaching": (
+        "models01.jpg",
         "Jonathan Caruso & Jiawei Gong01.png",
         "Lucas Nagel_01.jpg",
         "Jiawei Gong_01.jpeg",
         "Lydia Efthymiopoulou_05.jpg",
         "Chase Scholze_02.png",
         "Miguel Pita-Ruiz_04.png",
+        "Samuel Thurman_01.png",
+        "Rishi Patel_01.jpg",
     ),
 }
 
@@ -178,6 +186,8 @@ def student_captions() -> dict[str, str]:
                 meta[k.strip()] = v.strip()
         if meta.get("student"):
             out[md.stem] = f"{meta.get('title', '')} \u00b7 {meta['student']}"
+            if meta.get("project"):
+                out[md.stem] += f" \u00b7 {meta['project']}"
     return out
 
 

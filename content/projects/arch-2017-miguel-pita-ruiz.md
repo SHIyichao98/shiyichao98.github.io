@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2017/miguel-pita-ruiz/grid/01.jpg | as
 authors: Student: **Miguel Pita-Ruiz**
 links: [About the course](#project/arch-2017)
 student: Miguel Pita-Ruiz
+project: 
 course: arch-2017
 ---
 

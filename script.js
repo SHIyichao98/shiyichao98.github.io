@@ -49,12 +49,15 @@ const projectSources = {
   "arch-6020-sydney-devereux": "content/projects/arch-6020-sydney-devereux.md",
   "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
   "arch-2017-lucas-nagel": "content/projects/arch-2017-lucas-nagel.md",
+  "arch-2017-lucas-nagel-plaster-models": "content/projects/arch-2017-lucas-nagel-plaster-models.md",
   "arch-2017-lydia-efthymiopoulou": "content/projects/arch-2017-lydia-efthymiopoulou.md",
   "arch-2017-miguel-pita-ruiz": "content/projects/arch-2017-miguel-pita-ruiz.md",
+  "arch-2017-rishi-patel": "content/projects/arch-2017-rishi-patel.md",
   "arch-8833-brian-lachnicht": "content/projects/arch-8833-brian-lachnicht.md",
   "arch-8833-calvin-heimberg": "content/projects/arch-8833-calvin-heimberg.md",
   "arch-8833-kayla-rinoski": "content/projects/arch-8833-kayla-rinoski.md",
   "arch-8833-meitong-liu": "content/projects/arch-8833-meitong-liu.md",
+  "arch-8833-samuel-thurman": "content/projects/arch-8833-samuel-thurman.md",
   // --- teaching:end ---
 };
 
@@ -63,7 +66,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "114";
+const ASSET_VERSION = "115";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");

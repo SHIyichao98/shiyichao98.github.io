@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-8833/calvin-heimberg/grid/01.jpg | ass
 authors: Student: **Calvin Heimberg**
 links: [About the course](#project/arch-8833)
 student: Calvin Heimberg
+project: 
 course: arch-8833
 ---
 

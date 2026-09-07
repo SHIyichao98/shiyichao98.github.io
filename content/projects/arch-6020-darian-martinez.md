@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/darian-martinez/grid/01.jpg
 authors: Student: **Darian Martinez**
 links: [About the course](#project/arch-6020)
 student: Darian Martinez
+project: 
 course: arch-6020
 ---
 

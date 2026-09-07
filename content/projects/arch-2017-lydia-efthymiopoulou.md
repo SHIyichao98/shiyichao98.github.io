@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2017/lydia-efthymiopoulou/grid/01.jpg 
 authors: Student: **Lydia Efthymiopoulou**
 links: [About the course](#project/arch-2017)
 student: Lydia Efthymiopoulou
+project: 
 course: arch-2017
 ---
 

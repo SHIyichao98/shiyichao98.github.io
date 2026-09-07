@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/lyriel-todd/grid/01.jpg | assets/
 authors: Student: **Lyriel Todd**
 links: [About the course](#project/arch-2020)
 student: Lyriel Todd
+project: 
 course: arch-2020
 ---
 

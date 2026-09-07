@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/mitchell-stevens-and-austin-taylo
 authors: Student: **Mitchell Stevens and Austin Taylor**
 links: [About the course](#project/arch-6020)
 student: Mitchell Stevens and Austin Taylor
+project: 
 course: arch-6020
 ---
 

@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2017/andy-nguyen/grid/01.jpg | assets/
 authors: Student: **Andy Nguyen**
 links: [About the course](#project/arch-2017)
 student: Andy Nguyen
+project: 
 course: arch-2017
 ---
 

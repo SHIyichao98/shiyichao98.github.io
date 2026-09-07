@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/hang-xu/grid/01.jpg | assets/site
 authors: Student: **Hang Xu**
 links: [About the course](#project/arch-6020)
 student: Hang Xu
+project: 
 course: arch-6020
 ---
 

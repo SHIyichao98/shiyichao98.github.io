@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/alyaana-zaman/grid/01.jpg
 authors: Student: **Alyaana Zaman**
 links: [About the course](#project/arch-2020)
 student: Alyaana Zaman
+project: 
 course: arch-2020
 ---
 

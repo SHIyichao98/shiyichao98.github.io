@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/sydney-wetterhan/grid/01.jpg
 authors: Student: **Sydney Wetterhan**
 links: [About the course](#project/arch-2020)
 student: Sydney Wetterhan
+project: 
 course: arch-2020
 ---
 

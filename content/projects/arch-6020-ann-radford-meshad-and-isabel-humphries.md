@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/ann-radford-meshad-and-isabel-hum
 authors: Student: **Ann Radford Meshad and Isabel Humphries**
 links: [About the course](#project/arch-6020)
 student: Ann Radford Meshad and Isabel Humphries
+project: 
 course: arch-6020
 ---
 

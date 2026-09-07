@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/alesya-yermakova/grid/01.jpg
 authors: Student: **Alesya Yermakova**
 links: [About the course](#project/arch-2020)
 student: Alesya Yermakova
+project: 
 course: arch-2020
 ---
 

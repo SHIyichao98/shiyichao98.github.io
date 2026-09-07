@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/ethan-cofer-and-rohan-sood/grid/0
 authors: Student: **Ethan Cofer and Rohan Sood**
 links: [About the course](#project/arch-6020)
 student: Ethan Cofer and Rohan Sood
+project: 
 course: arch-6020
 ---
 

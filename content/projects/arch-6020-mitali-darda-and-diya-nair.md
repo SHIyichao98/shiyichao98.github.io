@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/mitali-darda-and-diya-nair/grid/0
 authors: Student: **Mitali Darda and Diya Nair**
 links: [About the course](#project/arch-6020)
 student: Mitali Darda and Diya Nair
+project: 
 course: arch-6020
 ---
 

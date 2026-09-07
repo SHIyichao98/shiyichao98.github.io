@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/hellen-gonzalez/grid/01.jpg | ass
 authors: Student: **Hellen Gonzalez**
 links: [About the course](#project/arch-2020)
 student: Hellen Gonzalez
+project: 
 course: arch-2020
 ---
 

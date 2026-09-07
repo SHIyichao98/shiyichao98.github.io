@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/chris-wang/grid/01.jpg
 authors: Student: **Chris Wang**
 links: [About the course](#project/arch-2020)
 student: Chris Wang
+project: 
 course: arch-2020
 ---
 

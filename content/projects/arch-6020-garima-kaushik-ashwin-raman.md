@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/grid/
 authors: Student: **Garima Kaushik & Ashwin Raman**
 links: [About the course](#project/arch-6020)
 student: Garima Kaushik & Ashwin Raman
+project: 
 course: arch-6020
 ---
 

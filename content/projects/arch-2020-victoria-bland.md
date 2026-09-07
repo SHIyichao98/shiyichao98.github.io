@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-2020/victoria-bland/grid/01.jpg
 authors: Student: **Victoria Bland**
 links: [About the course](#project/arch-2020)
 student: Victoria Bland
+project: 
 course: arch-2020
 ---
 

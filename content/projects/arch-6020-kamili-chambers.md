@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/kamili-chambers/grid/01.jpg | ass
 authors: Student: **Kamili Chambers**
 links: [About the course](#project/arch-6020)
 student: Kamili Chambers
+project: 
 course: arch-6020
 ---
 

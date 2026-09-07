@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-8833/brian-lachnicht/grid/01.jpg | ass
 authors: Student: **Brian Lachnicht**
 links: [About the course](#project/arch-8833)
 student: Brian Lachnicht
+project: 
 course: arch-8833
 ---
 

@@ -8,6 +8,7 @@ gallery: assets/site_images/teaching/arch-6020/jiawei-gong/grid/01.jpg | assets/
 authors: Student: **Jiawei Gong**
 links: [About the course](#project/arch-6020)
 student: Jiawei Gong
+project: 
 course: arch-6020
 ---
 
