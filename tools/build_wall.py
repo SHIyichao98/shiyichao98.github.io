@@ -103,7 +103,7 @@ BY_HAND = {
     # Each has its own page now; the published copies carry a corner credit,
     # which is what keeps content matching from placing them on its own.
     "models01.jpg": "arch-2017-lucas-nagel-physical-models",
-    "Rishi Patel_01.jpg": "arch-2017-rishi-patel",
+    "Rishi Patel_00.png": "arch-2017-rishi-patel",
     "Samuel Thurman_01.png": "arch-8833-samuel-thurman",
     # Page 22 of the Kokura portfolio, before that project was published.
     "housing.jpg": "kokura",
@@ -139,7 +139,7 @@ ORDER = {
         "Chase Scholze_02.png",
         "Miguel Pita-Ruiz_04.png",
         "Samuel Thurman_01.png",
-        "Rishi Patel_01.jpg",
+        "Rishi Patel_00.png",
     ),
 }
 
