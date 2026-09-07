@@ -399,9 +399,10 @@ img {
   line-height: 1.12;
 }
 
-/* The title receives focus on navigation so screen readers land on it.
-   Keep the ring for keyboard users only, not for every mouse click. */
-.project-hero h1:focus:not(:focus-visible) {
+/* The title receives focus on navigation so screen readers land on it. It
+   is a landing point, not a control, so it never draws a ring: after a
+   keyboard-driven navigation the browser was boxing the heading. */
+.project-hero h1:focus {
   outline: none;
 }
 

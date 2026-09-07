@@ -5,7 +5,7 @@ type: Teaching / AI Enhanced Architecture Design
 subtitle: AI-Enhanced Design Methods for Architecture
 cover: assets/site_images/teaching/arch-8833/kayla-rinoski/hero.jpg
 gallery: assets/site_images/teaching/arch-8833/kayla-rinoski/grid/01.jpg | assets/site_images/teaching/arch-8833/kayla-rinoski/grid/02.jpg | assets/site_images/teaching/arch-8833/kayla-rinoski/grid/03.jpg | assets/site_images/teaching/arch-8833/kayla-rinoski/grid/04.jpg | assets/site_images/teaching/arch-8833/kayla-rinoski/grid/05.jpg | assets/site_images/teaching/arch-8833/kayla-rinoski/grid/06.jpg | assets/site_images/teaching/arch-8833/kayla-rinoski/grid/07.jpg
-authors: Student: Kayla Rinoski
+authors: Student: **Kayla Rinoski**
 links: [About the course](#project/arch-8833)
 student: Kayla Rinoski
 course: arch-8833

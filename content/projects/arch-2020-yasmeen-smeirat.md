@@ -5,7 +5,7 @@ type: Teaching / Computational Design & Digital Fabrication
 subtitle: Media + Modeling 2
 cover: assets/site_images/teaching/arch-2020/yasmeen-smeirat/hero.jpg
 gallery: assets/site_images/teaching/arch-2020/yasmeen-smeirat/grid/01.jpg
-authors: Student: Yasmeen Smeirat
+authors: Student: **Yasmeen Smeirat**
 links: [About the course](#project/arch-2020)
 student: Yasmeen Smeirat
 course: arch-2020

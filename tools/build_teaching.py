@@ -242,7 +242,7 @@ def page(course: dict[str, str], student: str, note: tuple[str, str, str], cours
         lines.append("gallery_full: " + " | ".join(shots["full"]))
     if summary:
         lines.append(f"summary: {summary}")
-    credit = f"Student: {student}"
+    credit = f"Student: **{student}**"
     if assignment:
         credit += f" | Assignment: {assignment}"
     lines += [

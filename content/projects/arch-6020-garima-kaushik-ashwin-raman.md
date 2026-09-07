@@ -5,7 +5,7 @@ type: Teaching / Computational Design & Digital Fabrication
 subtitle: Media + Modeling II
 cover: assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/hero.jpg
 gallery: assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/grid/01.jpg | assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/grid/02.jpg
-authors: Student: Garima Kaushik & Ashwin Raman
+authors: Student: **Garima Kaushik & Ashwin Raman**
 links: [About the course](#project/arch-6020)
 student: Garima Kaushik & Ashwin Raman
 course: arch-6020
