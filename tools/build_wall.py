@@ -54,11 +54,10 @@ TILE = 1000
 # Rows of three, so a section keeps whatever it is given rounded down to a
 # multiple of three. A part-filled last row reads as a gap rather than an end.
 ROW = 3
-# Order on the page. Teaching leads because this is a teaching portfolio;
-# research closes it.
+# Order on the page: design, then teaching, then research.
 SECTIONS = (
-    ("teaching", "My Teaching Works", "teaching"),
     ("design", "My Design Works", "my_design"),
+    ("teaching", "My Teaching Works", "teaching"),
     ("research", "My Research Works", "research"),
 )
 
@@ -122,6 +121,23 @@ TRUST_BITS = 20
 # Keyed by section, valued by source filename. The first row is the one a
 # visitor sees without scrolling, so it is chosen rather than drawn.
 LEAD = {}
+# A section listed here is laid out exactly as written and never shuffled.
+# Written once the author has moved tiles by hand: a shuffle that reseeds
+# would undo the move, and pinning only a first row leaves the rest loose.
+# Every pick in the folder must appear once; the build refuses otherwise.
+ORDER = {
+    "teaching": (
+        "models01.jpg",
+        "Jonathan Caruso & Jiawei Gong01.png",
+        "Lucas Nagel_01.jpg",
+        "Jiawei Gong_01.jpeg",
+        "Lydia Efthymiopoulou_05.jpg",
+        "Chase Scholze_02.png",
+        "Miguel Pita-Ruiz_04.png",
+        "Samuel Thurman_01.png",
+        "Rishi Patel_01.jpg",
+    ),
+}
 
 TITLES = {
     "arch-2017": "Architectural Design Studio",
@@ -357,6 +373,13 @@ def main() -> None:
         if dropped:
             print(f"  {key}: kept {len(kept)}, left out {', '.join(d['path'].name for d in dropped)}")
         names = {item["path"].name: item for item in kept}
+        if key in ORDER:
+            wanted = ORDER[key]
+            if sorted(wanted) != sorted(names):
+                sys.exit(f"{key}: ORDER does not match the folder. "
+                         f"missing {sorted(set(wanted) - set(names))}, extra {sorted(set(names) - set(wanted))}")
+            ordered[key] = [names[n] for n in wanted]
+            continue
         head = [names[n] for n in LEAD.get(key, ()) if n in names]
         absent = [n for n in LEAD.get(key, ()) if n not in names]
         if absent:
@@ -425,7 +448,7 @@ def write_markup(cuts) -> None:
         lines.append(f'        <h2 id="wall-{key}">{title}</h2>')
         lines.append('        <div class="wall-grid">')
         for i, (slug, _image) in enumerate(cuts[key], 1):
-            eager = key == "teaching" and i <= 3
+            eager = key == SECTIONS[0][0] and i <= 3
             lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}">')
             lines.append("            <img")
             lines.append(f'              src="assets/site_images/index/{key}/{i:02d}.jpg?v={version}"')

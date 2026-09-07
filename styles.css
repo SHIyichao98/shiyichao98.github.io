@@ -155,8 +155,10 @@ img {
   padding: var(--head-top) var(--gap) var(--gap);
 }
 
+/* One continuous grid: the walls run into each other at the same gap the
+   tiles keep between themselves. */
 .wall + .wall {
-  margin-top: clamp(30px, 4vw, 52px);
+  margin-top: var(--gap);
 }
 
 /* The wall carries no text. Each section keeps its heading for assistive
