@@ -10,3 +10,7 @@ links: [About the course](#project/arch-2020)
 student: Alyaana Zaman
 course: arch-2020
 ---
+
+## Course
+
+Media + Modeling 2 introduces parametric modeling and visual scripting in Rhino and Grasshopper to undergraduate architecture students. I co-taught the course with Yeinn Oh across its two sections. This student's work was taught and evaluated by me directly.

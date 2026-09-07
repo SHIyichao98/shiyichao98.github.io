@@ -253,6 +253,11 @@ def page(course: dict[str, str], student: str, note: tuple[str, str, str], cours
         "---",
         "",
     ]
+    # A short account of the course, and of my place in it, ahead of the
+    # student's own note. Read from the course page's brief field, so the
+    # wording lives with the course, not in this script.
+    if course.get("brief"):
+        lines += ["## Course", "", course["brief"], ""]
     if body:
         lines += [body, ""]
     return "\n".join(lines)
