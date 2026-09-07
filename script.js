@@ -48,8 +48,8 @@ const projectSources = {
   "arch-6020-sam-charles-jonathon-caruso": "content/projects/arch-6020-sam-charles-jonathon-caruso.md",
   "arch-6020-sydney-devereux": "content/projects/arch-6020-sydney-devereux.md",
   "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
-  "arch-2017-lucas-nagel": "content/projects/arch-2017-lucas-nagel.md",
-  "arch-2017-lucas-nagel-plaster-models": "content/projects/arch-2017-lucas-nagel-plaster-models.md",
+  "arch-2017-lucas-nagel-final-drawings": "content/projects/arch-2017-lucas-nagel-final-drawings.md",
+  "arch-2017-lucas-nagel-physical-models": "content/projects/arch-2017-lucas-nagel-physical-models.md",
   "arch-2017-lydia-efthymiopoulou": "content/projects/arch-2017-lydia-efthymiopoulou.md",
   "arch-2017-miguel-pita-ruiz": "content/projects/arch-2017-miguel-pita-ruiz.md",
   "arch-2017-rishi-patel": "content/projects/arch-2017-rishi-patel.md",
@@ -66,7 +66,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "115";
+const ASSET_VERSION = "116";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");

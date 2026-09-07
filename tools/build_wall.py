@@ -99,10 +99,10 @@ BY_HAND = {
     # Read as DCC 2024 at 18 bits. It is Lucas Nagel's axonometric from the
     # 2026 studio; the source folder says so and the published copy is
     # watermarked, which is what pushed the true match out of range.
-    "Lucas Nagel_01.jpg": "arch-2017-lucas-nagel",
+    "Lucas Nagel_01.jpg": "arch-2017-lucas-nagel-final-drawings",
     # Each has its own page now; the published copies carry a corner credit,
     # which is what keeps content matching from placing them on its own.
-    "models01.jpg": "arch-2017-lucas-nagel-plaster-models",
+    "models01.jpg": "arch-2017-lucas-nagel-physical-models",
     "Rishi Patel_01.jpg": "arch-2017-rishi-patel",
     "Samuel Thurman_01.png": "arch-8833-samuel-thurman",
     # Page 22 of the Kokura portfolio, before that project was published.

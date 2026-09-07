@@ -16,15 +16,20 @@ is one folder ("Hang Xu & Dingkun Hu"). Files are ordered by the number in
 their name, whatever else the name says. Anything at the course level that is
 not a student folder is ignored.
 
-A student with more than one project keeps each in its own subfolder, named
-for the project, each with its own grids/, full/ and project.md:
+A student with more than one project has one folder per project at the
+course level, named "Student Name_Project Name", each with its own grids/,
+full/ and project.md:
 
-    <Student Name>/Plaster Models/grids/01.jpg
-    <Student Name>/Plaster Models/project.md
+    Lucas Nagel_Final Drawings/grids/01.jpg
+    Lucas Nagel_Physical Models/grids/01.jpg
 
-Each project is its own page and its own tile on the course page. Pictures
-directly under the student's folder are one more project, unnamed, and keep
-the short page address.
+The part after the underscore names the project and is the assignment on
+the page unless project.md says otherwise. Each project is its own page and
+its own tile on the course page. (Project subfolders inside a student folder
+are read too, for the same result.)
+
+Pages and pictures for folders that no longer exist are removed on each
+build, so renaming a folder moves the page rather than duplicating it.
 
 project.md is the student's own account, written by hand:
 
@@ -153,8 +158,14 @@ def slugify(text: str) -> str:
 
 
 def display_name(raw: str) -> str:
-    """Kayla_Rinoski and Kayla Rinoski are one person."""
-    return re.sub(r"\s+", " ", raw.replace("_", " ")).strip()
+    return re.sub(r"\s+", " ", raw).strip()
+
+
+def split_folder(name: str) -> tuple[str, str]:
+    """'Lucas Nagel_Final Drawings' -> ('Lucas Nagel', 'Final Drawings');
+    'Lucas Nagel' -> ('Lucas Nagel', '')."""
+    student, _, project = name.partition("_")
+    return display_name(student), display_name(project)
 
 
 def front_matter(path: Path) -> tuple[dict[str, str], str]:
@@ -215,11 +226,11 @@ def collect(folder: Path) -> list[tuple[str, str, Path, dict[str, list[Path]]]]:
     for student_dir in sorted(folder.iterdir()):
         if not student_dir.is_dir() or student_dir.name in NOT_STUDENTS or student_dir.name.startswith("_"):
             continue
-        name = display_name(student_dir.name)
+        name, project = split_folder(student_dir.name)
         found = False
         own = pictures_in(student_dir)
         if own["grid"] or own["full"]:
-            out.append((name, "", student_dir, own)); found = True
+            out.append((name, project, student_dir, own)); found = True
         for project_dir in sorted(student_dir.iterdir()):
             if not project_dir.is_dir() or project_dir.name in NOT_STUDENTS:
                 continue
@@ -370,6 +381,8 @@ def main() -> None:
     pages_written = 0
     pictures = 0
     notes_blank = 0
+    produced_pages: set[Path] = set()
+    produced_dirs: set[Path] = set()
     folder_of = {slug: name for name, slug in COURSES.items()}
 
     for cat_slug, cat_title, span, summary, course_slugs in CATEGORIES:
@@ -407,6 +420,8 @@ def main() -> None:
                 text = page(course_meta, student, project, note, course_slug, cover, published)
                 if not args.dry_run:
                     (PROJECTS / f"{slug}.md").write_text(text, encoding="utf-8")
+                produced_pages.add(PROJECTS / f"{slug}.md")
+                produced_dirs.add(student_dir)
                 pages_written += 1
                 state = f"  assignment: {note[0]}" if note[0] else ("  (note filled, no assignment)" if any(note) else "  (project.md blank)")
                 label = f"{student} \u00b7 {project}" if project else student
@@ -422,6 +437,23 @@ def main() -> None:
     if args.dry_run:
         print(f"\n  would write {pages_written} pages and {pictures} pictures")
         return
+
+    # A folder renamed or removed since the last build leaves a page and a
+    # picture folder behind; take them out, or the old address keeps working
+    # beside the new one.
+    stale = 0
+    for md in PROJECTS.glob("arch-*-*.md"):
+        if md not in produced_pages:
+            md.unlink(); stale += 1
+    for course_slug in COURSES.values():
+        course_out = OUT / course_slug
+        if not course_out.is_dir():
+            continue
+        for sub in course_out.iterdir():
+            if sub.is_dir() and sub not in produced_dirs:
+                shutil.rmtree(sub); stale += 1
+    if stale:
+        print(f"  cleared {stale} stale page(s)/folder(s)")
 
     index_path.write_text(
         replace_between(index_text, "          <!-- teaching:start -->", "          <!-- teaching:end -->",
