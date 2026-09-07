@@ -129,10 +129,10 @@ ORDER = {
     "design": (
         "07.png",
         "axon.jpg",
-        "robots.jpg",
-        "housing.jpg",
-        "27-2-2.jpg",
         "dome.jpg",
+        "housing.jpg",
+        "robots.jpg",
+        "27-2-2.jpg",
     ),
     "teaching": (
         "models01.jpg",
