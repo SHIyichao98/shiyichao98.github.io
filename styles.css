@@ -75,6 +75,11 @@ img {
   line-height: 1.12;
 }
 
+/* Only exists on a phone; see the 760px block. */
+.menu-toggle {
+  display: none;
+}
+
 .profile p {
   margin: 0;
   max-width: 250px;
@@ -683,13 +688,76 @@ body.lightbox-open {
 }
 
 @media (max-width: 760px) {
+  /* On a phone the pictures come first. The sidebar collapses to one bar --
+     the name and a button -- and the index opens over the page when asked.
+     Stacked in full, as it used to be, a visitor scrolled through thirty
+     lines of navigation before the first picture. */
   .sidebar {
-    position: static;
+    position: sticky;
+    top: 0;
+    z-index: 6;
     width: auto;
     max-height: none;
     overflow: visible;
+    padding: 12px 18px;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+  }
+
+  .profile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px 16px;
+  }
+
+  .profile h1 {
+    margin: 0;
+  }
+
+  .menu-toggle {
+    display: inline-block;
+    margin: 0;
+    padding: 6px 12px;
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .menu-toggle:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /* Closed: the role lines and the whole index are out of the document,
+     not just out of sight, so nothing below them shifts. */
+  .sidebar:not(.is-open) .profile p,
+  .sidebar:not(.is-open) .sidebar-body {
+    display: none;
+  }
+
+  /* Open: the bar grows into a full-height panel over the page. */
+  .sidebar.is-open {
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    border-bottom: 0;
+  }
+
+  .sidebar.is-open .profile p {
+    flex-basis: 100%;
+    margin-top: 6px;
+  }
+
+  body.nav-open {
+    overflow: hidden;
   }
 
   .index-nav a,

@@ -29,7 +29,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "104";
+const ASSET_VERSION = "105";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -478,6 +478,32 @@ document.querySelectorAll("[data-project]").forEach((link) => {
 closeProject.addEventListener("click", (event) => {
   event.preventDefault();
   showIndex();
+});
+
+// On a phone the index lives behind a button. The button only renders under
+// 760px (styles.css), so on a desktop none of this fires.
+const sidebar = document.querySelector(".sidebar");
+const menuToggle = document.querySelector("[data-menu-toggle]");
+const menuLabel = document.querySelector("[data-menu-label]");
+
+const setMenu = (open) => {
+  sidebar.classList.toggle("is-open", open);
+  document.body.classList.toggle("nav-open", open);
+  menuToggle.setAttribute("aria-expanded", String(open));
+  menuLabel.textContent = open ? "Close" : "Menu";
+};
+
+menuToggle.addEventListener("click", () => {
+  setMenu(!sidebar.classList.contains("is-open"));
+});
+
+// Choosing a page is the end of the menu's job.
+sidebar.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => setMenu(false));
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && sidebar.classList.contains("is-open")) setMenu(false);
 });
 
 // The index wall labels each tile with the project it opens. Reading the name
