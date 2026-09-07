@@ -97,6 +97,21 @@ BY_HAND = {
     "27-2-2.jpg": "craftman",
     "dome.jpg": "mars",
     "Samuel Thurman_13.png": "arch-8833",
+    "Samuel Thurman_01.png": "arch-8833",
+    # Read as DCC 2024 at 18 bits. It is Lucas Nagel's axonometric from the
+    # 2026 studio; the source folder says so and the published copy is
+    # watermarked, which is what pushed the true match out of range.
+    "Lucas Nagel_01.jpg": "arch-2017",
+    # The studio's plaster models photographed together. No single student's
+    # file, so no name on the caption, but the course is not in doubt: Lucas
+    # Nagel's cast is in the middle of the group.
+    "models01.jpg": "arch-2017",
+    # Not in any course folder and matched at 16 bits. A brick gallery in
+    # section is the 2026 studio's brief -- an art gallery in Sweet Auburn --
+    # so it is placed there until the author says otherwise.
+    "Rishi Patel_01.jpg": "arch-2017",
+    # Page 22 of the Kokura portfolio, before that project was published.
+    "housing.jpg": "kokura",
 }
 # Past this many differing bits the nearest neighbour is a coincidence, not the
 # same picture. Cropping a pick square by hand pushes it up the scale, so a
@@ -106,9 +121,7 @@ TRUST_BITS = 20
 # Picks that open a section, in this order, before the shuffle places the rest.
 # Keyed by section, valued by source filename. The first row is the one a
 # visitor sees without scrolling, so it is chosen rather than drawn.
-LEAD = {
-    "teaching": ("Lucas Nagel_03.jpg", "Hang Xu & Dingkun Hu_01.jpeg", "Andy Nguyen_03.jpg"),
-}
+LEAD = {}
 
 TITLES = {
     "arch-2017": "Architectural Design Studio",
@@ -129,6 +142,7 @@ TITLES = {
     "robotics": "Overnight House",
     "stadium": "Stadium Design for a University",
     "street": "School Gate Street Reconstruction",
+    "kokura": "Kokura Station Modular Construction",
 }
 
 
@@ -303,7 +317,7 @@ def gather(report: bool):
 def _section_of(slug: str) -> str:
     if slug.startswith("arch-"):
         return "teaching"
-    if slug in {"craftman", "loops", "mars", "robotics", "stadium", "street"}:
+    if slug in {"craftman", "loops", "mars", "robotics", "stadium", "street", "kokura"}:
         return "design"
     return "research"
 

@@ -15,6 +15,7 @@ const projectSources = {
   "simaud-2026": "content/projects/simaud-2026.md",
   stadium: "content/projects/stadium.md",
   street: "content/projects/street.md",
+  kokura: "content/projects/kokura.md",
   craftman: "content/projects/craftman.md",
   mars: "content/projects/mars.md",
   robotics: "content/projects/robotics.md",
@@ -28,7 +29,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "98";
+const ASSET_VERSION = "99";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");

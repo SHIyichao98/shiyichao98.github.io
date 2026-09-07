@@ -17,8 +17,9 @@
   --accent: #000000;
   /* Wide enough for the longest index entry on one line, no wider: the strip
      of empty ground the old 480px left between the list and the wall was
-     the first thing a visitor saw. */
-  --sidebar: clamp(260px, 18vw, 340px);
+     the first thing a visitor saw. Fixed, not fluid: at 18vw a 1600px laptop
+     got 288px and the longest entry wrapped. */
+  --sidebar: 340px;
   --gap: 10px;
   /* Where content begins in both columns, so the name and the first row of
      tiles start on one line. */
