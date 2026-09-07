@@ -4,7 +4,7 @@ year: 2026 Spring
 type: Teaching / Architectural Design Studio
 subtitle: Architecture Design Studio 3
 cover: assets/site_images/teaching/arch-2017/rishi-patel/hero.jpg
-gallery: assets/site_images/teaching/arch-2017/rishi-patel/grid/01.jpg
+gallery: assets/site_images/teaching/arch-2017/rishi-patel/grid/01.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/02.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/03.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/04.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/05.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/06.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/07.jpg | assets/site_images/teaching/arch-2017/rishi-patel/grid/08.jpg
 authors: Student: **Rishi Patel**
 links: [About the course](#project/arch-2017)
 student: Rishi Patel

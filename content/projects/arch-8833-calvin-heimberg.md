@@ -14,4 +14,4 @@ course: arch-8833
 
 ## Course
 
-AI-Enhanced Design Methods for Architecture is a graduate course on generative AI workflows and their integration with parametric design tools. I was the Instructor of Record, responsible for the course as a whole, and taught and evaluated this student's work directly.
+AI-Enhanced Design Methods for Architecture is an elective open to undergraduate and graduate students, on generative AI workflows and their integration with parametric design tools. I was the Instructor of Record, responsible for the course as a whole, and taught and evaluated this student's work directly.
