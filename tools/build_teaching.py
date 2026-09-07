@@ -43,7 +43,10 @@ What this writes:
                     each a cut of the homepage teaching wall
     script.js       the projectSources entries, between their markers
 
-The course pages (arch-2017.md and the rest) are left as they are.
+The course pages (arch-2017.md and the rest) keep their own text, and their
+gallery is replaced by a hub: one tile per student project, each a link to
+that student's page. Pictures open in the lightbox only on the student's own
+page. A student with no folder has no page, and so appears nowhere.
 
 Run tools/guard_images.py afterwards: it stamps each new picture with the
 student's name, read from the page it belongs to.
@@ -291,6 +294,20 @@ def category_page(slug: str, title: str, span: str, summary: str, courses: list[
     return "\n".join(lines)
 
 
+GALLERY_FIELDS = ("gallery", "gallery_credits", "gallery_full", "gallery_full_credits", "credit_label", "credit")
+
+
+def write_course_hub(course_slug: str, hub: list[str]) -> None:
+    """Swap the course page's own gallery for a hub of its student projects."""
+    path = PROJECTS / f"{course_slug}.md"
+    text = path.read_text(encoding="utf-8")
+    head, block, body = text.split("---", 2)
+    kept = [line for line in block.strip("\n").splitlines()
+            if line.split(":", 1)[0].strip() not in GALLERY_FIELDS + ("hub",)]
+    kept.append("hub: " + " | ".join(hub))
+    path.write_text(f"---\n" + "\n".join(kept) + "\n---" + body, encoding="utf-8")
+
+
 def replace_between(text: str, start: str, end: str, block: str, where: str) -> str:
     pattern = re.compile(re.escape(start) + r"[\s\S]*?" + re.escape(end))
     if not pattern.search(text):
@@ -338,6 +355,7 @@ def main() -> None:
             course_meta, _course_body = front_matter(PROJECTS / f"{course_slug}.md")
             # The kicker on a student page names the category, as the sidebar does.
             course_meta = {**course_meta, "type": f"Teaching / {cat_title}"}
+            hub: list[str] = []
             students = collect(folder)
             print(f"  {course_slug}: {len(students)} students")
             for student, shots in sorted(students.items()):
@@ -358,6 +376,9 @@ def main() -> None:
                 state = f"  assignment: {note[0]}" if note[0] else ("  (note filled, no assignment)" if any(note) else "  (project.md blank)")
                 print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{state}")
                 sources.append(f'  "{slug}": "content/projects/{slug}.md",')
+                hub.append(f"{slug}::{student}::{cover}")
+            if not args.dry_run:
+                write_course_hub(course_slug, hub)
         # The hub pages this once wrote are retired; clear a leftover.
         if not args.dry_run:
             (PROJECTS / f"{cat_slug}.md").unlink(missing_ok=True)

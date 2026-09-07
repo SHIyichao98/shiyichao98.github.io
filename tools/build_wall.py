@@ -96,20 +96,10 @@ BY_HAND = {
     "01-01.jpg": "street",
     "27-2-2.jpg": "craftman",
     "dome.jpg": "mars",
-    "Samuel Thurman_13.png": "arch-8833",
-    "Samuel Thurman_01.png": "arch-8833",
     # Read as DCC 2024 at 18 bits. It is Lucas Nagel's axonometric from the
     # 2026 studio; the source folder says so and the published copy is
     # watermarked, which is what pushed the true match out of range.
     "Lucas Nagel_01.jpg": "arch-2017-lucas-nagel",
-    # The studio's plaster models photographed together. No single student's
-    # file, so no name on the caption, but the course is not in doubt: Lucas
-    # Nagel's cast is in the middle of the group.
-    "models01.jpg": "arch-2017",
-    # Not in any course folder and matched at 16 bits. A brick gallery in
-    # section is the 2026 studio's brief -- an art gallery in Sweet Auburn --
-    # so it is placed there until the author says otherwise.
-    "Rishi Patel_01.jpg": "arch-2017",
     # Page 22 of the Kokura portfolio, before that project was published.
     "housing.jpg": "kokura",
 }
@@ -136,15 +126,12 @@ ORDER = {
         "27-2-2.jpg",
     ),
     "teaching": (
-        "models01.jpg",
         "Jonathan Caruso & Jiawei Gong01.png",
         "Lucas Nagel_01.jpg",
         "Jiawei Gong_01.jpeg",
         "Lydia Efthymiopoulou_05.jpg",
         "Chase Scholze_02.png",
         "Miguel Pita-Ruiz_04.png",
-        "Samuel Thurman_01.png",
-        "Rishi Patel_01.jpg",
     ),
 }
 
