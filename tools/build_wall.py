@@ -50,6 +50,12 @@ Image.MAX_IMAGE_PIXELS = None
 
 ROOT = Path(__file__).resolve().parent.parent
 PICKS = ROOT / "assets" / "index_of_images"
+# Two tracks for teaching. The homepage shows the nine in index_of_images/
+# teaching and nothing more; a category view (Architectural Design Studio and
+# the rest) shows those plus whatever is in teaching_extra. Extra tiles are
+# built into the same wall and hidden on the homepage, so a category view is
+# still one wall cut by category, only a fuller one.
+EXTRA_PICKS = PICKS / "teaching_extra"
 OUT = ROOT / "assets" / "site_images" / "index"
 TILE = 1000
 # Rows of three, so a section keeps whatever it is given rounded down to a
@@ -435,7 +441,22 @@ def main() -> None:
             print(f"  {key}: {clashes} tile(s) still adjacent to their own project")
         ordered[key] = mixed
 
-    cuts = {key: [(item["slug"], cut(item["path"])) for item in items] for key, items in ordered.items()}
+    # The second track: category-only teaching tiles, after the homepage nine.
+    extras = []
+    if EXTRA_PICKS.is_dir():
+        library = build_library()
+        for path in sorted(p for p in EXTRA_PICKS.iterdir() if p.is_file()):
+            slug, how = resolve("teaching", path, library)
+            if slug is None or slug not in TITLES:
+                print(f"  [!] extra {path.name}: {how} \u2014 add it to BY_HAND", file=sys.stderr)
+                continue
+            extras.append({"slug": slug, "path": path, "how": how})
+        if extras:
+            extras, _clashes = mix(extras)
+            print(f"  teaching: {len(extras)} extra tile(s) for the category views")
+
+    cuts = {key: [(item["slug"], cut(item["path"]), False) for item in items] for key, items in ordered.items()}
+    cuts["teaching"] += [(item["slug"], cut(item["path"]), True) for item in extras]
 
     if args.preview:
         cell = 200
@@ -444,7 +465,7 @@ def main() -> None:
         draw = ImageDraw.Draw(sheet)
         for row, (key, _title, _folder) in enumerate(SECTIONS):
             draw.text((4, row * (cell + 26) + 6), key, fill="red")
-            for column, (slug, image) in enumerate(cuts[key]):
+            for column, (slug, image, _extra) in enumerate(cuts[key]):
                 thumb = image.copy()
                 thumb.thumbnail((cell - 6, cell - 6))
                 sheet.paste(thumb, (column * cell + 3, row * (cell + 26) + 24))
@@ -458,7 +479,7 @@ def main() -> None:
         folder = OUT / key
         shutil.rmtree(folder, ignore_errors=True)
         folder.mkdir(parents=True, exist_ok=True)
-        for index, (_slug, image) in enumerate(cuts[key], 1):
+        for index, (_slug, image, _extra) in enumerate(cuts[key], 1):
             target = folder / f"{index:02d}.jpg"
             image.save(target, "JPEG", quality=88, optimize=True, progressive=True)
         print(f"  {key}: {len(cuts[key])} tiles")
@@ -493,12 +514,13 @@ def write_markup(cuts) -> None:
         # Drawn nowhere -- styles.css hides it -- but named for screen readers.
         lines.append(f'        <h2 id="wall-{key}">{title}</h2>')
         lines.append('        <div class="wall-grid">')
-        for i, (slug, _image) in enumerate(cuts[key], 1):
+        for i, (slug, _image, extra) in enumerate(cuts[key], 1):
             eager = key == SECTIONS[0][0] and i <= 3
             caption = f' data-caption="{html.escape(CAPTIONS[slug], quote=True)}"' if slug in CAPTIONS else ""
             category = category_of(slug)
             cut = f' data-category="{category}"' if category else ""
-            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}"{caption}{cut}>')
+            more = " data-extra" if extra else ""
+            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}"{caption}{cut}{more}>')
             lines.append("            <img")
             lines.append(f'              src="assets/site_images/index/{key}/{i:02d}.jpg?v={version}"')
             lines.append(f'              alt="{TITLES[slug]}"' + ("" if eager else '\n              loading="lazy"'))
@@ -509,7 +531,8 @@ def write_markup(cuts) -> None:
 
     updated = re.sub(r'    <main class="gallery"[\s\S]*?\n    </main>', "\n".join(lines), text, count=1)
     index.write_text(updated, encoding="utf-8")
-    print(f"  index.html: {sum(len(v) for v in cuts.values())} tiles")
+    homepage = sum(1 for v in cuts.values() for _s, _i, extra in v if not extra)
+    print(f"  index.html: {homepage} tiles on the homepage, {sum(len(v) for v in cuts.values()) - homepage} more in the category views")
 
 
 if __name__ == "__main__":

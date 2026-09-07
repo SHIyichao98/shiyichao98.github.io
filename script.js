@@ -66,7 +66,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "120";
+const ASSET_VERSION = "121";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -474,8 +474,15 @@ const showIndex = (updateHash = true, wall = null, category = null) => {
   document.querySelectorAll(".gallery .wall").forEach((section) => {
     section.hidden = Boolean(wall) && section.getAttribute("aria-labelledby") !== `wall-${wall}`;
   });
+  // Two tracks. The homepage shows only the chosen few; a teaching view --
+  // the whole wall or one category -- shows the extra tiles too.
   document.querySelectorAll(".gallery .tile[data-category]").forEach((tile) => {
-    tile.hidden = Boolean(category) && tile.dataset.category !== category;
+    const extra = tile.hasAttribute("data-extra");
+    if (category) {
+      tile.hidden = tile.dataset.category !== category;
+    } else {
+      tile.hidden = extra && wall !== "teaching";
+    }
   });
   document.querySelectorAll("[data-wall]").forEach((link) => {
     const current = link.dataset.category
