@@ -1,7 +1,7 @@
 ---
 title: ARCH 6020
 year: 2025 Fall & 2026 Fall
-type: Teaching / Advanced Computational Design
+type: Teaching / Computational Design & Digital Fabrication
 subtitle: Media + Modeling II
 cover: assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/hero.jpg
 gallery: assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/grid/01.jpg | assets/site_images/teaching/arch-6020/garima-kaushik-ashwin-raman/grid/02.jpg

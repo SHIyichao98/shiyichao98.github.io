@@ -145,18 +145,6 @@ img {
   line-height: 1.15;
 }
 
-/* Student projects sit under their course, a step in and a step smaller. */
-.students {
-  margin: 3px 0 8px 10px;
-  padding-left: 9px;
-  border-left: 1px solid var(--line);
-}
-
-.index-nav .students a {
-  font-size: 0.8rem;
-  line-height: 1.2;
-}
-
 .index-nav a:hover,
 .side-links a:hover {
   color: var(--ink);
@@ -520,6 +508,13 @@ img {
 .project-grid.is-full .grid-tile:hover img {
   transform: none;
   opacity: 0.86;
+}
+
+/* A hub tile is a link, not a lightbox button, but dresses the same. */
+.hub-tile {
+  display: block;
+  color: inherit;
+  text-decoration: none;
 }
 
 .grid-tile:focus-visible {

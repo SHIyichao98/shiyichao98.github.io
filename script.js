@@ -24,6 +24,16 @@ const projectSources = {
   cv: "content/projects/cv.md",
   // One entry per student project, written by tools/build_teaching.py.
   // --- teaching:start ---
+  "teaching-computational": "content/projects/teaching-computational.md",
+  "arch-2020-alesya-yermakova": "content/projects/arch-2020-alesya-yermakova.md",
+  "arch-2020-alyaana-zaman": "content/projects/arch-2020-alyaana-zaman.md",
+  "arch-2020-chris-wang": "content/projects/arch-2020-chris-wang.md",
+  "arch-2020-ella-rowan": "content/projects/arch-2020-ella-rowan.md",
+  "arch-2020-hellen-gonzalez": "content/projects/arch-2020-hellen-gonzalez.md",
+  "arch-2020-lyriel-todd": "content/projects/arch-2020-lyriel-todd.md",
+  "arch-2020-sydney-wetterhan": "content/projects/arch-2020-sydney-wetterhan.md",
+  "arch-2020-victoria-bland": "content/projects/arch-2020-victoria-bland.md",
+  "arch-2020-yasmeen-smeirat": "content/projects/arch-2020-yasmeen-smeirat.md",
   "arch-6020-ann-radford-meshad-and-isabel-humphries": "content/projects/arch-6020-ann-radford-meshad-and-isabel-humphries.md",
   "arch-6020-chase-scholze": "content/projects/arch-6020-chase-scholze.md",
   "arch-6020-darian-martinez": "content/projects/arch-6020-darian-martinez.md",
@@ -38,23 +48,16 @@ const projectSources = {
   "arch-6020-mitchell-stevens-and-austin-taylor": "content/projects/arch-6020-mitchell-stevens-and-austin-taylor.md",
   "arch-6020-sam-charles-jonathon-caruso": "content/projects/arch-6020-sam-charles-jonathon-caruso.md",
   "arch-6020-sydney-devereux": "content/projects/arch-6020-sydney-devereux.md",
-  "arch-8833-brian-lachnicht": "content/projects/arch-8833-brian-lachnicht.md",
-  "arch-8833-calvin-heimberg": "content/projects/arch-8833-calvin-heimberg.md",
-  "arch-8833-kayla-rinoski": "content/projects/arch-8833-kayla-rinoski.md",
-  "arch-8833-meitong-liu": "content/projects/arch-8833-meitong-liu.md",
+  "teaching-studio": "content/projects/teaching-studio.md",
   "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
   "arch-2017-lucas-nagel": "content/projects/arch-2017-lucas-nagel.md",
   "arch-2017-lydia-efthymiopoulou": "content/projects/arch-2017-lydia-efthymiopoulou.md",
   "arch-2017-miguel-pita-ruiz": "content/projects/arch-2017-miguel-pita-ruiz.md",
-  "arch-2020-alesya-yermakova": "content/projects/arch-2020-alesya-yermakova.md",
-  "arch-2020-alyaana-zaman": "content/projects/arch-2020-alyaana-zaman.md",
-  "arch-2020-chris-wang": "content/projects/arch-2020-chris-wang.md",
-  "arch-2020-ella-rowan": "content/projects/arch-2020-ella-rowan.md",
-  "arch-2020-hellen-gonzalez": "content/projects/arch-2020-hellen-gonzalez.md",
-  "arch-2020-lyriel-todd": "content/projects/arch-2020-lyriel-todd.md",
-  "arch-2020-sydney-wetterhan": "content/projects/arch-2020-sydney-wetterhan.md",
-  "arch-2020-victoria-bland": "content/projects/arch-2020-victoria-bland.md",
-  "arch-2020-yasmeen-smeirat": "content/projects/arch-2020-yasmeen-smeirat.md",
+  "teaching-ai": "content/projects/teaching-ai.md",
+  "arch-8833-brian-lachnicht": "content/projects/arch-8833-brian-lachnicht.md",
+  "arch-8833-calvin-heimberg": "content/projects/arch-8833-calvin-heimberg.md",
+  "arch-8833-kayla-rinoski": "content/projects/arch-8833-kayla-rinoski.md",
+  "arch-8833-meitong-liu": "content/projects/arch-8833-meitong-liu.md",
   // --- teaching:end ---
 };
 
@@ -63,7 +66,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "107";
+const ASSET_VERSION = "108";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -142,6 +145,26 @@ const thumbSource = (image) => image.replace(/([^/]+)$/, "thumbs/$1");
 // back to a page-wide value, so a teaching wall can credit a different student
 // per tile without every page listing one per image. label prefixes the name —
 // a teaching page says the work is a student's, which the name alone does not.
+// A hub page lists other pages: one tile per student project, each a plain
+// link, so the router opens it through the hash like any sidebar entry.
+// hub: slug::Name::cover | slug::Name::cover ...
+const renderHub = (meta) => {
+  if (!meta.hub) return "";
+  const tiles = meta.hub
+    .split("|")
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [slug, name, cover] = entry.split("::").map((part) => part.trim());
+      return `<a class="grid-tile hub-tile" href="#project/${escapeHtml(slug)}">
+          <img src="${escapeHtml(versioned(cover))}" alt="${escapeHtml(name)}" loading="lazy" />
+          <span class="tile-caption">${escapeHtml(name)}</span>
+        </a>`;
+    })
+    .join("");
+  return `<div class="project-grid hub-grid" aria-label="Student projects">${tiles}</div>`;
+};
+
 const renderGrid = (title, images, layout, credits = {}) => {
   if (!images.length) return "";
   const full = layout === "full";
@@ -310,6 +333,7 @@ const renderProject = (markdown) => {
         <h1${titleClass} tabindex="-1" data-project-title>${inlineMarkdown(title)}</h1>
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
+      ${renderHub(meta)}
       ${renderGrid(title, images, meta.layout, gridCredits)}
       ${renderGrid(title, fullImages, "full", fullCredits)}
     `;
@@ -330,6 +354,7 @@ const renderProject = (markdown) => {
       </header>
       <div class="project-body">${renderBlocks(body)}</div>
     </div>
+    ${renderHub(meta)}
     ${renderGrid(title, images, meta.layout, gridCredits)}
     ${renderGrid(title, fullImages, "full", fullCredits)}
   `;
@@ -564,13 +589,14 @@ document.addEventListener("keydown", (event) => {
 // off the sidebar link keeps the two in step: renaming a project in index.html
 // renames its captions too.
 document.querySelectorAll(".gallery .tile[data-project]").forEach((tile) => {
+  // A student project is not in the sidebar, so its tile carries its own
+  // caption ("ARCH 2017 · Lucas Nagel"), written by tools/build_wall.py.
   const link = document.querySelector(`.index-nav a[data-project="${tile.dataset.project}"]`);
-  const name = link?.textContent.trim();
+  const name = tile.dataset.caption || link?.textContent.trim();
   if (!name) return;
   const caption = document.createElement("span");
   caption.className = "tile-caption";
-  // A student's tile says which course it comes from as well as whose it is.
-  caption.textContent = link.dataset.course ? `${link.dataset.course} · ${name}` : name;
+  caption.textContent = name;
   tile.append(caption);
 });
 

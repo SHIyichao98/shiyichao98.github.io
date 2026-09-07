@@ -1,14 +1,11 @@
 ---
-title: ARCH 8833
+title: AI Enhanced Architecture Design
 year: 2025 Spring
-type: Teaching / AI Enhanced Architecture Design
-subtitle: AI-Enhanced Design Methods for Architecture
-cover: assets/site_images/teaching/arch-8833/calvin-heimberg/hero.jpg
-gallery: assets/site_images/teaching/arch-8833/calvin-heimberg/grid/01.jpg | assets/site_images/teaching/arch-8833/calvin-heimberg/grid/02.jpg | assets/site_images/teaching/arch-8833/calvin-heimberg/grid/03.jpg | assets/site_images/teaching/arch-8833/calvin-heimberg/grid/04.jpg | assets/site_images/teaching/arch-8833/calvin-heimberg/grid/05.jpg | assets/site_images/teaching/arch-8833/calvin-heimberg/grid/06.jpg | assets/site_images/teaching/arch-8833/calvin-heimberg/grid/07.jpg
-summary: Advanced architecture course exploring AI-assisted design methods, generative image workflows, and the integration of AI with computational design tools.
-authors: Student: Calvin Heimberg
-student: Calvin Heimberg
-course: arch-8833
+type: Teaching
+subtitle: ARCH 8833
+summary: Generative image workflows, model training, and the integration of AI with parametric design tools in an advanced architecture course.
+authors: Graduate Student Instructor, PhD student | School of Architecture, Georgia Institute of Technology
+hub: arch-8833-brian-lachnicht::Brian Lachnicht::assets/site_images/teaching/arch-8833/brian-lachnicht/hero.jpg | arch-8833-calvin-heimberg::Calvin Heimberg::assets/site_images/teaching/arch-8833/calvin-heimberg/hero.jpg | arch-8833-kayla-rinoski::Kayla Rinoski::assets/site_images/teaching/arch-8833/kayla-rinoski/hero.jpg | arch-8833-meitong-liu::Meitong Liu::assets/site_images/teaching/arch-8833/meitong-liu/hero.jpg
 ---
 
 ## Overview

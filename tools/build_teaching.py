@@ -21,7 +21,8 @@ What this writes:
     assets/site_images/teaching/<course>/<student>/full/NN.jpg
     assets/site_images/teaching/<course>/<student>/hero.jpg
     content/projects/<course>-<student>.md
-    index.html      the Teaching section of the sidebar, between its markers
+    content/projects/teaching-*.md   one hub page per category
+    index.html      the Teaching section of the sidebar: three category links
     script.js       the projectSources entries, between their markers
 
 Assignment names come from tools/assignments.csv (course, student,
@@ -75,6 +76,37 @@ COURSES = {
     "2025Fall_Arch_6020": "arch-6020",
     "2025Spring_Arch_8833": "arch-8833",
 }
+
+# The sidebar lists three categories, not four courses and not thirty
+# students. Each category gets a hub page: its courses' descriptions, then one
+# tile per student project. (slug, title, span, summary, course slugs)
+CATEGORIES = (
+    (
+        "teaching-computational",
+        "Computational Design & Digital Fabrication",
+        "2023 Fall \u2013 2026 Fall",
+        "Parametric modeling, visual scripting, rule-based design, simulation and fabrication, "
+        "taught across the undergraduate and graduate Media + Modeling courses.",
+        ("arch-2020", "arch-6020"),
+    ),
+    (
+        "teaching-studio",
+        "Architectural Design Studio",
+        "2026 Spring",
+        "Undergraduate design studio integrating precedent, typology, representation, physical "
+        "making, and AI-assisted design workflows.",
+        ("arch-2017",),
+    ),
+    (
+        "teaching-ai",
+        "AI Enhanced Architecture Design",
+        "2025 Spring",
+        "Generative image workflows, model training, and the integration of AI with parametric "
+        "design tools in an advanced architecture course.",
+        ("arch-8833",),
+    ),
+)
+INSTRUCTOR = "Graduate Student Instructor, PhD student | School of Architecture, Georgia Institute of Technology"
 QUALITY = 88
 
 # The number that orders a file: "03.jpg", "Lucas Nagel_03.jpg", "img-3.png".
@@ -198,6 +230,34 @@ def page(course: dict[str, str], body: str, student: str, assignment: str, cours
     return "\n".join(lines)
 
 
+def category_page(slug: str, title: str, span: str, summary: str, courses: list[tuple[dict, str]],
+                  hub: list[str]) -> str:
+    """A hub: the category's courses described in turn, then the student tiles."""
+    numbers = " \u00b7 ".join(meta.get("title", "") for meta, _body in courses)
+    lines = [
+        "---",
+        f"title: {title}",
+        f"year: {span}",
+        "type: Teaching",
+        f"subtitle: {numbers}",
+        f"summary: {summary}",
+        f"authors: {INSTRUCTOR}",
+        "hub: " + " | ".join(hub),
+        "---",
+        "",
+    ]
+    for meta, body in courses:
+        if len(courses) > 1:
+            # Each course under its own heading, its sections a level down.
+            lines.append(f"## {meta.get('title', '')} \u00b7 {meta.get('subtitle', '')} ({meta.get('year', '')})")
+            lines.append("")
+            lines.append(re.sub(r"^## ", "### ", body, flags=re.M))
+        else:
+            lines.append(body)
+        lines.append("")
+    return "\n".join(lines)
+
+
 def replace_between(text: str, start: str, end: str, block: str, where: str) -> str:
     pattern = re.compile(re.escape(start) + r"[\s\S]*?" + re.escape(end))
     if not pattern.search(text):
@@ -215,54 +275,59 @@ def sidebar_course_links(index_text: str) -> dict[str, str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--dry-run", action="store_true", help="Report, write nothing.")
+    parser.add_argument("--pages-only", action="store_true",
+                        help="Rewrite pages, sidebar and router; leave pictures already exported alone.")
     args = parser.parse_args()
 
     table = read_table()
     index_path = ROOT / "index.html"
     index_text = index_path.read_text(encoding="utf-8")
-    course_links = sidebar_course_links(index_text)
 
     sidebar: list[str] = []
     sources: list[str] = []
     pages_written = 0
     pictures = 0
+    folder_of = {slug: name for name, slug in COURSES.items()}
 
-    # Sidebar order follows the course links as they stand.
-    ordered = sorted(COURSES.items(), key=lambda kv: html.unescape(course_links.get(kv[1], kv[1])).lower())
-    for folder_name, course_slug in ordered:
-        folder = SOURCES / folder_name
-        if not folder.is_dir():
-            print(f"  [!] missing source folder {folder_name}", file=sys.stderr)
-            continue
-        course_meta, body = front_matter(PROJECTS / f"{course_slug}.md")
-        students = collect(folder)
-        print(f"  {course_slug}: {len(students)} students")
-
-        sidebar.append(
-            f'          <a href="#project/{course_slug}" data-project="{course_slug}">'
-            f'{course_links.get(course_slug, course_meta.get("title", course_slug))}</a>'
-        )
-        sidebar.append('          <div class="students">')
-        for student, shots in sorted(students.items()):
-            slug = f"{course_slug}-{slugify(student)}"
-            table.setdefault((course_slug, student), "")
-            assignment = table[(course_slug, student)]
-            student_dir = OUT / course_slug / slugify(student)
-            published = export(student_dir, shots, args.dry_run)
-            pictures += sum(len(v) for v in published.values())
-            cover = f"{student_dir.relative_to(ROOT).as_posix()}/hero.jpg"
-            text = page(course_meta, body, student, assignment, course_slug, cover, published)
-            if not args.dry_run:
-                (PROJECTS / f"{slug}.md").write_text(text, encoding="utf-8")
-            pages_written += 1
-            note = f"  assignment: {assignment}" if assignment else "  (no assignment named)"
-            print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{note}")
-            sidebar.append(
-                f'            <a href="#project/{slug}" data-project="{slug}" '
-                f'data-course="{course_meta.get("title", course_slug)}">{student}</a>'
-            )
-            sources.append(f'  "{slug}": "content/projects/{slug}.md",')
-        sidebar.append("          </div>")
+    for cat_slug, cat_title, span, summary, course_slugs in CATEGORIES:
+        sidebar.append(f'          <a href="#project/{cat_slug}" data-project="{cat_slug}">{html.escape(cat_title)}</a>')
+        sources.append(f'  "{cat_slug}": "content/projects/{cat_slug}.md",')
+        courses: list[tuple[dict, str]] = []
+        hub: list[str] = []
+        for course_slug in course_slugs:
+            folder = SOURCES / folder_of[course_slug]
+            if not folder.is_dir():
+                print(f"  [!] missing source folder {folder}", file=sys.stderr)
+                continue
+            course_meta, body = front_matter(PROJECTS / f"{course_slug}.md")
+            # The kicker on a student page names the category, as the sidebar does.
+            course_meta = {**course_meta, "type": f"Teaching / {cat_title}"}
+            courses.append((course_meta, body))
+            students = collect(folder)
+            print(f"  {course_slug}: {len(students)} students")
+            for student, shots in sorted(students.items()):
+                slug = f"{course_slug}-{slugify(student)}"
+                table.setdefault((course_slug, student), "")
+                assignment = table[(course_slug, student)]
+                student_dir = OUT / course_slug / slugify(student)
+                if args.dry_run or (args.pages_only and student_dir.is_dir()):
+                    published = export(student_dir, shots, dry=True)
+                else:
+                    published = export(student_dir, shots, dry=False)
+                    pictures += sum(len(v) for v in published.values())
+                cover = f"{student_dir.relative_to(ROOT).as_posix()}/hero.jpg"
+                text = page(course_meta, body, student, assignment, course_slug, cover, published)
+                if not args.dry_run:
+                    (PROJECTS / f"{slug}.md").write_text(text, encoding="utf-8")
+                pages_written += 1
+                note = f"  assignment: {assignment}" if assignment else "  (no assignment named)"
+                print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{note}")
+                hub.append(f"{slug}::{student}::{cover}")
+                sources.append(f'  "{slug}": "content/projects/{slug}.md",')
+        if not args.dry_run:
+            (PROJECTS / f"{cat_slug}.md").write_text(
+                category_page(cat_slug, cat_title, span, summary, courses, hub), encoding="utf-8")
+        pages_written += 1
 
     if args.dry_run:
         print(f"\n  would write {pages_written} pages and {pictures} pictures")

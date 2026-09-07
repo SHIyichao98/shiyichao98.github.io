@@ -23,6 +23,7 @@ red channel on CMYK and Display P3 files, which reads on screen as a green cast.
 from __future__ import annotations
 
 import argparse
+import html
 import collections
 import random
 import re
@@ -177,7 +178,24 @@ def titles_from_sidebar() -> dict[str, str]:
     return dict(re.findall(r'<a href="#project/([^"]+)" data-project="[^"]+"[^>]*>([^<]+)</a>', text))
 
 
-TITLES = {**TITLES, **titles_from_sidebar()}
+def student_captions() -> dict[str, str]:
+    """Student page slug -> 'ARCH 2017 · Lucas Nagel'. Student pages are not in
+    the sidebar, so their tiles carry the caption themselves."""
+    out = {}
+    for md in (ROOT / "content" / "projects").glob("arch-*-*.md"):
+        meta = {}
+        block = md.read_text(encoding="utf-8").split("---", 2)[1]
+        for line in block.splitlines():
+            if ":" in line:
+                k, v = line.split(":", 1)
+                meta[k.strip()] = v.strip()
+        if meta.get("student"):
+            out[md.stem] = f"{meta.get('title', '')} \u00b7 {meta['student']}"
+    return out
+
+
+CAPTIONS = student_captions()
+TITLES = {**TITLES, **titles_from_sidebar(), **CAPTIONS}
 
 
 def project_by_name(path: Path) -> str | None:
@@ -352,7 +370,7 @@ def gather(report: bool):
 
 
 def _section_of(slug: str) -> str:
-    if slug.startswith("arch-"):
+    if slug.startswith("arch-") or slug.startswith("teaching-"):
         return "teaching"
     if slug in {"craftman", "loops", "mars", "robotics", "stadium", "street", "kokura"}:
         return "design"
@@ -470,7 +488,8 @@ def write_markup(cuts) -> None:
         lines.append('        <div class="wall-grid">')
         for i, (slug, _image) in enumerate(cuts[key], 1):
             eager = key == SECTIONS[0][0] and i <= 3
-            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}">')
+            caption = f' data-caption="{html.escape(CAPTIONS[slug], quote=True)}"' if slug in CAPTIONS else ""
+            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}"{caption}>')
             lines.append("            <img")
             lines.append(f'              src="assets/site_images/index/{key}/{i:02d}.jpg?v={version}"')
             lines.append(f'              alt="{TITLES[slug]}"' + ("" if eager else '\n              loading="lazy"'))
