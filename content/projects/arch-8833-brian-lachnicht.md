@@ -5,27 +5,8 @@ type: Teaching / AI Enhanced Architecture Design
 subtitle: AI-Enhanced Design Methods for Architecture
 cover: assets/site_images/teaching/arch-8833/brian-lachnicht/hero.jpg
 gallery: assets/site_images/teaching/arch-8833/brian-lachnicht/grid/01.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/02.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/03.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/04.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/05.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/06.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/07.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/08.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/09.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/10.jpg | assets/site_images/teaching/arch-8833/brian-lachnicht/grid/11.jpg
-summary: Advanced architecture course exploring AI-assisted design methods, generative image workflows, and the integration of AI with computational design tools.
 authors: Student: Brian Lachnicht
+links: [About the course](#project/arch-8833)
 student: Brian Lachnicht
 course: arch-8833
 ---
-
-## Overview
-
-ARCH 8833: AI-Enhanced Design Methods for Architecture introduces AI-driven workflows for architectural design using Stable Diffusion WebUI, ComfyUI, Rhino/Grasshopper, and related tools. Students learn how generative AI can support architectural concept development, representation, and design iteration while connecting AI-generated content with parametric models.
-
-The course moves from text-to-image generation and ControlNet/LoRA workflows to LoRA model training, advanced ComfyUI pipelines, machine-learning tools in Grasshopper, and a final AI-integrated architectural design project. Students are also asked to critically assess the role and ethical use of AI within architectural practice.
-
-## Focus
-
-- Generative AI for Architectural Design
-- Stable Diffusion, ControlNet & LoRA
-- ComfyUI Workflow Development
-- AI + Rhino/Grasshopper Integration
-- Machine Learning & Parametric Design
-- AI Ethics & Critical Design Practice
-
-## Role
-
-Instructor of Record, responsible for course development, lectures, technical instruction, assignments, student advising, and evaluation.

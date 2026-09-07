@@ -7,13 +7,31 @@ line naming the student and the assignment. A course can have a grid of
 square tiles and a run of full-width figures, from two source subfolders.
 
     assets/teaching_work_samples/<course folder>/<Student Name>/
-        grids/  01.jpg    -> square tiles, opening in the lightbox
-        full/   01.jpg    -> shown whole, one per row
+        project.md   -> what the page says: assignment, summary, text
+        grids/ 01.jpg   -> square tiles, opening in the lightbox
+        full/  01.jpg   -> shown whole, one per row
 
 One folder per student, named as the name should appear on the page; a team
 is one folder ("Hang Xu & Dingkun Hu"). Files are ordered by the number in
 their name, whatever else the name says. Anything at the course level that is
 not a student folder is ignored.
+
+project.md is the student's own account, written by hand:
+
+    ---
+    assignment: Form Study
+    summary: One sentence under the title.
+    ---
+
+    ## Project
+
+    A few paragraphs about the work.
+
+A folder without one gets a blank template written into it on the next
+build, so the place to write is never in doubt. Until it is filled in, the
+page shows the course header, the student's name and the pictures, and
+nothing it would have to make up. The course's own description stays on the
+course page, linked from every student page.
 
 What this writes:
 
@@ -24,11 +42,6 @@ What this writes:
     index.html      the Teaching section of the sidebar: three category links,
                     each a cut of the homepage teaching wall
     script.js       the projectSources entries, between their markers
-
-Assignment names come from tools/assignments.csv (course, student,
-assignment). The table is created with blanks the first time and never
-overwritten; fill a blank in and rebuild. A student with no assignment named
-gets the student line only.
 
 The course pages (arch-2017.md and the rest) are left as they are.
 
@@ -42,7 +55,6 @@ student's name, read from the page it belongs to.
 from __future__ import annotations
 
 import argparse
-import csv
 import html
 import re
 import shutil
@@ -66,7 +78,15 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "assets" / "teaching_work_samples"
 OUT = ROOT / "assets" / "site_images" / "teaching"
 PROJECTS = ROOT / "content" / "projects"
-TABLE = ROOT / "tools" / "assignments.csv"
+NOTE = "project.md"
+NOTE_TEMPLATE = """---
+assignment:
+summary:
+---
+
+## Project
+
+"""
 
 # Source folder -> course slug. The course page (content/projects/<slug>.md)
 # supplies the title, term, description and the text of every student page.
@@ -137,19 +157,22 @@ def front_matter(path: Path) -> tuple[dict[str, str], str]:
     return meta, body.strip("\n")
 
 
-def read_table() -> dict[tuple[str, str], str]:
-    if not TABLE.exists():
-        return {}
-    with TABLE.open(encoding="utf-8", newline="") as handle:
-        return {(r["course"], r["student"]): r["assignment"].strip() for r in csv.DictReader(handle)}
+def read_note(student_dir: Path, dry: bool) -> tuple[str, str, str]:
+    """(assignment, summary, body) from the student's project.md.
 
-
-def write_table(rows: dict[tuple[str, str], str]) -> None:
-    with TABLE.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.writer(handle)
-        writer.writerow(["course", "student", "assignment"])
-        for (course, student), assignment in sorted(rows.items()):
-            writer.writerow([course, student, assignment])
+    A missing note is written as a blank template. A body that is only the
+    template's heading counts as empty, so an unfilled page is not published
+    with a heading over nothing.
+    """
+    note = student_dir / NOTE
+    if not note.exists():
+        if not dry:
+            note.write_text(NOTE_TEMPLATE, encoding="utf-8")
+        return "", "", ""
+    meta, body = front_matter(note)
+    if body.strip() in {"", "## Project"}:
+        body = ""
+    return meta.get("assignment", "").strip(), meta.get("summary", "").strip(), body.strip()
 
 
 def collect(folder: Path) -> dict[str, dict[str, list[Path]]]:
@@ -201,8 +224,10 @@ def export(student_dir: Path, shots: dict[str, list[Path]], dry: bool) -> dict[s
     return published
 
 
-def page(course: dict[str, str], body: str, student: str, assignment: str, course_slug: str,
+def page(course: dict[str, str], student: str, note: tuple[str, str, str], course_slug: str,
          cover: str, shots: dict[str, list[str]]) -> str:
+    """A student page: the course as header, the student's own note as body."""
+    assignment, summary, body = note
     lines = [
         "---",
         f"title: {course['title']}",
@@ -215,19 +240,21 @@ def page(course: dict[str, str], body: str, student: str, assignment: str, cours
         lines.append("gallery: " + " | ".join(shots["grid"]))
     if shots["full"]:
         lines.append("gallery_full: " + " | ".join(shots["full"]))
-    lines.append(f"summary: {course['summary']}")
+    if summary:
+        lines.append(f"summary: {summary}")
     credit = f"Student: {student}"
     if assignment:
         credit += f" | Assignment: {assignment}"
     lines += [
         f"authors: {credit}",
+        f"links: [About the course](#project/{course_slug})",
         f"student: {student}",
         f"course: {course_slug}",
         "---",
         "",
-        body,
-        "",
     ]
+    if body:
+        lines += [body, ""]
     return "\n".join(lines)
 
 
@@ -280,7 +307,6 @@ def main() -> None:
                         help="Rewrite pages, sidebar and router; leave pictures already exported alone.")
     args = parser.parse_args()
 
-    table = read_table()
     index_path = ROOT / "index.html"
     index_text = index_path.read_text(encoding="utf-8")
 
@@ -288,6 +314,7 @@ def main() -> None:
     sources: list[str] = []
     pages_written = 0
     pictures = 0
+    notes_blank = 0
     folder_of = {slug: name for name, slug in COURSES.items()}
 
     for cat_slug, cat_title, span, summary, course_slugs in CATEGORIES:
@@ -298,23 +325,20 @@ def main() -> None:
             f'          <a href="#{cat_slug}" data-wall="teaching" data-category="{cat_slug}">'
             f'{html.escape(cat_title)}</a>'
         )
-        courses: list[tuple[dict, str]] = []
-        hub: list[str] = []
         for course_slug in course_slugs:
             folder = SOURCES / folder_of[course_slug]
             if not folder.is_dir():
                 print(f"  [!] missing source folder {folder}", file=sys.stderr)
                 continue
-            course_meta, body = front_matter(PROJECTS / f"{course_slug}.md")
+            course_meta, _course_body = front_matter(PROJECTS / f"{course_slug}.md")
             # The kicker on a student page names the category, as the sidebar does.
             course_meta = {**course_meta, "type": f"Teaching / {cat_title}"}
-            courses.append((course_meta, body))
             students = collect(folder)
             print(f"  {course_slug}: {len(students)} students")
             for student, shots in sorted(students.items()):
                 slug = f"{course_slug}-{slugify(student)}"
-                table.setdefault((course_slug, student), "")
-                assignment = table[(course_slug, student)]
+                note = read_note(folder / student, args.dry_run)
+                notes_blank += not any(note)
                 student_dir = OUT / course_slug / slugify(student)
                 if args.dry_run or (args.pages_only and student_dir.is_dir()):
                     published = export(student_dir, shots, dry=True)
@@ -322,13 +346,12 @@ def main() -> None:
                     published = export(student_dir, shots, dry=False)
                     pictures += sum(len(v) for v in published.values())
                 cover = f"{student_dir.relative_to(ROOT).as_posix()}/hero.jpg"
-                text = page(course_meta, body, student, assignment, course_slug, cover, published)
+                text = page(course_meta, student, note, course_slug, cover, published)
                 if not args.dry_run:
                     (PROJECTS / f"{slug}.md").write_text(text, encoding="utf-8")
                 pages_written += 1
-                note = f"  assignment: {assignment}" if assignment else "  (no assignment named)"
-                print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{note}")
-                hub.append(f"{slug}::{student}::{cover}")
+                state = f"  assignment: {note[0]}" if note[0] else ("  (note filled, no assignment)" if any(note) else "  (project.md blank)")
+                print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{state}")
                 sources.append(f'  "{slug}": "content/projects/{slug}.md",')
         # The hub pages this once wrote are retired; clear a leftover.
         if not args.dry_run:
@@ -338,7 +361,6 @@ def main() -> None:
         print(f"\n  would write {pages_written} pages and {pictures} pictures")
         return
 
-    write_table(table)
     index_path.write_text(
         replace_between(index_text, "          <!-- teaching:start -->", "          <!-- teaching:end -->",
                          "\n".join(sidebar), "index.html"),
@@ -350,8 +372,7 @@ def main() -> None:
                          "  // --- teaching:end ---", "\n".join(sources), "script.js"),
         encoding="utf-8",
     )
-    blanks = sum(1 for v in table.values() if not v)
-    print(f"\n  {pages_written} pages, {pictures} pictures; {blanks} assignment name(s) still blank in {TABLE.name}")
+    print(f"\n  {pages_written} pages, {pictures} pictures; {notes_blank} project.md still blank")
     print("  next: python tools/guard_images.py && python tools/build_wall.py")
 
 
