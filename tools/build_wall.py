@@ -195,6 +195,16 @@ def student_captions() -> dict[str, str]:
 
 
 CAPTIONS = student_captions()
+
+
+def category_of(slug: str) -> str | None:
+    """Teaching category slug for a course or student page slug, else None."""
+    from build_teaching import CATEGORIES  # noqa: PLC0415  (same folder)
+
+    for cat_slug, _title, _span, _summary, courses in CATEGORIES:
+        if any(slug == c or slug.startswith(f"{c}-") for c in courses):
+            return cat_slug
+    return None
 TITLES = {**TITLES, **titles_from_sidebar(), **CAPTIONS}
 
 
@@ -489,7 +499,9 @@ def write_markup(cuts) -> None:
         for i, (slug, _image) in enumerate(cuts[key], 1):
             eager = key == SECTIONS[0][0] and i <= 3
             caption = f' data-caption="{html.escape(CAPTIONS[slug], quote=True)}"' if slug in CAPTIONS else ""
-            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}"{caption}>')
+            category = category_of(slug)
+            cut = f' data-category="{category}"' if category else ""
+            lines.append(f'          <a class="tile" href="#project/{slug}" data-project="{slug}"{caption}{cut}>')
             lines.append("            <img")
             lines.append(f'              src="assets/site_images/index/{key}/{i:02d}.jpg?v={version}"')
             lines.append(f'              alt="{TITLES[slug]}"' + ("" if eager else '\n              loading="lazy"'))

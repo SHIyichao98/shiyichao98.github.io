@@ -132,8 +132,16 @@ img {
   text-underline-offset: 3px;
 }
 
-.gallery .wall[hidden] {
+.gallery .wall[hidden],
+.gallery .tile[hidden] {
   display: none;
+}
+
+/* A category is the entry under the Teaching heading that is showing. */
+.index-nav a[aria-current="page"] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .index-nav a,

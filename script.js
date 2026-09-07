@@ -24,7 +24,6 @@ const projectSources = {
   cv: "content/projects/cv.md",
   // One entry per student project, written by tools/build_teaching.py.
   // --- teaching:start ---
-  "teaching-computational": "content/projects/teaching-computational.md",
   "arch-2020-alesya-yermakova": "content/projects/arch-2020-alesya-yermakova.md",
   "arch-2020-alyaana-zaman": "content/projects/arch-2020-alyaana-zaman.md",
   "arch-2020-chris-wang": "content/projects/arch-2020-chris-wang.md",
@@ -48,12 +47,10 @@ const projectSources = {
   "arch-6020-mitchell-stevens-and-austin-taylor": "content/projects/arch-6020-mitchell-stevens-and-austin-taylor.md",
   "arch-6020-sam-charles-jonathon-caruso": "content/projects/arch-6020-sam-charles-jonathon-caruso.md",
   "arch-6020-sydney-devereux": "content/projects/arch-6020-sydney-devereux.md",
-  "teaching-studio": "content/projects/teaching-studio.md",
   "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
   "arch-2017-lucas-nagel": "content/projects/arch-2017-lucas-nagel.md",
   "arch-2017-lydia-efthymiopoulou": "content/projects/arch-2017-lydia-efthymiopoulou.md",
   "arch-2017-miguel-pita-ruiz": "content/projects/arch-2017-miguel-pita-ruiz.md",
-  "teaching-ai": "content/projects/teaching-ai.md",
   "arch-8833-brian-lachnicht": "content/projects/arch-8833-brian-lachnicht.md",
   "arch-8833-calvin-heimberg": "content/projects/arch-8833-calvin-heimberg.md",
   "arch-8833-kayla-rinoski": "content/projects/arch-8833-kayla-rinoski.md",
@@ -66,7 +63,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "108";
+const ASSET_VERSION = "109";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -450,11 +447,22 @@ const indexUrl = () => window.location.pathname + window.location.search;
 // The three walls answer to three hashes. A sidebar heading opens the index
 // with only its own wall showing; the name, or no hash at all, shows all three.
 const WALL_HASHES = { designs: "design", teaching: "teaching", research: "research" };
+// A teaching category is a narrower cut of the teaching wall: the same tiles,
+// only those whose course belongs to the category. The sidebar's category
+// links declare them, so the list here is read off the markup.
+// hash -> { wall, category }
+const CATEGORY_HASHES = {};
+document.querySelectorAll("[data-wall][data-category]").forEach((link) => {
+  CATEGORY_HASHES[link.getAttribute("href").slice(1)] = {
+    wall: link.dataset.wall,
+    category: link.dataset.category,
+  };
+});
 
-const showIndex = (updateHash = true, wall = null) => {
+const showIndex = (updateHash = true, wall = null, category = null) => {
   if (!lightbox.hidden) closeLightbox();
   const wasIndex = currentRoute === "index";
-  currentRoute = wall ? `wall/${wall}` : "index";
+  currentRoute = category ? `wall/${wall}/${category}` : wall ? `wall/${wall}` : "index";
   requestToken += 1;
   document.body.classList.remove("viewing-project");
   detail.hidden = true;
@@ -463,11 +471,22 @@ const showIndex = (updateHash = true, wall = null) => {
   document.querySelectorAll(".gallery .wall").forEach((section) => {
     section.hidden = Boolean(wall) && section.getAttribute("aria-labelledby") !== `wall-${wall}`;
   });
+  document.querySelectorAll(".gallery .tile[data-category]").forEach((tile) => {
+    tile.hidden = Boolean(category) && tile.dataset.category !== category;
+  });
   document.querySelectorAll("[data-wall]").forEach((link) => {
-    link.setAttribute("aria-current", link.dataset.wall === wall ? "page" : "false");
+    const current = link.dataset.category
+      ? link.dataset.category === category
+      : link.dataset.wall === wall && !category;
+    link.setAttribute("aria-current", current ? "page" : "false");
   });
   if (updateHash) {
-    const hash = wall ? `#${Object.keys(WALL_HASHES).find((k) => WALL_HASHES[k] === wall)}` : "";
+    let hash = "";
+    if (category) {
+      hash = `#${Object.keys(CATEGORY_HASHES).find((k) => CATEGORY_HASHES[k].category === category)}`;
+    } else if (wall) {
+      hash = `#${Object.keys(WALL_HASHES).find((k) => WALL_HASHES[k] === wall)}`;
+    }
     history.pushState(null, "", indexUrl() + hash);
   }
   // Coming back from a project restores the place on the wall; choosing a
@@ -555,7 +574,7 @@ document.querySelector("[data-home]").addEventListener("click", (event) => {
 document.querySelectorAll("[data-wall]").forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
-    showIndex(true, link.dataset.wall);
+    showIndex(true, link.dataset.wall, link.dataset.category || null);
   });
 });
 
@@ -602,13 +621,16 @@ document.querySelectorAll(".gallery .tile[data-project]").forEach((tile) => {
 
 const syncRoute = () => {
   const match = window.location.hash.match(/^#project\/(.+)$/);
-  const wall = WALL_HASHES[window.location.hash.slice(1)] ?? null;
-  const route = match ? `project/${match[1]}` : wall ? `wall/${wall}` : "index";
+  const key = window.location.hash.slice(1);
+  const cut = CATEGORY_HASHES[key];
+  const wall = cut ? cut.wall : WALL_HASHES[key] ?? null;
+  const category = cut ? cut.category : null;
+  const route = match ? `project/${match[1]}` : category ? `wall/${wall}/${category}` : wall ? `wall/${wall}` : "index";
   if (route === currentRoute) return;
   if (match) {
     openProject(match[1], false);
   } else {
-    showIndex(false, wall);
+    showIndex(false, wall, category);
   }
 };
 

@@ -21,8 +21,8 @@ What this writes:
     assets/site_images/teaching/<course>/<student>/full/NN.jpg
     assets/site_images/teaching/<course>/<student>/hero.jpg
     content/projects/<course>-<student>.md
-    content/projects/teaching-*.md   one hub page per category
-    index.html      the Teaching section of the sidebar: three category links
+    index.html      the Teaching section of the sidebar: three category links,
+                    each a cut of the homepage teaching wall
     script.js       the projectSources entries, between their markers
 
 Assignment names come from tools/assignments.csv (course, student,
@@ -78,8 +78,9 @@ COURSES = {
 }
 
 # The sidebar lists three categories, not four courses and not thirty
-# students. Each category gets a hub page: its courses' descriptions, then one
-# tile per student project. (slug, title, span, summary, course slugs)
+# students. A category link shows the teaching wall cut to that category's
+# tiles; a tile opens the student's page. (slug, title, span, summary, course
+# slugs -- span and summary are kept for the kicker and any future hub.)
 CATEGORIES = (
     (
         "teaching-computational",
@@ -290,8 +291,13 @@ def main() -> None:
     folder_of = {slug: name for name, slug in COURSES.items()}
 
     for cat_slug, cat_title, span, summary, course_slugs in CATEGORIES:
-        sidebar.append(f'          <a href="#project/{cat_slug}" data-project="{cat_slug}">{html.escape(cat_title)}</a>')
-        sources.append(f'  "{cat_slug}": "content/projects/{cat_slug}.md",')
+        # A category is a cut of the teaching wall, not a page: the link
+        # filters the wall to the category's tiles, each of which opens a
+        # student's project.
+        sidebar.append(
+            f'          <a href="#{cat_slug}" data-wall="teaching" data-category="{cat_slug}">'
+            f'{html.escape(cat_title)}</a>'
+        )
         courses: list[tuple[dict, str]] = []
         hub: list[str] = []
         for course_slug in course_slugs:
@@ -324,10 +330,9 @@ def main() -> None:
                 print(f"    {student:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{note}")
                 hub.append(f"{slug}::{student}::{cover}")
                 sources.append(f'  "{slug}": "content/projects/{slug}.md",')
+        # The hub pages this once wrote are retired; clear a leftover.
         if not args.dry_run:
-            (PROJECTS / f"{cat_slug}.md").write_text(
-                category_page(cat_slug, cat_title, span, summary, courses, hub), encoding="utf-8")
-        pages_written += 1
+            (PROJECTS / f"{cat_slug}.md").unlink(missing_ok=True)
 
     if args.dry_run:
         print(f"\n  would write {pages_written} pages and {pictures} pictures")
