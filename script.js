@@ -22,6 +22,40 @@ const projectSources = {
   about: "content/projects/about.md",
   publications: "content/projects/publications.md",
   cv: "content/projects/cv.md",
+  // One entry per student project, written by tools/build_teaching.py.
+  // --- teaching:start ---
+  "arch-6020-ann-radford-meshad-and-isabel-humphries": "content/projects/arch-6020-ann-radford-meshad-and-isabel-humphries.md",
+  "arch-6020-chase-scholze": "content/projects/arch-6020-chase-scholze.md",
+  "arch-6020-darian-martinez": "content/projects/arch-6020-darian-martinez.md",
+  "arch-6020-ethan-cofer-and-rohan-sood": "content/projects/arch-6020-ethan-cofer-and-rohan-sood.md",
+  "arch-6020-garima-kaushik-ashwin-raman": "content/projects/arch-6020-garima-kaushik-ashwin-raman.md",
+  "arch-6020-hang-xu": "content/projects/arch-6020-hang-xu.md",
+  "arch-6020-hang-xu-dingkun-hu": "content/projects/arch-6020-hang-xu-dingkun-hu.md",
+  "arch-6020-jiawei-gong": "content/projects/arch-6020-jiawei-gong.md",
+  "arch-6020-jonathan-caruso-jiawei-gong": "content/projects/arch-6020-jonathan-caruso-jiawei-gong.md",
+  "arch-6020-kamili-chambers": "content/projects/arch-6020-kamili-chambers.md",
+  "arch-6020-mitali-darda-and-diya-nair": "content/projects/arch-6020-mitali-darda-and-diya-nair.md",
+  "arch-6020-mitchell-stevens-and-austin-taylor": "content/projects/arch-6020-mitchell-stevens-and-austin-taylor.md",
+  "arch-6020-sam-charles-jonathon-caruso": "content/projects/arch-6020-sam-charles-jonathon-caruso.md",
+  "arch-6020-sydney-devereux": "content/projects/arch-6020-sydney-devereux.md",
+  "arch-8833-brian-lachnicht": "content/projects/arch-8833-brian-lachnicht.md",
+  "arch-8833-calvin-heimberg": "content/projects/arch-8833-calvin-heimberg.md",
+  "arch-8833-kayla-rinoski": "content/projects/arch-8833-kayla-rinoski.md",
+  "arch-8833-meitong-liu": "content/projects/arch-8833-meitong-liu.md",
+  "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
+  "arch-2017-lucas-nagel": "content/projects/arch-2017-lucas-nagel.md",
+  "arch-2017-lydia-efthymiopoulou": "content/projects/arch-2017-lydia-efthymiopoulou.md",
+  "arch-2017-miguel-pita-ruiz": "content/projects/arch-2017-miguel-pita-ruiz.md",
+  "arch-2020-alesya-yermakova": "content/projects/arch-2020-alesya-yermakova.md",
+  "arch-2020-alyaana-zaman": "content/projects/arch-2020-alyaana-zaman.md",
+  "arch-2020-chris-wang": "content/projects/arch-2020-chris-wang.md",
+  "arch-2020-ella-rowan": "content/projects/arch-2020-ella-rowan.md",
+  "arch-2020-hellen-gonzalez": "content/projects/arch-2020-hellen-gonzalez.md",
+  "arch-2020-lyriel-todd": "content/projects/arch-2020-lyriel-todd.md",
+  "arch-2020-sydney-wetterhan": "content/projects/arch-2020-sydney-wetterhan.md",
+  "arch-2020-victoria-bland": "content/projects/arch-2020-victoria-bland.md",
+  "arch-2020-yasmeen-smeirat": "content/projects/arch-2020-yasmeen-smeirat.md",
+  // --- teaching:end ---
 };
 
 // Bumped whenever a published file changes. Filenames here are stable
@@ -29,7 +63,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "106";
+const ASSET_VERSION = "107";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -530,13 +564,13 @@ document.addEventListener("keydown", (event) => {
 // off the sidebar link keeps the two in step: renaming a project in index.html
 // renames its captions too.
 document.querySelectorAll(".gallery .tile[data-project]").forEach((tile) => {
-  const name = document
-    .querySelector(`.index-nav a[data-project="${tile.dataset.project}"]`)
-    ?.textContent.trim();
+  const link = document.querySelector(`.index-nav a[data-project="${tile.dataset.project}"]`);
+  const name = link?.textContent.trim();
   if (!name) return;
   const caption = document.createElement("span");
   caption.className = "tile-caption";
-  caption.textContent = name;
+  // A student's tile says which course it comes from as well as whose it is.
+  caption.textContent = link.dataset.course ? `${link.dataset.course} · ${name}` : name;
   tile.append(caption);
 });
 

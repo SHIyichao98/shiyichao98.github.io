@@ -1,0 +1,31 @@
+---
+title: ARCH 8833
+year: 2025 Spring
+type: Teaching / AI & Computational Design
+subtitle: AI-Enhanced Design Methods for Architecture
+cover: assets/site_images/teaching/arch-8833/meitong-liu/hero.jpg
+gallery: assets/site_images/teaching/arch-8833/meitong-liu/grid/01.jpg | assets/site_images/teaching/arch-8833/meitong-liu/grid/02.jpg | assets/site_images/teaching/arch-8833/meitong-liu/grid/03.jpg | assets/site_images/teaching/arch-8833/meitong-liu/grid/04.jpg | assets/site_images/teaching/arch-8833/meitong-liu/grid/05.jpg | assets/site_images/teaching/arch-8833/meitong-liu/grid/06.jpg
+summary: Advanced architecture course exploring AI-assisted design methods, generative image workflows, and the integration of AI with computational design tools.
+authors: Student: Meitong Liu
+student: Meitong Liu
+course: arch-8833
+---
+
+## Overview
+
+ARCH 8833: AI-Enhanced Design Methods for Architecture introduces AI-driven workflows for architectural design using Stable Diffusion WebUI, ComfyUI, Rhino/Grasshopper, and related tools. Students learn how generative AI can support architectural concept development, representation, and design iteration while connecting AI-generated content with parametric models.
+
+The course moves from text-to-image generation and ControlNet/LoRA workflows to LoRA model training, advanced ComfyUI pipelines, machine-learning tools in Grasshopper, and a final AI-integrated architectural design project. Students are also asked to critically assess the role and ethical use of AI within architectural practice.
+
+## Focus
+
+- Generative AI for Architectural Design
+- Stable Diffusion, ControlNet & LoRA
+- ComfyUI Workflow Development
+- AI + Rhino/Grasshopper Integration
+- Machine Learning & Parametric Design
+- AI Ethics & Critical Design Practice
+
+## Role
+
+Instructor of Record, responsible for course development, lectures, technical instruction, assignments, student advising, and evaluation.

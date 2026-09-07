@@ -100,7 +100,7 @@ BY_HAND = {
     # Read as DCC 2024 at 18 bits. It is Lucas Nagel's axonometric from the
     # 2026 studio; the source folder says so and the published copy is
     # watermarked, which is what pushed the true match out of range.
-    "Lucas Nagel_01.jpg": "arch-2017",
+    "Lucas Nagel_01.jpg": "arch-2017-lucas-nagel",
     # The studio's plaster models photographed together. No single student's
     # file, so no name on the caption, but the course is not in doubt: Lucas
     # Nagel's cast is in the middle of the group.
@@ -170,6 +170,16 @@ TITLES = {
 }
 
 
+def titles_from_sidebar() -> dict[str, str]:
+    """Every data-project link in the sidebar, slug -> text. Student pages are
+    written by tools/build_teaching.py and would otherwise need listing here."""
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    return dict(re.findall(r'<a href="#project/([^"]+)" data-project="[^"]+"[^>]*>([^<]+)</a>', text))
+
+
+TITLES = {**TITLES, **titles_from_sidebar()}
+
+
 def project_by_name(path: Path) -> str | None:
     stem = re.sub(r"[^a-z0-9]+", "_", path.stem.lower())
     for needle, slug in BY_NAME:
@@ -186,7 +196,10 @@ def project_by_content(path: Path, library) -> tuple[str | None, int]:
     best, best_bits = None, 99
     for other_bits, _ratio, _p, slug in library:
         differ = bin(bits ^ other_bits).count("1")
-        if differ < best_bits:
+        # A tie between a course and one of its students goes to the student:
+        # the same picture is published under both, and the page that names
+        # the maker is the one to open.
+        if differ < best_bits or (differ == best_bits and best and len(slug) > len(best)):
             best, best_bits = slug, differ
     if best is None:
         return None, 99

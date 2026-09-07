@@ -86,6 +86,14 @@ def credit_map() -> dict[str, str]:
     for md in sorted(PROJECTS.glob("*.md")):
         meta = front_matter(md)
         course = meta.get("title", "")
+        # A student page: one maker for every picture on it, cover included.
+        if meta.get("student"):
+            mark = f"Student work by {meta['student']} · {course} · Georgia Tech"
+            for field in ("cover", "gallery", "gallery_full"):
+                for shot in meta.get(field, "").split("|"):
+                    if shot.strip():
+                        marks[shot.strip().replace("\\", "/")] = mark
+            continue
         for field, credit_field in (("gallery", "gallery_credits"), ("gallery_full", "gallery_full_credits")):
             if field not in meta:
                 continue
@@ -107,7 +115,8 @@ def mark_for(path: Path, marks: dict[str, str]) -> str:
     # A cover crop has no entry of its own. On a teaching page it is still
     # student work, and saying so without a name is better than claiming it.
     if "teaching" in path.parts:
-        slug = path.parent.name
+        # teaching/<course>/... whether or not a student folder sits between.
+        slug = path.parts[path.parts.index("teaching") + 1]
         meta = front_matter(PROJECTS / f"{slug}.md") if (PROJECTS / f"{slug}.md").exists() else {}
         return f"Student work \u00b7 {meta.get('title', slug)} \u00b7 Georgia Tech"
     return OWN_MARK

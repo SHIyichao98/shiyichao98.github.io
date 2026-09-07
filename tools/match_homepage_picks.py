@@ -57,9 +57,16 @@ def project_of(path: Path) -> str:
     """The slug a library image belongs to, taken from its folder."""
     parts = path.parts
     if "site_images" in parts:
-        # assets/site_images/<section>/<slug>/[thumbs/]file
+        # assets/site_images/<section>/<slug>/[grid|full/][thumbs/]file
+        # A student folder under a course is the more specific project:
+        # teaching/arch-2017/lucas-nagel/... -> arch-2017-lucas-nagel.
         i = parts.index("site_images")
-        return parts[i + 2] if len(parts) > i + 2 else "?"
+        if len(parts) <= i + 2:
+            return "?"
+        slug = parts[i + 2]
+        if parts[i + 1] == "teaching" and len(parts) > i + 4 and parts[i + 3] not in {"thumbs", "grid", "full"}:
+            slug = f"{slug}-{parts[i + 3]}"
+        return slug
     for root in ("my_design_works", "research_projects"):
         if root in parts:
             i = parts.index(root)
