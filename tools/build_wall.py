@@ -127,12 +127,12 @@ LEAD = {}
 # Every pick in the folder must appear once; the build refuses otherwise.
 ORDER = {
     "design": (
-        "robots.jpg",
-        "dome.jpg",
+        "07.png",
         "axon.jpg",
+        "robots.jpg",
         "housing.jpg",
         "27-2-2.jpg",
-        "07.png",
+        "dome.jpg",
     ),
     "teaching": (
         "models01.jpg",
