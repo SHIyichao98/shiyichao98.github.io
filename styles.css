@@ -1,24 +1,28 @@
 :root {
-  --bg: #080909;
-  --ink: #f4f2ec;
-  --muted: #a3a09a;
-  --line: rgba(255, 255, 255, 0.12);
-  --panel: #101111;
-  --accent: #d8b454;
-  /* 480px at 1920, narrowing on smaller screens so the wall keeps room. */
-  --sidebar: clamp(280px, 25vw, 480px);
-  --gap: 10px;
-  /* Where content begins, in both columns. The sidebar pads down to it and the
-     masthead pads down to it less the gallery's own gap, so the name and the
-     opening sentence start on one line. */
-  --head-top: 22px;
-  /* Project detail pages: white and neutral greys only. No warm tint, no
-     accent colour, so nothing competes with the work being shown. */
+  /* One surface for the whole site: white, neutral greys, black type. The
+     index used to be dark with white project pages behind it; the pictures
+     are the colour now, and a dark ground was competing with them. The
+     --paper names stay because half the sheet is written in them. */
   --paper: #ffffff;
   --paper-ink: #151515;
   --paper-muted: #6b6b6b;
   --paper-line: #e3e3e3;
   --paper-well: #f4f4f4;
+  --bg: var(--paper);
+  --ink: var(--paper-ink);
+  --muted: var(--paper-muted);
+  --line: var(--paper-line);
+  --panel: var(--paper-well);
+  /* No accent. Hover and focus are black on white, like everything else. */
+  --accent: #000000;
+  /* Wide enough for the longest index entry on one line, no wider: the strip
+     of empty ground the old 480px left between the list and the wall was
+     the first thing a visitor saw. */
+  --sidebar: clamp(260px, 18vw, 340px);
+  --gap: 10px;
+  /* Where content begins in both columns, so the name and the first row of
+     tiles start on one line. */
+  --head-top: 22px;
   --tile-ratio: 1 / 1;
   --detail-image-height: min(68vh, 620px);
 }
@@ -33,9 +37,7 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 72% 16%, rgba(255, 255, 255, 0.08), transparent 28%),
-    linear-gradient(135deg, #070808, #101110 44%, #050505);
+  background: var(--bg);
   color: var(--ink);
   font-family: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;
   font-size: 15px;
@@ -60,15 +62,13 @@ img {
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--head-top) 26px 20px;
-  background:
-    radial-gradient(circle at 18% 4%, rgba(255, 255, 255, 0.08), transparent 24%),
-    linear-gradient(180deg, #0e0f0f, #080909);
+  background: var(--bg);
   border-right: 1px solid var(--line);
 }
 
 .profile h1 {
   margin: 0 0 13px;
-  color: #ffffff;
+  color: var(--ink);
   font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.12;
@@ -98,7 +98,7 @@ img {
 .side-links a,
 .kicker {
   margin: 0 0 5px;
-  color: #f6f1e7;
+  color: var(--ink);
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -124,7 +124,9 @@ img {
 
 .index-nav a:hover,
 .side-links a:hover {
-  color: var(--accent);
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .side-links {
@@ -149,95 +151,26 @@ img {
 .gallery {
   margin-left: var(--sidebar);
   min-height: 100vh;
-  padding: var(--gap);
-}
-
-/* Says what the work is about before the first picture, so a visitor who reads
-   nothing else still knows. */
-.masthead {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(24px, 4vw, 76px);
-  align-items: start;
-  padding: calc(var(--head-top) - var(--gap)) 2px clamp(28px, 4vw, 46px);
-}
-
-.masthead p {
-  margin: 0;
-  max-width: 60ch;
-  color: #e9e9e9;
-  font-size: clamp(1rem, 1.55vw, 1.32rem);
-  line-height: 1.45;
-  letter-spacing: -0.005em;
-}
-
-/* The name is the one place on the page that says who wrote it, so it carries
-   a full underline and goes to the About page. White, not the accent: a gold
-   name in a white sentence read as a highlight rather than a signature. */
-.masthead .whoami {
-  color: #ffffff;
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  transition: color 180ms ease;
-}
-
-.masthead .whoami:hover,
-.masthead .whoami:focus-visible {
-  color: var(--accent);
-}
-
-/* Three words in the sentence are also the three walls below it. Marked with a
-   dotted rule rather than a solid one: they are a shortcut through the page,
-   not a departure from it, and a paragraph with three solid links in it reads
-   as a list of links rather than as a sentence. */
-.masthead .jump {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgba(255, 255, 255, 0.42);
-  text-underline-offset: 4px;
-  transition: color 180ms ease, text-decoration-color 180ms ease;
-}
-
-.masthead .jump:hover,
-.masthead .jump:focus-visible {
-  color: #ffffff;
-  text-decoration-color: var(--accent);
-}
-
-/* Landing flush against the top edge reads as an overshoot. */
-.wall {
-  scroll-margin-top: 18px;
-}
-
-/* The terms the work is filed under, set against the right edge so they read
-   as an index rather than a second sentence. A step quieter than the statement:
-   they qualify it, they do not compete with it. */
-.keywords {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-align: right;
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.62;
-  letter-spacing: 0.01em;
+  padding: var(--head-top) var(--gap) var(--gap);
 }
 
 .wall + .wall {
   margin-top: clamp(30px, 4vw, 52px);
 }
 
+/* The wall carries no text. Each section keeps its heading for assistive
+   technology and for the hash targets, but nothing is drawn: the gap between
+   one wall and the next is the only visible division, and the hover caption
+   says which project a tile belongs to. */
 .wall h2 {
-  margin: 0 0 12px;
-  padding: 0 2px;
-  color: #f4f4f4;
-  font-size: clamp(0.92rem, 1.3vw, 1.1rem);
-  font-weight: 700;
-  letter-spacing: 0.015em;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .wall-grid {
@@ -256,11 +189,10 @@ img {
   aspect-ratio: var(--tile-ratio);
   min-height: 0;
   overflow: hidden;
-  background: #171817;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--paper-well);
+  border: 1px solid var(--paper-line);
   border-radius: 0;
   outline: 0 solid transparent;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
 }
 
 .tile img {
@@ -283,43 +215,8 @@ img {
 }
 
 .tile:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-}
-
-/* --- index wall: grey until looked at ----------------------------------
-   Thirty-three tiles in nine palettes fight each other; drained to grey they
-   read as one wall, and the picture under the cursor is the only one in
-   colour. Suggested by Ilker Karadag, who called it cliche and was right on
-   both counts.
-
-   Done as a filter rather than as grey exports: the files stay in colour, so
-   this is a display choice and not a re-export, and it is reversible by
-   editing one character.
-
-   To go back to colour everywhere, set --tile-grey to 0.
-
-   Only where a cursor exists. On a phone there is no hover, so the reveal can
-   never fire and the wall would simply be monochrome forever -- which is not
-   the effect, it is a bug wearing the effect's clothes. Touch devices get the
-   colour straight away. */
-.wall-grid {
-  --tile-grey: 1;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .wall-grid .tile img {
-    filter: grayscale(var(--tile-grey));
-  }
-
-  /* Dimmed less than a project tile is. The caption carries its own scrim, so
-     it stays legible, and the colour arriving at 72% opacity was arriving
-     apologetically. */
-  .wall-grid .tile:hover img,
-  .wall-grid .tile:focus-visible img {
-    filter: grayscale(0);
-    opacity: 0.88;
-  }
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 /* Rides in with the hover dim: the picture says what it is only while being
@@ -804,16 +701,6 @@ body.lightbox-open {
 
   .wall-grid {
     grid-template-columns: 1fr;
-  }
-
-  .masthead {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 26px 2px 24px;
-  }
-
-  .keywords {
-    text-align: left;
   }
 
   .project-detail {

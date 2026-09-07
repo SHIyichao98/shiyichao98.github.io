@@ -398,16 +398,16 @@ def write_markup(cuts) -> None:
     version = re.search(r"styles\.css\?v=(\d+)", text).group(1)
 
     lines = ['    <main class="gallery" aria-label="Selected work">']
-    # The opening block is written by hand — the statement and the keywords
-    # beside it — so it is carried across whole. Rebuilding it from a captured
-    # sentence silently dropped the keyword list the first time this ran.
+    # The wall has no opening text now. If a hand-written header ever returns
+    # it is carried across whole rather than rebuilt: rebuilding one from a
+    # captured sentence silently dropped its keyword list the first time.
     opening = re.search(r'      <header class="masthead">[\s\S]*?</header>', text)
-    if not opening:
-        sys.exit("index.html has no masthead to carry over")
-    lines += [opening.group(0), ""]
+    if opening:
+        lines += [opening.group(0), ""]
 
     for key, title, _folder in SECTIONS:
         lines.append(f'      <section class="wall" aria-labelledby="wall-{key}">')
+        # Drawn nowhere -- styles.css hides it -- but named for screen readers.
         lines.append(f'        <h2 id="wall-{key}">{title}</h2>')
         lines.append('        <div class="wall-grid">')
         for i, (slug, _image) in enumerate(cuts[key], 1):
