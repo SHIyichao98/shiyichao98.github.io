@@ -127,9 +127,6 @@ LEAD = {}
 # Every pick in the folder must appear once; the build refuses otherwise.
 ORDER = {
     "design": (
-        "RC2_Team3_0_Sim_1_a(1).png",
-        "perspective.jpg",
-        "6unit_abstract_modified.png",
         "robots.jpg",
         "dome.jpg",
         "axon.jpg",
