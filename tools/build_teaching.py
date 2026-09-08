@@ -166,7 +166,8 @@ def split_folder(name: str) -> tuple[str, str]:
     """'Lucas Nagel_Final Drawings' -> ('Lucas Nagel', 'Final Drawings');
     'Lucas Nagel' -> ('Lucas Nagel', '')."""
     student, _, project = name.partition("_")
-    return display_name(student), display_name(project)
+    # Underscores inside the project part stand for spaces: Building_System.
+    return display_name(student), display_name(project.replace("_", " "))
 
 
 def front_matter(path: Path) -> tuple[dict[str, str], str]:

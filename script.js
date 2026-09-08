@@ -33,11 +33,12 @@ const projectSources = {
   "arch-2020-sydney-wetterhan": "content/projects/arch-2020-sydney-wetterhan.md",
   "arch-2020-victoria-bland": "content/projects/arch-2020-victoria-bland.md",
   "arch-2020-yasmeen-smeirat": "content/projects/arch-2020-yasmeen-smeirat.md",
-  "arch-6020-chase-scholze": "content/projects/arch-6020-chase-scholze.md",
-  "arch-6020-garima-kaushik-ashwin-raman": "content/projects/arch-6020-garima-kaushik-ashwin-raman.md",
-  "arch-6020-jiawei-gong": "content/projects/arch-6020-jiawei-gong.md",
-  "arch-6020-jonathan-caruso-jiawei-gong": "content/projects/arch-6020-jonathan-caruso-jiawei-gong.md",
-  "arch-6020-mitchell-stevens-austin-taylor": "content/projects/arch-6020-mitchell-stevens-austin-taylor.md",
+  "arch-6020-chase-scholze-image-based-building-elements-and-systems": "content/projects/arch-6020-chase-scholze-image-based-building-elements-and-systems.md",
+  "arch-6020-garima-kaushik-ashwin-raman-building-system": "content/projects/arch-6020-garima-kaushik-ashwin-raman-building-system.md",
+  "arch-6020-jiawei-gong-architectural-fields": "content/projects/arch-6020-jiawei-gong-architectural-fields.md",
+  "arch-6020-jiawei-gong-building-system": "content/projects/arch-6020-jiawei-gong-building-system.md",
+  "arch-6020-jonathan-caruso-jiawei-gong-image-based-building-elements-and-systems": "content/projects/arch-6020-jonathan-caruso-jiawei-gong-image-based-building-elements-and-systems.md",
+  "arch-6020-mitchell-stevens-austin-taylor-building-system": "content/projects/arch-6020-mitchell-stevens-austin-taylor-building-system.md",
   "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
   "arch-2017-lucas-nagel-final-drawings": "content/projects/arch-2017-lucas-nagel-final-drawings.md",
   "arch-2017-lucas-nagel-physical-models": "content/projects/arch-2017-lucas-nagel-physical-models.md",
@@ -56,7 +57,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "126";
+const ASSET_VERSION = "127";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
