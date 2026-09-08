@@ -352,6 +352,28 @@ img {
   display: none;
 }
 
+/* A way home at the top of every project page, above the title, staying
+   put as the page scrolls. */
+.detail-nav {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  margin: -26px clamp(-58px, -4vw, -20px) 22px;
+  padding: 12px clamp(20px, 4vw, 58px);
+  background: var(--paper);
+  border-bottom: 1px solid var(--paper-line);
+  font-size: 0.86rem;
+}
+
+.detail-nav a {
+  color: var(--paper-ink);
+  font-weight: 700;
+}
+
+.detail-nav a:hover {
+  text-decoration: underline;
+}
+
 
 /* No cap here: the image grid should fill the page. Prose is held to a
    readable measure by the 720px rule on p/li/h2 further down. */
@@ -792,6 +814,11 @@ body.lightbox-open {
   .project-detail {
     margin-left: 0;
     padding: 18px 18px 54px;
+  }
+
+  .detail-nav {
+    margin: -18px -18px 18px;
+    padding: 10px 18px;
   }
 
 

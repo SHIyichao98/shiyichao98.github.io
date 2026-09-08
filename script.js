@@ -57,7 +57,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "131";
+const ASSET_VERSION = "132";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
@@ -563,9 +563,12 @@ document.querySelectorAll("[data-project]").forEach((link) => {
   });
 });
 
-document.querySelector("[data-home]").addEventListener("click", (event) => {
-  event.preventDefault();
-  showIndex();
+// The name in the sidebar and the Home link over every project page.
+document.querySelectorAll("[data-home]").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    showIndex();
+  });
 });
 
 document.querySelectorAll("[data-wall]").forEach((link) => {

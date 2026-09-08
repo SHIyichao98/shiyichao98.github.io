@@ -5,6 +5,7 @@ type: Teaching / Computational Design & Digital Fabrication
 subtitle: Media + Modeling 2
 cover: assets/site_images/teaching/arch-2020/sydney-wetterhan/hero.jpg
 gallery: assets/site_images/teaching/arch-2020/sydney-wetterhan/grid/01.jpg
+summary: A waving wall of open cells that thins out toward one end.
 authors: Student: **Sydney Wetterhan**
 links: [About the course](#project/arch-2020)
 student: Sydney Wetterhan
@@ -15,3 +16,7 @@ course: arch-2020
 ## Course
 
 Media + Modeling 2 introduces parametric modeling and visual scripting in Rhino and Grasshopper to undergraduate architecture students. I co-taught the course with Yeinn Oh across its two sections. This student's work was taught and evaluated by me directly.
+
+## Project
+
+A curved surface is panelled into square cells that are extruded into frames; toward one end the cells scatter and fall away, and a colour gradient runs across the whole. The study pairs a surface with an attractor that controls both opening and colour.
