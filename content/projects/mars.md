@@ -11,21 +11,8 @@ authors: Advisor: Diego Pinochet
 
 ## Overview
 
-The project investigates the design of a future Martian settlement under extreme environmental and resource conditions. Research on climate, geology, atmosphere, water, energy, construction, and material availability is translated into a set of architectural and urban design constraints, forming the basis for a computational settlement strategy.
-
-The proposal combines protected habitation systems, large-span enclosure structures, modular residential units, resource infrastructure, and robotic construction within a connected urban framework. Parametric modeling is used to study how surface geometry, settlement density, structural systems, and program distribution can adapt to site conditions while reducing material and construction demands. The project treats Mars as a test ground for computational approaches to designing under limited resources and extreme environmental constraints.
-
-## Focus
-
-- Speculative Martian urbanism
-- Parametric urban design
-- Environmental data integration
-- Large-span protective structures
-- Modular habitat systems
-- Robotic and automated construction
-- Resource-constrained design
-- Computational surface optimization
+A speculative settlement on Mars, designed from the planet's constraints: climate, geology, water, energy and the materials to hand. Protected habitats, large-span enclosures, modular housing and robotic construction are set within one urban framework, and parametric models test how surface geometry, density and structure can adapt to the site while keeping material and construction demands low.
 
 ## Role
 
-Student designer and computational researcher, primarily responsible for C# programming, parametric system development, and optimization of surface modeling and settlement geometry.
+Student designer and computational researcher: C# programming, the parametric system, and optimisation of the surface and settlement geometry.

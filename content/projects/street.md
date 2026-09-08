@@ -10,20 +10,8 @@ authors: Advisor: Nan Zhang
 
 ## Overview
 
-The project investigates the intense everyday use of the streets surrounding Maotanchang Middle School, where a large population of accompanying parents lives near the campus to support students preparing for major examinations. During meal times, the school entrance and surrounding streets become temporary dining and gathering spaces, but the existing environment provides limited shelter, seating, and spatial organization.
-
-The design restructures the school-gate area as a pedestrian-oriented public space shaped by changing patterns of use throughout the day. A system of adaptable street structures supports dining, waiting, vending, circulation, and informal gathering, opening when crowds increase and becoming less intrusive during quieter periods. The project treats time, crowd movement, and temporary occupation as key design factors in the reconstruction of the street.
-
-## Focus
-
-- School gate and street reconstruction
-- Time-based public space
-- Student and parent daily life
-- Informal dining and street vendors
-- Pedestrian circulation
-- Adaptable urban structures
-- Social infrastructure
+Around Maotanchang Middle School, thousands of accompanying parents live beside the campus, and at meal times the school gate and its streets become an open-air dining hall with almost no shelter or seating. The project rebuilds the gate area as a pedestrian public space shaped by the rhythm of the day: a system of adaptable street structures for dining, waiting, vending and gathering that opens when the crowds come and recedes when they go.
 
 ## Role
 
-Individual design project, responsible for site research, behavioral observation, concept development, urban and architectural design, spatial organization, representation, and final presentation.
+Individual project: site research and behavioural observation, concept, urban and architectural design, representation.

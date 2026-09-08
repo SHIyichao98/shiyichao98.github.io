@@ -11,21 +11,8 @@ authors: Advisors: Yunsheng Su, Kangyi Zheng
 
 ## Overview
 
-Overnight House investigates an automated construction method in which a robotic arm sprays fast-setting polymeric material onto an inflated membrane to create a self-supporting shell. The inflatable surface acts as temporary formwork, while the sprayed material gradually forms the permanent enclosure. The project studies how geometry, spraying density, material composition, and robotic motion can be coordinated within a digital fabrication workflow.
-
-The design process combines membrane-form research, robotic path simulation, material testing, and full-scale on-site calibration. Spray trajectories are developed as continuous patterns over the curved surface, with attention to coverage, efficiency, material use, and collision avoidance. The project tests how computational control and robotic fabrication can support rapid construction and mass customization of small architectural spaces.
-
-## Focus
-
-- Robotic fabrication
-- Inflatable membrane formwork
-- Automated material spraying
-- Robotic path planning
-- Material and pattern optimization
-- Full-scale prototyping
-- Digital construction
-- Mass customization
+A robotic arm sprays fast-setting polymer onto an inflated membrane, which serves as temporary formwork until the sprayed shell can stand on its own. The work coordinates membrane geometry, spray density, material mix and robot motion in one digital fabrication workflow, with spray paths developed as continuous patterns over the curved surface and calibrated at full scale on site. The aim is rapid construction and mass customisation of small enclosures.
 
 ## Role
 
-Student designer and fabrication researcher, primarily responsible for robotic trajectory design, path simulation, and on-site calibration during fabrication.
+Student designer and fabrication researcher: robotic trajectory design, path simulation, and on-site calibration during fabrication.

@@ -12,21 +12,8 @@ links: [Project Page](https://bpro2021.bartlettarchucl.com/rc2-human-material-ma
 
 ## Overview
 
-LOOPS is an autonomous mobile and self-forming architectural robotic system developed through the aggregation of bending-active tensile hybrid modules. Instead of relying on rigid mechanical joints, the system changes shape through controlled elastic deformation and variable cable lengths, allowing individual modules to self-form, crawl, and aggregate into larger spatial structures.
-
-The project combines material experiments, parametric simulation, robotic prototyping, and cyber-physical control. Physical prototypes were developed alongside digital simulations to study structural deformation, movement, aggregation, and interaction with users. Machine-learning and agent-based methods were also tested to support target seeking, obstacle avoidance, collective movement, and autonomous assembly.
-
-## Focus
-
-- Elastic robotic structures
-- Self-forming and shape-changing systems
-- Bending-active tensile hybrids
-- Robotic actuation and physical prototyping
-- Cyber-physical control
-- Machine learning and autonomous crawling
-- Human–robot interaction
-- Multi-agent aggregation
+LOOPS is a mobile, self-forming robotic structure built from bending-active tensile hybrid modules. Instead of rigid joints, each module changes shape through controlled elastic deformation and variable cable lengths, so that modules can self-form, crawl and aggregate into larger structures. Physical prototypes were developed alongside simulations, and machine-learning and agent-based methods were tested for target seeking, obstacle avoidance and collective movement.
 
 ## Role
 
-Student designer and researcher, primarily responsible for C# programming, simulation development and optimization, ROS-based Python coding, and machine-learning experiments for robotic movement and autonomous behaviors.
+Student designer and researcher: C# programming, simulation development and optimisation, ROS-based Python control, and the machine-learning experiments for autonomous movement.

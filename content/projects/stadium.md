@@ -11,20 +11,8 @@ authors: Advisor: Xiao Sun
 
 ## Overview
 
-The project addresses the fragmented spatial condition of Xi’an University of Science and Technology, where scattered buildings, level changes, and disconnected open spaces limit movement and everyday interaction across the campus. Rather than treating the stadium as an isolated sports building, the proposal uses it as a new public center that links different parts of the university.
-
-The design is conceived as a continuous architectural “blanket” extending across the site. Sports spaces, circulation routes, terraces, and public areas are integrated into a connected system that supports both organized athletic activities and informal daily use. By combining recreation, gathering, and movement, the stadium becomes a shared social space intended to encourage interaction among students from different academic backgrounds.
-
-## Focus
-
-- University stadium design
-- Campus connectivity
-- Sports and recreational architecture
-- Public space and social interaction
-- Multi-level circulation
-- Landscape integration
-- Structural and detail development
+Xi'an University of Science and Technology is a scattered campus of level changes and disconnected open spaces. Rather than an isolated sports building, the stadium is conceived as a continuous architectural blanket across the site: sports spaces, routes, terraces and public areas in one connected system, serving organised athletics and everyday informal use alike, and giving students from different departments a shared place to meet.
 
 ## Role
 
-Chief designer in a two-person team, responsible for concept development, overall architectural and spatial design, structural strategy, detail development, modeling, and final representation.
+Chief designer in a two-person team: concept, architectural and spatial design, structural strategy, details, modelling and final representation.
