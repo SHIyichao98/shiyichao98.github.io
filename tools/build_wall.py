@@ -216,9 +216,11 @@ TITLES = {**TITLES, **titles_from_sidebar(), **CAPTIONS}
 
 
 def project_by_name(path: Path) -> str | None:
-    stem = re.sub(r"[^a-z0-9]+", "_", path.stem.lower())
+    # Compare with every separator stripped, so caadria_2026, caadria2026
+    # and CAADRIA-2026 are one name.
+    stem = re.sub(r"[^a-z0-9]", "", path.stem.lower())
     for needle, slug in BY_NAME:
-        if needle in stem:
+        if re.sub(r"[^a-z0-9]", "", needle) in stem:
             return slug
     return None
 
