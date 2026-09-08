@@ -114,8 +114,7 @@ BY_HAND = {
     # The course cover was cut from this picture, so content matching lands
     # on the course page at 3 bits; the project page is the one to open.
     "Jonathan Caruso & Jiawei Gong01.png": "arch-6020-jonathan-caruso-jiawei-gong-image-based-building-elements-and-systems",
-    # Read as a CAADRIA figure by content. It is Jiawei Gong's building system.
-    "Jiawei Gong_2.jpeg": "arch-6020-jiawei-gong-building-system",
+
     # Page 22 of the Kokura portfolio, before that project was published.
     "housing.jpg": "kokura",
 }
@@ -255,6 +254,34 @@ def resolve(section: str, path: Path, library):
     if bits > TRUST_BITS:
         return None, f"no confident match, nearest {slug} at {bits} bits"
     return slug, f"content, {bits} bits"
+
+
+def resolve_extra(path: Path, library) -> tuple[str | None, str]:
+    """An extra pick is filed under its category and named "Student_Project",
+    which is enough to find its page without looking at the pixels: the
+    category's courses are tried in turn for a page with that student and
+    project. Content matching is the fallback, for a file named otherwise."""
+    from build_teaching import CATEGORIES, slugify, split_folder  # noqa: PLC0415
+
+    if path.name in BY_HAND:
+        return BY_HAND[path.name], "by hand"
+    courses = ()
+    for _slug, title, _span, _summary, course_slugs in CATEGORIES:
+        if path.parent.name.strip().lower() == title.lower():
+            courses = course_slugs
+    student, project = split_folder(path.stem)
+    for course in courses:
+        candidates = [f"{course}-{slugify(student)}-{slugify(project)}"] if project else []
+        candidates.append(f"{course}-{slugify(student)}")
+        for candidate in candidates:
+            if candidate in TITLES:
+                return candidate, "filename"
+        # One project only: the name alone should find it.
+        stem = f"{course}-{slugify(student)}-"
+        matches = [slug for slug in TITLES if slug.startswith(stem)]
+        if len(matches) == 1:
+            return matches[0], "filename (only project)"
+    return resolve("teaching", path, library)
 
 
 def looks_like_a_slide(image: Image.Image) -> bool:
@@ -453,7 +480,7 @@ def main() -> None:
         # Subfolders are the author's filing (one per category); the category a
         # tile lands in comes from its student's course, not from the folder.
         for path in sorted(p for p in EXTRA_PICKS.rglob("*") if p.is_file()):
-            slug, how = resolve("teaching", path, library)
+            slug, how = resolve_extra(path, library)
             if slug is None or slug not in TITLES:
                 print(f"  [!] extra {path.name}: {how} \u2014 add it to BY_HAND", file=sys.stderr)
                 continue
