@@ -77,6 +77,7 @@ import html
 import re
 import shutil
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -451,7 +452,17 @@ def main() -> None:
             continue
         for sub in course_out.iterdir():
             if sub.is_dir() and sub not in produced_dirs:
-                shutil.rmtree(sub); stale += 1
+                # OneDrive holds a lock on a folder for a moment after touching
+                # it; try a few times, then leave it and say so rather than
+                # stop before the sidebar and router are written.
+                for attempt in range(5):
+                    try:
+                        shutil.rmtree(sub); stale += 1
+                        break
+                    except PermissionError:
+                        time.sleep(1)
+                else:
+                    print(f"  [!] could not remove {sub.relative_to(ROOT)}; delete it by hand", file=sys.stderr)
     if stale:
         print(f"  cleared {stale} stale page(s)/folder(s)")
 

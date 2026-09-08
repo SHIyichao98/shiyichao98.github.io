@@ -445,7 +445,9 @@ def main() -> None:
     extras = []
     if EXTRA_PICKS.is_dir():
         library = build_library()
-        for path in sorted(p for p in EXTRA_PICKS.iterdir() if p.is_file()):
+        # Subfolders are the author's filing (one per category); the category a
+        # tile lands in comes from its student's course, not from the folder.
+        for path in sorted(p for p in EXTRA_PICKS.rglob("*") if p.is_file()):
             slug, how = resolve("teaching", path, library)
             if slug is None or slug not in TITLES:
                 print(f"  [!] extra {path.name}: {how} \u2014 add it to BY_HAND", file=sys.stderr)
