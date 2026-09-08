@@ -111,6 +111,11 @@ BY_HAND = {
     "models01.jpg": "arch-2017-lucas-nagel-physical-models",
     "Rishi Patel_00.png": "arch-2017-rishi-patel",
     "Samuel Thurman_01.png": "arch-8833-samuel-thurman",
+    # The course cover was cut from this picture, so content matching lands
+    # on the course page at 3 bits; the project page is the one to open.
+    "Jonathan Caruso & Jiawei Gong01.png": "arch-6020-jonathan-caruso-jiawei-gong-image-based-building-elements-and-systems",
+    # Read as a CAADRIA figure by content. It is Jiawei Gong's building system.
+    "Jiawei Gong_2.jpeg": "arch-6020-jiawei-gong-building-system",
     # Page 22 of the Kokura portfolio, before that project was published.
     "housing.jpg": "kokura",
 }
