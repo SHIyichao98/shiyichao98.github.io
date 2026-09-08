@@ -535,6 +535,27 @@ def main() -> None:
         print(f"  {key}: {len(cuts[key])} tiles")
 
     write_markup(cuts)
+    write_course_walls(cuts["teaching"])
+
+
+def write_course_walls(teaching) -> None:
+    """A course page shows its category's wall -- the same tiles, homepage and
+    extra alike, each opening a student's page -- so the three ways in
+    (category link, course page, homepage) agree on what there is to see."""
+    from build_teaching import CATEGORIES, write_course_hub  # noqa: PLC0415
+
+    by_category: dict[str, list[str]] = {}
+    for index, (slug, _image, _extra) in enumerate(teaching, 1):
+        category = category_of(slug)
+        if not category:
+            continue
+        tile = f"assets/site_images/index/teaching/{index:02d}.jpg"
+        caption = CAPTIONS.get(slug, TITLES.get(slug, slug))
+        by_category.setdefault(category, []).append(f"{slug}::{caption}::{tile}")
+    for cat_slug, _title, _span, _summary, courses in CATEGORIES:
+        for course in courses:
+            write_course_hub(course, by_category.get(cat_slug, []))
+    print(f"  course pages: walls written for {sum(len(c) for *_r, c in CATEGORIES)} courses")
 
 
 def cut(source: Path) -> Image.Image:

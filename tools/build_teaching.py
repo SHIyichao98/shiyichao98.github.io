@@ -58,10 +58,11 @@ What this writes:
                     each a cut of the homepage teaching wall
     script.js       the projectSources entries, between their markers
 
-The course pages (arch-2017.md and the rest) keep their own text, and their
-gallery is replaced by a hub: one tile per student project, each a link to
-that student's page. Pictures open in the lightbox only on the student's own
-page. A student with no folder has no page, and so appears nowhere.
+The course pages (arch-2017.md and the rest) keep their own text; their
+picture wall is written by tools/build_wall.py and is the same wall the
+course's category shows, each tile a link to a student's page. Pictures open
+in the lightbox only on the student's own page. A student with no folder has
+no page, and so appears nowhere.
 
 Run tools/guard_images.py afterwards: it stamps each new picture with the
 student's name, read from the page it belongs to.
@@ -430,8 +431,9 @@ def main() -> None:
                 print(f"    {label:<40} grid {len(published['grid']):2d}  full {len(published['full']):2d}{state}")
                 sources.append(f'  "{slug}": "content/projects/{slug}.md",')
                 hub.append(f"{slug}::{label}::{cover}")
-            if not args.dry_run:
-                write_course_hub(course_slug, hub)
+            # The course page's hub is written by tools/build_wall.py from the
+            # category's wall, so a course page shows the same pictures as
+            # its category view. Nothing to do here.
         # The hub pages this once wrote are retired; clear a leftover.
         if not args.dry_run:
             (PROJECTS / f"{cat_slug}.md").unlink(missing_ok=True)
