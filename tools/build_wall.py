@@ -126,7 +126,10 @@ TRUST_BITS = 20
 # Picks that open a section, in this order, before the shuffle places the rest.
 # Keyed by section, valued by source filename. The first row is the one a
 # visitor sees without scrolling, so it is chosen rather than drawn.
-LEAD = {}
+LEAD = {
+    # The research wall opens on the robotic structures; the rest shuffle.
+    "research": ("acadia_02.jpg",),
+}
 # A section listed here is laid out exactly as written and never shuffled.
 # Written once the author has moved tiles by hand: a shuffle that reseeds
 # would undo the move, and pinning only a first row leaves the rest loose.
