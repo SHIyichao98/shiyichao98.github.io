@@ -3,11 +3,11 @@ title: ARCH 6020
 year: 2025 Fall & 2026 Fall
 type: Teaching / Computational Design & Digital Fabrication
 subtitle: Media + Modeling II
-cover: assets/site_images/teaching/arch-6020/sydney-devereux/hero.jpg
-gallery: assets/site_images/teaching/arch-6020/sydney-devereux/grid/01.jpg
-authors: Student: **Sydney Devereux**
+cover: assets/site_images/teaching/arch-6020/mitchell-stevens-austin-taylor/hero.jpg
+gallery: assets/site_images/teaching/arch-6020/mitchell-stevens-austin-taylor/grid/01.jpg | assets/site_images/teaching/arch-6020/mitchell-stevens-austin-taylor/grid/02.jpg
+authors: Student: **Mitchell Stevens & Austin Taylor**
 links: [About the course](#project/arch-6020)
-student: Sydney Devereux
+student: Mitchell Stevens & Austin Taylor
 project: 
 course: arch-6020
 ---

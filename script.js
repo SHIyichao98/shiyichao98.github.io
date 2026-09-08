@@ -33,20 +33,11 @@ const projectSources = {
   "arch-2020-sydney-wetterhan": "content/projects/arch-2020-sydney-wetterhan.md",
   "arch-2020-victoria-bland": "content/projects/arch-2020-victoria-bland.md",
   "arch-2020-yasmeen-smeirat": "content/projects/arch-2020-yasmeen-smeirat.md",
-  "arch-6020-ann-radford-meshad-and-isabel-humphries": "content/projects/arch-6020-ann-radford-meshad-and-isabel-humphries.md",
   "arch-6020-chase-scholze": "content/projects/arch-6020-chase-scholze.md",
-  "arch-6020-darian-martinez": "content/projects/arch-6020-darian-martinez.md",
-  "arch-6020-ethan-cofer-and-rohan-sood": "content/projects/arch-6020-ethan-cofer-and-rohan-sood.md",
   "arch-6020-garima-kaushik-ashwin-raman": "content/projects/arch-6020-garima-kaushik-ashwin-raman.md",
-  "arch-6020-hang-xu": "content/projects/arch-6020-hang-xu.md",
-  "arch-6020-hang-xu-dingkun-hu": "content/projects/arch-6020-hang-xu-dingkun-hu.md",
   "arch-6020-jiawei-gong": "content/projects/arch-6020-jiawei-gong.md",
   "arch-6020-jonathan-caruso-jiawei-gong": "content/projects/arch-6020-jonathan-caruso-jiawei-gong.md",
-  "arch-6020-kamili-chambers": "content/projects/arch-6020-kamili-chambers.md",
-  "arch-6020-mitali-darda-and-diya-nair": "content/projects/arch-6020-mitali-darda-and-diya-nair.md",
-  "arch-6020-mitchell-stevens-and-austin-taylor": "content/projects/arch-6020-mitchell-stevens-and-austin-taylor.md",
-  "arch-6020-sam-charles-jonathon-caruso": "content/projects/arch-6020-sam-charles-jonathon-caruso.md",
-  "arch-6020-sydney-devereux": "content/projects/arch-6020-sydney-devereux.md",
+  "arch-6020-mitchell-stevens-austin-taylor": "content/projects/arch-6020-mitchell-stevens-austin-taylor.md",
   "arch-2017-andy-nguyen": "content/projects/arch-2017-andy-nguyen.md",
   "arch-2017-lucas-nagel-final-drawings": "content/projects/arch-2017-lucas-nagel-final-drawings.md",
   "arch-2017-lucas-nagel-physical-models": "content/projects/arch-2017-lucas-nagel-physical-models.md",
@@ -65,7 +56,7 @@ const projectSources = {
 // keeps its old copy indefinitely, and a returning visitor can end up running
 // new markup against old CSS. index.html carries the same stamp on script.js
 // and styles.css, so one bump reaches everything.
-const ASSET_VERSION = "123";
+const ASSET_VERSION = "124";
 const versioned = (url) => `${url}${url.includes("?") ? "&" : "?"}v=${ASSET_VERSION}`;
 
 const gallery = document.querySelector(".gallery");
