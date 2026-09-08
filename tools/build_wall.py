@@ -453,6 +453,22 @@ def main() -> None:
                 print(f"  [!] extra {path.name}: {how} \u2014 add it to BY_HAND", file=sys.stderr)
                 continue
             extras.append({"slug": slug, "path": path, "how": how})
+        # An extra that is one of the homepage nine would show twice in a
+        # category view. Match by content, not by name: the same picture was
+        # filed under two names in two folders.
+        homepage = [dhash(item["path"]) for item in ordered.get("teaching", [])]
+        kept_extras = []
+        for item in extras:
+            print_ = dhash(item["path"])
+            twin = any(
+                print_ and mine and bin(print_[0] ^ mine[0]).count("1") <= 6
+                for mine in homepage
+            )
+            if twin:
+                print(f"  teaching: {item['path'].name} is already on the homepage, not repeated")
+            else:
+                kept_extras.append(item)
+        extras = kept_extras
         if extras:
             extras, _clashes = mix(extras)
             print(f"  teaching: {len(extras)} extra tile(s) for the category views")
