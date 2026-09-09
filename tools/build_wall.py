@@ -111,6 +111,10 @@ BY_HAND = {
     "models01.jpg": "arch-2017-lucas-nagel-physical-models",
     "Rishi Patel_00.png": "arch-2017-rishi-patel",
     "Samuel Thurman_01.png": "arch-8833-samuel-thurman",
+    # The square version of this drawing was taken off the student's page, so
+    # nothing published matches it any more and content matching drifted to
+    # the nearest other picture.
+    "Jiawei Gong_01.jpeg": "arch-6020-jiawei-gong-architectural-fields",
     # The course cover was cut from this picture, so content matching lands
     # on the course page at 3 bits; the project page is the one to open.
     "Jonathan Caruso & Jiawei Gong01.png": "arch-6020-jonathan-caruso-jiawei-gong-image-based-building-elements-and-systems",
