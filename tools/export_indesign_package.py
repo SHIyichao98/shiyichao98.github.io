@@ -217,9 +217,17 @@ cropping one cuts a heading in half. Each page below says which it is.
 
 
 def main() -> None:
-    shutil.rmtree(OUT, ignore_errors=True)
-    (OUT / "images").mkdir(parents=True)
-    (OUT / "text").mkdir(parents=True)
+    # OneDrive can hold the folder open for a moment after rmtree; wait it out.
+    import time
+    for _attempt in range(8):
+        shutil.rmtree(OUT, ignore_errors=True)
+        if not OUT.exists():
+            break
+        time.sleep(1)
+    (OUT / "images").mkdir(parents=True, exist_ok=True)
+    (OUT / "text").mkdir(parents=True, exist_ok=True)
+    for stale in list((OUT / "images").iterdir()) + list((OUT / "text").iterdir()):
+        stale.unlink()
 
     notes = [LAYOUT_HEAD]
     for number, spec in enumerate(PAGES, 1):

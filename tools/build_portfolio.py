@@ -59,7 +59,7 @@ PAGES: list[dict] = [
     {"kind": "course", "slug": "arch-2017", "shots": 5, "part": 1},
     {"kind": "course", "slug": "arch-2017", "shots": 6, "part": 2},
     {"kind": "course", "slug": "arch-6020", "shots": 6},
-    {"kind": "course", "slug": "arch-8833", "shots": 6},
+    {"kind": "course", "slug": "arch-8833", "shots": 4},
     {"kind": "course", "slug": "arch-2020", "shots": 6},
     {"kind": "design", "slugs": ["loops"], "shots": 5},
     {"kind": "design", "slugs": ["stadium", "street"], "shots": 3},
@@ -93,6 +93,7 @@ def read(slug: str) -> dict:
         elif current and line.strip():
             sections[current].append(line.strip())
     meta["_sections"] = sections  # type: ignore[assignment]
+    meta["_slug"] = slug
     return meta
 
 
@@ -131,9 +132,47 @@ def figure_score(path: Path) -> float:
     return white - colour / 120
 
 
+def course_pairs(course: str) -> list[tuple[str, str]]:
+    """A course's pictures, drawn from its student pages.
+
+    A course page on the site holds no pictures of its own any more; each
+    student project has a page. Round-robin across the projects -- every
+    student's first picture, then every student's second -- so a page of
+    six shows six students rather than one student six times. Projects the
+    wall shows come first, in the wall's order.
+    """
+    hub = read(course).get("hub", "")
+    wall_order = []
+    for entry in hub.split("|"):
+        slug = entry.split("::")[0].strip()
+        if slug.startswith(f"{course}-") and slug not in wall_order:
+            wall_order.append(slug)
+    pages = sorted(p.stem for p in (ROOT / "content" / "projects").glob(f"{course}-*.md"))
+    ordered = wall_order + [s for s in pages if s not in wall_order]
+
+    per_project: list[list[tuple[str, str]]] = []
+    for slug in ordered:
+        meta = read(slug)
+        who = meta.get("student", "")
+        what = meta.get("project", "")
+        caption = f"Student work by {who}" + (f" · {what}" if what else "")
+        shots = [(src, caption) for src in gallery(meta)]
+        if shots:
+            per_project.append(shots)
+    out: list[tuple[str, str]] = []
+    for round_ in range(max((len(s) for s in per_project), default=0)):
+        for shots in per_project:
+            if round_ < len(shots):
+                out.append(shots[round_])
+    return out
+
+
 def pick(meta: dict, count: int, skip: int = 0, by_figure: bool = False) -> list[tuple[str, str]]:
     """Return (src, caption) pairs. Captions name a student where one is credited."""
     images = gallery(meta)
+    if not images and meta.get("hub"):
+        pairs = course_pairs(meta["_slug"])
+        return pairs[skip : skip + count]
     names = credits(meta)
     label = meta.get("credit_label", "")
     pairs = [
@@ -285,9 +324,9 @@ def page_teaching_overview() -> str:
     return f"""<section class="page">
   <header class="head">
     <h2>Teaching</h2>
-    <p class="lede">Four courses at Georgia Tech as a graduate student instructor, from the
-    undergraduate computational design sequence to a graduate seminar on AI in design, and one
-    section of the undergraduate design studio.</p>
+    <p class="lede">Four courses at Georgia Tech as a graduate student instructor: the undergraduate
+    and graduate computational design sequence, an elective on AI in architectural design open to
+    both, and one section of the second-year design studio.</p>
   </header>
   <table class="courses">
     <thead><tr><th>Course</th><th>Term</th><th>Content</th><th>Role</th></tr></thead>
