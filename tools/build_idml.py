@@ -42,6 +42,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
 from build_portfolio import (  # noqa: E402
+    design_columns,
+    research_tiles,
     EMAIL,
     NAME,
     PAGES,
@@ -226,6 +228,22 @@ def blocks_for(spec: dict) -> tuple[list[tuple[str, str]], list[tuple[str, str]]
                 ("Caption", role[0] if role else ""),
             ]
         return ([("Title", "Teaching")], body)
+    if kind == "research-tiles":
+        body = []
+        for slug, _tile in research_tiles()[spec["first"] : spec["first"] + spec["count"]]:
+            meta = read(slug)
+            body += [
+                ("Kicker", f"{meta.get('year', '')} \u00b7 {meta.get('type', '').replace('Research / ', '')}"),
+                ("SectionHead", meta.get("title", "")),
+                ("Caption", meta.get("authors", "")),
+                ("ListItem", meta.get("summary", "")),
+            ]
+        if spec.get("pubs"):
+            text = (ROOT / "content" / "projects" / "publications.md").read_text(encoding="utf-8")
+            raw = text.split("---", 2)[2] if text.startswith("---") else text
+            body.append(("SectionHead", "Peer-reviewed publications"))
+            body += [("Reference", r.strip()) for r in raw.splitlines() if r.strip()]
+        return ([("Title", "Research" if spec["first"] == 0 else "Research, continued")], body)
     if kind == "papers-three":
         body = []
         for slug in spec["slugs"]:
@@ -302,7 +320,9 @@ def images_for(spec: dict) -> tuple[list[tuple[Path, str]], int, bool]:
         pairs = pick(meta, spec["shots"], skip=spec["shots"] if spec.get("part") == 2 else 0)
     elif kind == "design":
         for slug in spec["slugs"]:
-            pairs += pick(read(slug), spec["shots"])
+            pairs += pick(read(slug), spec["shots"], both=True)
+    elif kind == "research-tiles":
+        pairs = [(tile, "") for _slug, tile in research_tiles()[spec["first"] : spec["first"] + spec["count"]]]
     elif kind == "papers-three":
         pairs = [pick(read(slug), 1, by_figure=True)[0] for slug in spec["slugs"]]
 
@@ -315,9 +335,9 @@ def images_for(spec: dict) -> tuple[list[tuple[Path, str]], int, bool]:
         except Exception:
             pass
     whole = bool(pairs) and wide > len(pairs) / 2
-    columns = 3 if (kind == "papers-three" or (kind == "course" and spec.get("part") == 2)) else 2
-    if kind == "design" and spec["shots"] >= 3:
-        columns = 3
+    columns = 3 if (kind in {"papers-three", "research-tiles"} or (kind == "course" and spec.get("part") == 2)) else 2
+    if kind == "design":
+        columns = design_columns(spec["shots"])
     return list(zip(found, captions + [""] * len(found))), columns, whole
 
 

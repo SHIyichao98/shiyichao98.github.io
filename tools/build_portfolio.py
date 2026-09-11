@@ -27,6 +27,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import re
+
 from PIL import Image, ImageStat
 
 Image.MAX_IMAGE_PIXELS = None
@@ -46,25 +48,29 @@ SITE = "yichaoshi.com"
 # the design studio because that is the teaching a studio-based school hires
 # for; design takes four and sits last, since it is pre-doctoral student work
 # and reads as background rather than as practice.
+# Twenty pages. Teaching and the author's own design work carry the book;
+# research is the map and two pages of the homepage's six research tiles,
+# each with a line of text. The research tiles are read off index.html, so
+# the book shows what the site shows.
 PAGES: list[dict] = [
     {"kind": "cover"},
     {"kind": "map"},
-    {"kind": "paper", "slug": "dcc-2026", "shots": 4},
-    {"kind": "paper", "slug": "caadria-2026", "shots": 4},
-    {"kind": "paper", "slug": "simaud-2026", "shots": 4},
-    {"kind": "paper", "slug": "acadia-2022", "shots": 5},
-    {"kind": "paper", "slug": "dcc-2024", "shots": 4},
-    {"kind": "papers-three", "slugs": ["caadria-2025-1", "caadria-2025-2", "simaud-2023"]},
+    {"kind": "research-tiles", "first": 0, "count": 3},
+    {"kind": "research-tiles", "first": 3, "count": 3, "pubs": True},
     {"kind": "teaching-overview"},
     {"kind": "course", "slug": "arch-2017", "shots": 5, "part": 1},
     {"kind": "course", "slug": "arch-2017", "shots": 6, "part": 2},
-    {"kind": "course", "slug": "arch-6020", "shots": 6},
+    {"kind": "course", "slug": "arch-6020", "shots": 6, "part": 1},
+    {"kind": "course", "slug": "arch-6020", "shots": 6, "part": 2},
     {"kind": "course", "slug": "arch-8833", "shots": 4},
     {"kind": "course", "slug": "arch-2020", "shots": 6},
-    {"kind": "design", "slugs": ["loops"], "shots": 5},
-    {"kind": "design", "slugs": ["stadium", "street"], "shots": 3},
-    {"kind": "design", "slugs": ["mars", "robotics"], "shots": 3},
+    {"kind": "design", "slugs": ["loops"], "shots": 6},
+    {"kind": "design", "slugs": ["stadium"], "shots": 6},
+    {"kind": "design", "slugs": ["street"], "shots": 4},
+    {"kind": "design", "slugs": ["mars"], "shots": 6},
+    {"kind": "design", "slugs": ["robotics"], "shots": 4},
     {"kind": "design", "slugs": ["craftman"], "shots": 4},
+    {"kind": "design", "slugs": ["kokura"], "shots": 4},
     {"kind": "cv"},
     {"kind": "closing"},
 ]
@@ -108,6 +114,26 @@ def bullets(meta: dict, section: str) -> list[str]:
 def gallery(meta: dict) -> list[str]:
     raw = meta.get("gallery") or meta.get("gallery_full") or ""
     return [i.strip() for i in raw.split("|") if i.strip()]
+
+
+def all_images(meta: dict) -> list[str]:
+    """Grid and full-width pictures together, grid first, none twice."""
+    out: list[str] = []
+    for field in ("gallery", "gallery_full"):
+        for src in (meta.get(field) or "").split("|"):
+            src = src.strip()
+            if src and src not in out:
+                out.append(src)
+    return out
+
+
+def research_tiles() -> list[tuple[str, str]]:
+    """(slug, tile path) for the research wall on the homepage, in its order."""
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    section = re.search(r'aria-labelledby="wall-research".*?</section>', text, re.S)
+    if not section:
+        return []
+    return re.findall(r'<a class="tile" href="#project/([^"]+)"[^>]*>\s*<img\s+src="([^"?]+)', section.group(0))
 
 
 def credits(meta: dict) -> list[str]:
@@ -167,9 +193,9 @@ def course_pairs(course: str) -> list[tuple[str, str]]:
     return out
 
 
-def pick(meta: dict, count: int, skip: int = 0, by_figure: bool = False) -> list[tuple[str, str]]:
+def pick(meta: dict, count: int, skip: int = 0, by_figure: bool = False, both: bool = False) -> list[tuple[str, str]]:
     """Return (src, caption) pairs. Captions name a student where one is credited."""
-    images = gallery(meta)
+    images = all_images(meta) if both else gallery(meta)
     if not images and meta.get("hub"):
         pairs = course_pairs(meta["_slug"])
         return pairs[skip : skip + count]
@@ -308,6 +334,43 @@ def page_papers_three(slugs: list[str]) -> str:
 </section>"""
 
 
+def design_columns(shots: int) -> int:
+    return 2 if shots in (2, 4) else 3
+
+
+def page_research_tiles(first: int, count: int, pubs: bool = False) -> str:
+    """Three research projects across the page, each the tile the homepage
+    shows and a few lines from its page; the publications list under the
+    second of these pages."""
+    columns = []
+    for slug, tile in research_tiles()[first : first + count]:
+        meta = read(slug)
+        columns.append(
+            f"""<div class="third">
+      <img src="{tile}" alt="" />
+      <p class="kicker">{esc(meta.get('year',''))} &#183; {esc(meta.get('type','').replace('Research / ', ''))}</p>
+      <h3>{inline(meta.get('title',''))}</h3>
+      <p class="authors">{inline(meta.get('authors',''))}</p>
+      <p>{inline(meta.get('summary',''))}</p>
+    </div>"""
+        )
+    tail = ""
+    if pubs:
+        text = (ROOT / "content" / "projects" / "publications.md").read_text(encoding="utf-8")
+        body = text.split("---", 2)[2] if text.startswith("---") else text
+        rows = [r.strip() for r in body.splitlines() if r.strip() and not r.startswith("#")]
+        tail = f"""<div class="pubs">
+    <h4>Peer-reviewed publications</h4>
+    <ol>{"".join(f"<li>{inline(r)}</li>" for r in rows)}</ol>
+  </div>"""
+    title = "Research" if first == 0 else "Research, continued"
+    return f"""<section class="page">
+  <header class="head"><h2>{title}</h2></header>
+  <div class="thirds tiles{' with-pubs' if pubs else ''}">{"".join(columns)}</div>
+  {tail}
+</section>"""
+
+
 def page_teaching_overview() -> str:
     rows = []
     for slug in ("arch-2017", "arch-6020", "arch-8833", "arch-2020"):
@@ -371,7 +434,7 @@ def page_design(slugs: list[str], shots: int) -> str:
     blocks = []
     for slug in slugs:
         meta = read(slug)
-        pairs = pick(meta, shots)
+        pairs = pick(meta, shots, both=True)
         role = paragraphs(meta, "Role")
         blocks.append(
             f"""<div class="design-block">
@@ -381,7 +444,7 @@ def page_design(slugs: list[str], shots: int) -> str:
       </header>
       <p class="lede">{inline(meta.get('summary',''))}</p>
       {"<p class='role'>" + inline(role[0]) + "</p>" if role else ""}
-      {figures(pairs, shots if shots <= 3 else 3)}
+      {figures(pairs, design_columns(shots))}
     </div>"""
         )
     return f'<section class="page design-page">{"".join(blocks)}</section>'
@@ -423,6 +486,7 @@ BUILDERS = {
     "map": lambda spec: page_map(),
     "paper": lambda spec: page_paper(spec["slug"], spec["shots"]),
     "papers-three": lambda spec: page_papers_three(spec["slugs"]),
+    "research-tiles": lambda spec: page_research_tiles(spec["first"], spec["count"], spec.get("pubs", False)),
     "teaching-overview": lambda spec: page_teaching_overview(),
     "course": lambda spec: page_course(spec["slug"], spec["shots"], spec.get("part", 0)),
     "design": lambda spec: page_design(spec["slugs"], spec["shots"]),

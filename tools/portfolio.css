@@ -303,6 +303,26 @@ figcaption {
   margin-bottom: 3px;
 }
 
+/* The research pages show the homepage's square tiles, which want more
+   height than a figure strip; with the publications list under them, less. */
+.thirds.tiles .third img {
+  height: 2.6in;
+}
+
+/* Fourteen references in three columns need the lower half of the page;
+   at 1.9in the tiles pushed the fifth and tenth off the foot. */
+.thirds.tiles.with-pubs .third img {
+  height: 1.45in;
+}
+
+.thirds.tiles .third p {
+  -webkit-line-clamp: 6;
+}
+
+.thirds.tiles.with-pubs .third p {
+  -webkit-line-clamp: 3;
+}
+
 .third p {
   font-size: 8.6pt;
   line-height: 1.34;

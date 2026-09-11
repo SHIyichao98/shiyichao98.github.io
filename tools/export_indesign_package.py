@@ -30,6 +30,7 @@ import sys
 sys.path.insert(0, str(sys_path_hack))
 
 from build_portfolio import (  # noqa: E402
+    research_tiles,
     EMAIL,
     NAME,
     PAGES,
@@ -80,8 +81,10 @@ def page_images(spec: dict) -> list[tuple[str, str]]:
     if kind == "design":
         out: list[tuple[str, str]] = []
         for slug in spec["slugs"]:
-            out += pick(read(slug), spec["shots"])
+            out += pick(read(slug), spec["shots"], both=True)
         return out
+    if kind == "research-tiles":
+        return [(tile, "") for _slug, tile in research_tiles()[spec["first"] : spec["first"] + spec["count"]]]
     if kind == "papers-three":
         return [pick(read(slug), 1, by_figure=True)[0] for slug in spec["slugs"]]
     if kind == "cover":
@@ -125,6 +128,16 @@ def page_text(spec: dict) -> str:
             role = paragraphs(meta, "Role")
             if role:
                 lines += ["", "ROLE", role[0]]
+    elif kind == "research-tiles":
+        lines += ["Research" if spec["first"] == 0 else "Research, continued", ""]
+        for slug, _tile in research_tiles()[spec["first"] : spec["first"] + spec["count"]]:
+            meta = read(slug)
+            lines += [meta.get("year", ""), meta.get("title", ""), meta.get("authors", ""), meta.get("summary", ""), ""]
+        if spec.get("pubs"):
+            text = (ROOT / "content" / "projects" / "publications.md").read_text(encoding="utf-8")
+            body = text.split("---", 2)[2] if text.startswith("---") else text
+            refs = [r.strip() for r in body.splitlines() if r.strip()]
+            lines += ["PEER-REVIEWED PUBLICATIONS"] + [f"{i}. {r}" for i, r in enumerate(refs, 1)]
     elif kind == "papers-three":
         for slug in spec["slugs"]:
             meta = read(slug)
