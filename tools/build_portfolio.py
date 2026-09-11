@@ -452,7 +452,7 @@ def page_design(slugs: list[str], shots: int) -> str:
 
 def page_cv() -> str:
     meta = read("cv")
-    wanted = ("Education", "Experience", "Academic Service", "Awards", "Methods and Tools")
+    wanted = ("Education", "Academic and Research Experience", "Academic Service", "Awards and Fellowships", "Methods and Tools")
     blocks = []
     for name in wanted:
         rows = bullets(meta, name)

@@ -210,7 +210,7 @@ def blocks_for(spec: dict) -> tuple[list[tuple[str, str]], list[tuple[str, str]]
     if kind == "cv":
         meta = read("cv")
         body: list[tuple[str, str]] = []
-        for name in ("Education", "Experience", "Academic Service", "Awards", "Methods and Tools"):
+        for name in ("Education", "Academic and Research Experience", "Academic Service", "Awards and Fellowships", "Methods and Tools"):
             rows = bullets(meta, name)
             if rows:
                 body.append(("SectionHead", name))
